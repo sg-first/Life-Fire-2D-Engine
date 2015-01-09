@@ -67,7 +67,7 @@ public:
     Q_INVOKABLE float GetItemOpacity(int Number,bool LastIndex);
     Q_INVOKABLE float GetItemRotation(int Number,bool LastIndex);
     Q_INVOKABLE float GetItemScale(int Number,bool LastIndex);
-    Q_INVOKABLE int AddPicAnimation(QVector<QString> address,int x,int y,int time,QGraphicsScene *scene=scene);
+    Q_INVOKABLE int AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,bool cycle=true,QGraphicsScene *scene=scene);
     Q_INVOKABLE void endAnimation(int Number,QString signfun=NULL);
     Q_INVOKABLE void SetViewCenter(float x, float y, graphicsview *gview=MainView);
     Q_INVOKABLE void SetViewItemCenter(int Number,graphicsview *gview=MainView,bool LastIndex=false);
@@ -85,7 +85,6 @@ public:
     Q_INVOKABLE void SetItemOrder(int BelowNumber,int AboveNumber,bool LastIndex=false);
     Q_INVOKABLE void ScaleView(float sx,float sy,graphicsview *view=MainView);
     Q_INVOKABLE void RotateView(float set,graphicsview *view=MainView);
-
 
 protected:
     void keyPressEvent(QKeyEvent *e);

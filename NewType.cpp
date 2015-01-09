@@ -135,7 +135,32 @@ void SC::MoveByItem(float X, float Y)//移动一个图元
 void SC::changepixmap()
 {
     if(iter==pixmap.end())
-        iter=pixmap.begin();
+    {
+        if(cycle)
+        {iter=pixmap.begin();}//若需循环，就重播
+        else//若不循环，发信号退出一切
+        {
+            QList<QPair<int,SC *> > scPointer;
+            QMutableListIterator<QPair<int,SC *> > p(scPointer);
+            p.toFront();
+            while(p.hasNext())
+            {
+                if(p.next().first==num)
+                {
+                    p.value().second->over=1;
+                    break;
+                }
+            }
+            if(signfun!=NULL)
+            {
+             QByteArray ba = signfun.toLatin1();
+             const char *function = ba.data();
+             QMetaObject::invokeMethod(lfevent,function);
+            }
+            return;
+        }
+    }
+    //若未播完，正常换图
     pi->setPixmap(*iter);
     ++iter;
 }
@@ -195,9 +220,9 @@ void SC::start(int choose)
 
     case 7:
     {
-        iter=pixmap.begin();
-        temp1=times/pixmap.size();
-        timer->start(int (temp1));
+        iter=pixmap.begin();//将装满连帧图元的迭代器调到头元素
+        temp1=times/pixmap.size();//计算出播放每一帧需要的时间
+        timer->start(int(temp1));//根据此时间开始播放
     }
 
     }

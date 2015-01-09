@@ -4,8 +4,8 @@ Life-Fire is the SG-Studio on QGraphics and QWidget focus on 2D feature support 
 
 Version:
 -----------------------------------
-Beta v2.1
+Beta v2.2
 
 Progress:
 -----------------------------------
-Allows you to define a multi-view, multi-stage, and provides a view of the affine transformation, making large-scale structure of the world becomes more likely. Also added a safety delay before replacing the function block type delay function.
+Allow the definition of multi view and multi stage, and provide the affine transform view, making the construction of more large-scale world possible. Also add a delay before the function function block type safety delay substituted, allowing no cycle animation.

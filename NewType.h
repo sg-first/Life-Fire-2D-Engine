@@ -57,6 +57,8 @@ public:
     QString signfun;
     int over;//结束标志
     void start(int choose);
+    bool cycle;//连续播图是否循环播放
+    int num;//动画在图元管理器中的序号
 
 protected:
     float CurrentModulus;//当前系数

@@ -357,30 +357,36 @@ float Widget::GetItemRotation(int Number,bool LastIndex)
 float Widget::GetItemScale(int Number,bool LastIndex)
 {return AllItem[QListFindItem(LastIndex,Number)]->scale();}
 
-int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QGraphicsScene *scene)
+int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun,bool cycle,QGraphicsScene *scene)
 {
-    assert(!address.isEmpty());
-    myPixmap *temp=new myPixmap(QPixmap(address[0]));
-    scene->addItem(temp);
-    QGraphicsItem *Item=temp;
-    Item->setPos(x,y);
-    AllItem<<Item;
+    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
+    myPixmap *temp=new myPixmap(QPixmap(address[0]));//将第一张图片变为图元
+    scene->addItem(temp);//将第一张图片显示在场景中
+    QGraphicsItem *Item=temp;//将第一张图片转换为图元标准格式
+    Item->setPos(x,y);//设置其位置
+    AllItem<<Item;//置入图元管理器
     ItemNumber<<ItemNowNumber;
     Blur<<0;
     ColorR<<0;
     ColorG<<0;
     ColorB<<0;
-    int retur=ItemNowNumber;
-    ItemNowNumber++;
+    int retur=ItemNowNumber;//准备返回图元管理器序号
+    ItemNowNumber++;//目前序号加1
 
-    QMutableListIterator<QPair<int,SC *> > it(scPointer);
-    SC *sc=new SC(0,0,time,it);
-    sc->pi=temp;
-    for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)
-    {sc->pixmap.push_back(QPixmap(*iter));}
-    QPair<int,SC *> p(retur,sc);
-    scPointer<<p;
+    QMutableListIterator<QPair<int,SC *> > it(scPointer);//创建迭代器
+    SC *sc=new SC(0,0,time,it);//创建SC实例
+    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
+    sc->cycle=cycle;//定义是否循环连续播图
+
+    if(!cycle)//若不循环（默认是循环，true）
+    {sc->signfun=signfun;}//搬移一下播放完成要发出的信号
+
+    for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
+    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
+    QPair<int,SC *> p(retur,sc);//创建关联容器准备将当前实例导入SC管理器
+    scPointer<<p;//置入SC管理器
     sc->start(7);
+    sc->num=retur;
     return retur;
 }
 
