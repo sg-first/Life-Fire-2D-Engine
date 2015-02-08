@@ -3,6 +3,7 @@
 #include "head.h"
 #include "GlobalVar.h"
 #include "NewType.h"
+#include "AES.h"
 
 namespace Ui {class Widget;}
 
@@ -58,11 +59,11 @@ public:
     Q_INVOKABLE void AnimationSetOpacityItem(int Number, float set,int times,QString signfun=NULL,bool LastIndex=false);//设置一个图元的透明度
     Q_INVOKABLE void AnimationSetColorItem(int Number, float R, float G, float B,int times,QString signfun=NULL,bool LastIndex=false);//在一个图元基础上进行着色
     Q_INVOKABLE void AnimationMoveItem(int Number,float X,float Y,int time,QString signfun=NULL,bool LastIndex=false);
-    Q_INVOKABLE float GetItemX(int Number,bool LastIndex);
-    Q_INVOKABLE float GetItemY(int Number,bool LastIndex);
-    Q_INVOKABLE float GetItemR(int Number,bool LastIndex);
-    Q_INVOKABLE float GetItemG(int Number,bool LastIndex);
-    Q_INVOKABLE float GetItemB(int Number,bool LastIndex);
+    Q_INVOKABLE float GetItemX(int Number,bool LastIndex=false);
+    Q_INVOKABLE float GetItemY(int Number,bool LastIndex=false);
+    Q_INVOKABLE float GetItemR(int Number,bool LastIndex=false);
+    Q_INVOKABLE float GetItemG(int Number,bool LastIndex=false);
+    Q_INVOKABLE float GetItemB(int Number,bool LastIndex=false);
     Q_INVOKABLE float GetItemBlur(int Number,bool LastIndex);
     Q_INVOKABLE float GetItemOpacity(int Number,bool LastIndex);
     Q_INVOKABLE float GetItemRotation(int Number,bool LastIndex);
@@ -85,6 +86,13 @@ public:
     Q_INVOKABLE void SetItemOrder(int BelowNumber,int AboveNumber,bool LastIndex=false);
     Q_INVOKABLE void ScaleView(float sx,float sy,graphicsview *view=MainView);
     Q_INVOKABLE void RotateView(float set,graphicsview *view=MainView);
+    Q_INVOKABLE QString ReadTXT(QString path, int line=-1);
+    Q_INVOKABLE void WriteTXT(QString path,QString text);
+    Q_INVOKABLE QString WriteINI(QString path,QString section,QString var,QString value);
+    Q_INVOKABLE QString ReadINI(QString path,QString section,QString var);
+    Q_INVOKABLE QString AESEncrypt(QString str,QString key);
+    Q_INVOKABLE QString AESUncrypt(QString str,QString key);
+
 
 protected:
     void keyPressEvent(QKeyEvent *e);

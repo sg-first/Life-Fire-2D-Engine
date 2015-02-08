@@ -77,61 +77,35 @@ mediaPlayer->setMedia(QUrl::fromLocalFile(Path));
 mediaPlayer->play();
 this->timer=new QTimer(this);
 QObject::connect(timer,SIGNAL(timeout()),SLOT(playover()));
+timer->setSingleShot(true);
 timer->start((time+1)*1000);
 }
 
 void VideoPlayer::playover()
 {
+    mediaPlayer->stop();//停止视频播放
     if(cycle==false)
     {
-        if(signfun!=NULL)
+        if(signfun!=NULL)//发送信号
         {
          QByteArray ba = signfun.toLatin1();
          const char *function = ba.data();
          QMetaObject::invokeMethod(lfevent,function);
         }
-    delete timer;
-    delete this;
+    delete this;//销毁视频对象
     }
     else
     {this->start();}//循环播放
 }
 
+VideoPlayer::~VideoPlayer()
+{
+    delete mediaPlayer;
+    delete timer;
+    delete videoItem;
+}
+
 //SC类
-void SC::RotationItem(float set)//旋转
-{
-    gr->setRotation(set);
-    gr->rotation();
-}
-
-void SC::ScaleItem(float set)//缩放
-{
-    gr->setScale(set);
-    gr->scale();
-}
-
-void SC::BlurRadiusItem(float set)//将一个图元变模糊
-{
-    Effect->setBlurRadius(set);
-    gr->setGraphicsEffect(Effect);
-}
-
-void SC::SetOpacityItem(float set)//设置一个图元的透明度
-{
-    gr->setOpacity(set);
-}
-
-void SC::SetColorItem(float R, float G, float B)//对一个图元进行着色
-{
-    co->setColor(QColor(R,G,B));
-    gr->setGraphicsEffect(co);
-}
-
-void SC::MoveByItem(float X, float Y)//移动一个图元
-{
-    gr->moveBy(X,Y);
-}
-
 void SC::changepixmap()
 {
     if(iter==pixmap.end())
@@ -238,7 +212,8 @@ void SC::SlowChange()
         case 1:
         {
             temp+=2;
-            RotationItem(CurrentModulus+=temp1);
+            gr->setRotation(CurrentModulus+=temp1);
+            gr->rotation();
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;
@@ -246,7 +221,8 @@ void SC::SlowChange()
         case 2:
         {
             temp+=2;
-            ScaleItem(CurrentModulus+=temp1);
+            gr->setScale(CurrentModulus+=temp1);
+            gr->scale();
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
            break;
@@ -254,7 +230,7 @@ void SC::SlowChange()
         case 3:
         {
             temp+=2;
-            MoveByItem(temp1,temp2);
+            gr->moveBy(temp1,temp2);
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;
@@ -262,7 +238,8 @@ void SC::SlowChange()
         case 4:
         {
             temp+=3;
-            BlurRadiusItem(CurrentModulus+=temp1);
+            Effect->setBlurRadius(CurrentModulus+=temp1);
+            gr->setGraphicsEffect(Effect);
             if(temp==times || temp==times+1 || temp==times-1 || temp==times+2 || temp==times-2)
                 over=1;
             break;
@@ -270,7 +247,8 @@ void SC::SlowChange()
         case 5:
         {
             temp+=2;
-            SetOpacityItem(CurrentModulus+=temp1);
+            //SetOpacityItem(CurrentModulus+=temp1);
+            gr->setOpacity(CurrentModulus+=temp1);
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;
@@ -278,7 +256,8 @@ void SC::SlowChange()
         case 6:
         {
             temp+=2;
-            SetColorItem(CurrentModulus+=temp1,CurrentModulus2+=temp2,CurrentModulus3+=temp3);
+            co->setColor(QColor(CurrentModulus+=temp1,CurrentModulus2+=temp2,CurrentModulus3+=temp3));
+            gr->setGraphicsEffect(co);
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;

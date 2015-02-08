@@ -8,8 +8,8 @@ Q_OBJECT
 
 public:
     //对js的处理函数
-    Q_INVOKABLE void CallJs(QString path);
-    Q_INVOKABLE void CallJsFunction(QString path,QString functionss);
+    Q_INVOKABLE QScriptValue CallJSFile(QString path, QString functionname=NULL, QString mistake=NULL);
+    Q_INVOKABLE QScriptValue CallJSCode(QString code,QString functionname=NULL,QString mistake=NULL);
 	void StartGame();
 	//在此继续添加
 	

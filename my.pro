@@ -20,14 +20,16 @@ SOURCES += main.cpp\
     event.cpp \
     KeyPress.cpp \
     library.cpp \
-    js.cpp
+    js.cpp \
+    AES.cpp
 
 HEADERS  += widget.h \
     head.h \
     GlobalVar.h \
     maincall.h \
     library.h \
-    NewType.h
+    NewType.h \
+    AES.h
 
 FORMS    += widget.ui
 QT += core gui declarative

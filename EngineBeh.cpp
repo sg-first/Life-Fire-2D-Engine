@@ -248,7 +248,6 @@ void Widget::StopVideo(VideoPlayer *video)
      const char *function = ba.data();
      QMetaObject::invokeMethod(lfevent,function);
     }
-    delete video->timer;
     delete video;
 }
 
@@ -486,3 +485,51 @@ void Widget::ScaleView(float sx, float sy, graphicsview *view)
 
 void Widget::RotateView(float set, graphicsview *view)
 {view->Rotate(set);}
+
+QString Widget::ReadTXT(QString path,int line)
+{
+    QFile file(path);
+    file.open(QIODevice::ReadOnly);
+    QTextStream text(&file);
+    QString concert;
+    if(line==-1)
+    {concert=text.readAll();}
+    else
+    {concert=text.readLine(line);}
+    file.close();
+    return concert;
+}
+
+void Widget::WriteTXT(QString path, QString text)//这个函数等等再搞，问题超大
+{   
+    QFile file(path);
+    file.open(QFile::Text|QFile::Append);
+    QTextStream out(&file);
+    out<<text;
+    file.close();
+}
+
+QString Widget::WriteINI(QString path, QString section, QString var, QString value)
+{
+    QSettings configIniWrite(path,QSettings::IniFormat);
+    configIniWrite.setValue("/"+section+"/"+var,value);
+}
+
+QString Widget::ReadINI(QString path, QString section, QString var)
+{
+    QSettings configIniRead(path,QSettings::IniFormat);
+    QString result=configIniRead.value("/"+section+"/"+var).toString();
+    return result;
+}
+
+QString Widget::AESEncrypt(QString str,QString key)
+{
+   AesHelper aes(key);
+   return aes.aesEncrypt(str);
+}
+
+QString Widget::AESUncrypt(QString str,QString key)
+{
+   AesHelper aes(key);
+   return aes.aesUncrypt(str);
+}

@@ -12,6 +12,10 @@
 #include <QApplication>
 //文件
 #include <QDir>
+#include <QSettings>
+#include <QFile>
+#include <QTextStream>
+#include <QTextCodec>
 //线程
 #include <QThread>
 //数据
@@ -38,6 +42,4 @@
 #include <QWheelEvent>
 //脚本解释
 #include <QtScript/QScriptEngine>
-#include <QFile>
-#include <QTextStream>
 #include <QtScript/QScriptValue>

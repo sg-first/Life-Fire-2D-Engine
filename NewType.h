@@ -76,13 +76,13 @@ protected:
     float temp2;//临时变量，在某些特殊情况下用于各个函数之间通信使用
     float temp3;//临时变量，在某些特殊情况下用于各个函数之间通信使用
 
-    void RotationItem(float set);//旋转                                                    choose==1
-    void ScaleItem(float set);//缩放                                                       choose==2
-    void MoveByItem(float X, float Y);//相对移动一个图元                                     chose==3
-    void BlurRadiusItem(float set);//将一个图元变模糊                                        choose==4
-    void SetOpacityItem(float set);//设置一个图元的透明度                                     choose==5
-    void SetColorItem(float R, float G, float B);//在一个图元基础上进行着色                    choose==6
-    void changepixmap();//Gif改变图元                                                       choose==7
+    //旋转                         choose==1
+    //缩放                          choose==2
+    //相对移动一个图元                 chose==3
+    //将一个图元变模糊                 choose==4
+    //设置一个图元的透明度              choose==5
+    //在一个图元基础上进行着色           choose==6
+    void changepixmap();//Gif改变图元  choose==7
     QVector<QPixmap>::iterator iter;
 
 private slots:
@@ -113,7 +113,7 @@ class VideoPlayer : public QWidget //视频类
     Q_OBJECT
 public:
     VideoPlayer(QString Path,int Volume, int time, int x, int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent = 0);
-    ~VideoPlayer(){}
+    ~VideoPlayer();
     void start();
     QMediaPlayer *mediaPlayer;
     QTimer *timer;

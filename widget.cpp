@@ -41,4 +41,7 @@ void Widget::Initialization()
     MainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//禁用水平滚动条
     MainView->show();//视图显示
     SetViewCenter(WindowsWidth/2,WindowsHeigh/2);
+    //编码校正
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    QTextCodec::setCodecForLocale(codec);
 }
