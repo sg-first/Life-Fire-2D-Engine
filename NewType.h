@@ -112,21 +112,19 @@ class VideoPlayer : public QWidget //视频类
 {
     Q_OBJECT
 public:
-    VideoPlayer(QString Path,int Volume, int time, int x, int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent = 0);
+    VideoPlayer(QString Path,int Volume, int x, int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent = 0);
     ~VideoPlayer();
     void start();
     QMediaPlayer *mediaPlayer;
-    QTimer *timer;
     QString signfun;
 
 private:
     QGraphicsVideoItem *videoItem;
-    int time;
     bool cycle;
     QString Path;
 
 private slots:
-    void playover();
+    void playover(QMediaPlayer::State state);
 };
 
 

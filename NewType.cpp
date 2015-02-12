@@ -55,7 +55,7 @@ void myPixmap::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 //视频类
-VideoPlayer::VideoPlayer(QString Path,int Volume,int time,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent)
+VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent)
     : QWidget(parent)
 {
     mediaPlayer=new QMediaPlayer(0,QMediaPlayer::VideoSurface);
@@ -64,7 +64,6 @@ VideoPlayer::VideoPlayer(QString Path,int Volume,int time,int x,int y,int width,
     videoItem->setSize(QSizeF(width,heigh));
     scene->addItem(videoItem);
     mediaPlayer->setVideoOutput(videoItem);
-    this->time=time;
     videoItem->setPos(x,y);//设置视频位置，默认为窗口左上角
     this->cycle=cycle;
     this->Path=Path;
@@ -75,33 +74,30 @@ void VideoPlayer::start()
 {
 mediaPlayer->setMedia(QUrl::fromLocalFile(Path));
 mediaPlayer->play();
-this->timer=new QTimer(this);
-QObject::connect(timer,SIGNAL(timeout()),SLOT(playover()));
-timer->setSingleShot(true);
-timer->start((time+1)*1000);
+QObject::connect(mediaPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(playover(QMediaPlayer::State)));
 }
 
-void VideoPlayer::playover()
+void VideoPlayer::playover(QMediaPlayer::State state)
 {
-    mediaPlayer->stop();//停止视频播放
-    if(cycle==false)
+    if(state!=QMediaPlayer::StoppedState)
+    {return;}
+    if(!cycle)
     {
-        if(signfun!=NULL)//发送信号
+        if(signfun!=NULL)
         {
          QByteArray ba = signfun.toLatin1();
          const char *function = ba.data();
          QMetaObject::invokeMethod(lfevent,function);
         }
-    delete this;//销毁视频对象
+    delete this;
     }
     else
-    {this->start();}//循环播放
+    {mediaPlayer->play();}
 }
 
 VideoPlayer::~VideoPlayer()
 {
     delete mediaPlayer;
-    delete timer;
     delete videoItem;
 }
 

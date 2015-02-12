@@ -21,15 +21,16 @@ public:
     QList<int> ItemNumber;
     int ItemNowNumber;
     //效果管理器
-    QList<float>Blur;
-    QList<float>ColorR;
-    QList<float>ColorG;
-    QList<float>ColorB;
+    QList<QGraphicsBlurEffect*>Blur;
+    QList<QGraphicsColorizeEffect*>Color;
     //SC类管理器
     QList<QPair<int,SC *> > scPointer;
     //引擎行为（实现于enginebeh）
     Q_INVOKABLE int AddPixmapItem(QString PicPath,float X,float Y,QString fun=NULL,QString down=NULL,QGraphicsScene *scene=scene);
     Q_INVOKABLE int AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene=scene);
+    Q_INVOKABLE int AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
+    Q_INVOKABLE int AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
+    Q_INVOKABLE int AddLineItem(int x,int y,float fx,float fy,QGraphicsScene *scene=scene);
     Q_INVOKABLE void RotationItem(int Number, float set,bool LastIndex=false);
     Q_INVOKABLE void ScaleItem(int Number, float set,bool LastIndexx=false);
     Q_INVOKABLE void MoveItem(int Number, float X, float Y,bool LastIndex=false);
@@ -44,9 +45,10 @@ public:
     Q_INVOKABLE void SetVisibleItem(int Number,bool Enabled,bool LastIndex=false);
     Q_INVOKABLE QMediaPlayer* PlayMusic(QString name, int volume, bool cycle=false);
     Q_INVOKABLE void SetBackground(QString PicturePath,QGraphicsScene *scene=scene);
+    Q_INVOKABLE void SetBackground(int R, int G, int B);
     Q_INVOKABLE void PauseMusic(QMediaPlayer *player);
     Q_INVOKABLE void ContinueMusic(QMediaPlayer *player);
-    Q_INVOKABLE VideoPlayer* PlayVideo(QString path, int Volume, int time, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,QString signfun=NULL,QGraphicsScene *scene=scene);
+    Q_INVOKABLE VideoPlayer* PlayVideo(QString path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,QString signfun=NULL,QGraphicsScene *scene=scene);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void ContinueVideo(VideoPlayer *video);
     Q_INVOKABLE void StopVideo(VideoPlayer *video);

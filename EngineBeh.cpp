@@ -23,10 +23,8 @@ int Widget::AddPixmapItem(QString PicPath,float X,float Y,QString fun,QString do
     Item->setPos(X,Y);
     AllItem<<Item;
     ItemNumber<<ItemNowNumber;
-    Blur<<0;
-    ColorR<<0;
-    ColorG<<0;
-    ColorB<<0;
+    Blur<<NULL;
+    Color<<NULL;
     int retur=ItemNowNumber;
     ItemNowNumber++;
     return retur;
@@ -36,19 +34,55 @@ int Widget::AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,
 {
 QGraphicsTextItem *text=new QGraphicsTextItem(Text);
 text->setFont(QFont(Font,Size));
-//text->setDefaultTextColor(QColor(qrand()%CR,qrand()%CG,qrand()%CB));//设置颜色
 text->setDefaultTextColor(QColor(CR,CG,CB));
 scene->addItem(text);
 text->setPos(X,Y);
 AllItem<<text;
 ItemNumber<<ItemNowNumber;
-Blur<<0;
-ColorR<<0;
-ColorG<<0;
-ColorB<<0;
+Blur<<NULL;
+Color<<NULL;
 int retur=ItemNowNumber;
 ItemNowNumber++;
 return retur;
+}
+
+int Widget::AddRectItem(int x,int y,int width,int height,QGraphicsScene *scene)
+{
+    QGraphicsRectItem *rect=new QGraphicsRectItem(x,y,width,height);
+    scene->addItem(rect);
+    AllItem<<rect;
+    ItemNumber<<ItemNowNumber;
+    Blur<<NULL;
+    Color<<NULL;
+    int retur=ItemNowNumber;
+    ItemNowNumber++;
+    return retur;
+}
+
+int Widget::AddEllipseItem(int x,int y,int width,int height,QGraphicsScene *scene)
+{
+    QGraphicsEllipseItem *Ellipse=new QGraphicsEllipseItem(x,y,width,height);
+    scene->addItem(Ellipse);
+    AllItem<<Ellipse;
+    ItemNumber<<ItemNowNumber;
+    Blur<<NULL;
+    Color<<NULL;
+    int retur=ItemNowNumber;
+    ItemNowNumber++;
+    return retur;
+}
+
+int Widget::AddLineItem(int x,int y,int fx,int fy,QGraphicsScene *scene)
+{
+    QGraphicsLineItem *line=new QGraphicsLineItem(x,y,fx,fy);
+    scene->addItem(line);
+    AllItem<<line;
+    ItemNumber<<ItemNowNumber;
+    Blur<<NULL;
+    Color<<NULL;
+    int retur=ItemNowNumber;
+    ItemNowNumber++;
+    return retur;
 }
 
 void Widget::RotationItem(int Number, float set,bool LastIndex)
@@ -68,10 +102,12 @@ AllItem[Subscript]->scale();
 void Widget::BlurRadiusItem(int Number, float set,bool LastIndex)
 {
 int Subscript=QListFindItem(LastIndex,Number);
-QGraphicsBlurEffect *Effect=new QGraphicsBlurEffect(this);
+QGraphicsBlurEffect *Effect=Blur[Subscript];
+if(Effect==NULL)
+{Effect=new QGraphicsBlurEffect(this);}
 Effect->setBlurRadius(set);
 AllItem[Subscript]->setGraphicsEffect(Effect);
-Blur[Subscript]=set;
+Blur[Subscript]=Effect;
 }
 
 void Widget::SetOpacityItem(int Number, float set,bool LastIndex)
@@ -83,12 +119,12 @@ AllItem[Subscript]->setOpacity(set);
 void Widget::SetColorItem(int Number,float R,float G,float B,bool LastIndex)
 {
 int Subscript=QListFindItem(LastIndex,Number);
-QGraphicsColorizeEffect *Effect = new QGraphicsColorizeEffect(this);
+QGraphicsColorizeEffect *Effect=Color[Subscript];
+if(Effect==NULL)
+{Effect=new QGraphicsColorizeEffect(this);}
 Effect->setColor(QColor(R,G,B));
 AllItem[Subscript]->setGraphicsEffect(Effect);
-ColorR[Subscript]=R;
-ColorG[Subscript]=G;
-ColorB[Subscript]=B;
+Color[Subscript]=Effect;
 }
 
 void Widget::ClearScene(QGraphicsScene *scene)
@@ -102,9 +138,7 @@ scene->clear();
 AllItem.clear();
 ItemNumber.clear();
 Blur.clear();
-ColorR.clear();
-ColorG.clear();
-ColorB.clear();
+Color.clear();
 ItemNowNumber=0;
 }
 
@@ -116,9 +150,7 @@ delete AllItem[Subscript];
 AllItem.removeAt(Subscript);
 ItemNumber.removeAt(Subscript);
 Blur.removeAt(Subscript);
-ColorR.removeAt(Subscript);
-ColorG.removeAt(Subscript);
-ColorB.removeAt(Subscript);
+Color.removeAt(Subscript);
 }
 
 void Widget::MoveItem(int Number, float X, float Y,bool LastIndex)
@@ -157,6 +189,9 @@ void Widget::SetVisibleItem(int Number,bool Enabled,bool LastIndex)
 
 void Widget::SetBackground(QString PicturePath,QGraphicsScene *scene)
 {scene->setBackgroundBrush(QPixmap(PicturePath));}
+
+void Widget::SetBackground(int R,int G,int B)
+{scene->setBackgroundBrush(QColor(R,G,B));}
 
 QMediaPlayer* Widget::PlayMusic(QString name,int volume,bool cycle)
 {
@@ -222,14 +257,14 @@ bool Widget::IsColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2)
 bool Widget::ItemColliding(int item1,int item2)
 {return IsColliding(AllItem[QListFindItem(false,item1)],AllItem[QListFindItem(false,item2)]);}
 
-VideoPlayer* Widget::PlayVideo(QString path,int Volume,int time,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene)
+VideoPlayer* Widget::PlayVideo(QString path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene)
 {
     if(x==-1)
     {x=viewX-(WindowsWidth/2);}
     if(y==-1)
     {y=viewY-(WindowsHeigh/2);}
     //time为视频时长，单位为秒
-    VideoPlayer* video=new VideoPlayer(path,Volume,time,x,y,width,heigh,cycle,signfun,scene);
+    VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,scene);
     video->start();
     return video;
 }
@@ -241,15 +276,7 @@ void Widget::ContinueVideo(VideoPlayer *video)
 {video->mediaPlayer->play();}
 
 void Widget::StopVideo(VideoPlayer *video)
-{
-    if(video->signfun!=NULL)
-    {
-     QByteArray ba = video->signfun.toLatin1();
-     const char *function = ba.data();
-     QMetaObject::invokeMethod(lfevent,function);
-    }
-    delete video;
-}
+{video->mediaPlayer->stop();}
 
 void Widget::AnimationRotationItem(int Number, float set,int times,QString signfun,bool LastIndex)
 {
@@ -281,18 +308,27 @@ void Widget::AnimationScaleItem(int Number, float set,int times,QString signfun,
 void Widget::AnimationBlurRadiusItem(int Number, float set, int times,QString signfun,bool LastIndex)
 {
     int sub=QListFindItem(LastIndex,Number);
-    float CurrentModulus=Blur[sub];
+    float CurrentModulus;//当前系数
+    QGraphicsBlurEffect *Effect=Blur[sub];
+    if(Blur[sub]==NULL)
+    {
+        CurrentModulus=0;
+        Effect=new QGraphicsBlurEffect(this);
+    }
+
     QGraphicsItem* gr=AllItem[sub];
-    QGraphicsBlurEffect *Effect=new QGraphicsBlurEffect(this);
+    QGraphicsBlurEffect *effect=new QGraphicsBlurEffect(this);
     QMutableListIterator<QPair<int,SC *> > it(scPointer);
     SC *s=new SC(CurrentModulus,set,times,it);
     s->gr=gr;
-    s->Effect=Effect;
+    s->Effect=effect;
     s->signfun=signfun;
     QPair<int,SC *> p(Number,s);
     scPointer<<p;
     s->start(4);
-    Blur[sub]=set;
+
+    Effect->setBlurRadius(set);
+    Blur[sub]=Effect;
 }
 
 void Widget::AnimationSetOpacityItem(int Number, float set, int times,QString signfun,bool LastIndex)
@@ -311,9 +347,26 @@ void Widget::AnimationSetOpacityItem(int Number, float set, int times,QString si
 void Widget::AnimationSetColorItem(int Number, float R, float G, float B, int times,QString signfun,bool LastIndex)
 {
     int sub=QListFindItem(LastIndex,Number);
-    float CurrentModulus=ColorR[sub];
-    float CurrentModulus2=ColorG[sub];
-    float CurrentModulus3=ColorB[sub];
+    //当前系数
+    float CurrentModulus;
+    float CurrentModulus2;
+    float CurrentModulus3;
+    QGraphicsColorizeEffect *Effect=Color[sub];
+    if(Blur[sub]==NULL)
+    {
+        CurrentModulus=0;
+        CurrentModulus2=0;
+        CurrentModulus3=0;
+        Effect=new QGraphicsColorizeEffect(this);
+    }
+    else
+    {
+    QColor color=Effect->color();
+    CurrentModulus=color.red();
+    CurrentModulus2=color.green();
+    CurrentModulus3=color.blue();
+    }
+
     QGraphicsItem* gr=AllItem[sub];
     QGraphicsColorizeEffect *co = new QGraphicsColorizeEffect(this);
     QMutableListIterator<QPair<int,SC *> > it(scPointer);
@@ -324,9 +377,9 @@ void Widget::AnimationSetColorItem(int Number, float R, float G, float B, int ti
     QPair<int,SC *> p(Number,s);
     scPointer<<p;
     s->start(6);
-    ColorR[sub]=R;
-    ColorG[sub]=G;
-    ColorB[sub]=B;
+
+    Effect->setColor(QColor(R,G,B));
+    Color[sub]=Effect;
 }
 
 float Widget::GetItemX(int Number,bool LastIndex)
@@ -336,16 +389,39 @@ float Widget::GetItemY(int Number,bool LastIndex)
 {return AllItem[QListFindItem(LastIndex,Number)]->y();}
 
 float Widget::GetItemR(int Number,bool LastIndex)
-{return ColorR[QListFindItem(LastIndex,Number)];}
+{
+    int sub=QListFindItem(LastIndex,Number);
+    if(Color[sub]==NULL)
+    {return 0;}
+    QColor color=Color[sub]->color();
+    return color.red();
+}
 
 float Widget::GetItemG(int Number,bool LastIndex)
-{return ColorG[QListFindItem(LastIndex,Number)];}
+{
+    int sub=QListFindItem(LastIndex,Number);
+    if(Color[sub]==NULL)
+    {return 0;}
+    QColor color=Color[sub]->color();
+    return color.green();
+}
 
 float Widget::GetItemB(int Number,bool LastIndex)
-{return ColorB[QListFindItem(LastIndex,Number)];}
+{
+    int sub=QListFindItem(LastIndex,Number);
+    if(Color[sub]==NULL)
+    {return 0;}
+    QColor color=Color[sub]->color();
+    return color.blue();
+}
 
 float Widget::GetItemBlur(int Number,bool LastIndex)
-{return Blur[QListFindItem(LastIndex,Number)];}
+{
+    int sub=QListFindItem(LastIndex,Number);
+    if(Blur[sub]==NULL)
+    {return 0;}
+    return Blur[sub]->blurRadius();
+}
 
 float Widget::GetItemOpacity(int Number,bool LastIndex)
 {return AllItem[QListFindItem(LastIndex,Number)]->opacity();}
@@ -365,10 +441,8 @@ int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStrin
     Item->setPos(x,y);//设置其位置
     AllItem<<Item;//置入图元管理器
     ItemNumber<<ItemNowNumber;
-    Blur<<0;
-    ColorR<<0;
-    ColorG<<0;
-    ColorB<<0;
+    Blur<<NULL;
+    Color<<NULL;
     int retur=ItemNowNumber;//准备返回图元管理器序号
     ItemNowNumber++;//目前序号加1
 
