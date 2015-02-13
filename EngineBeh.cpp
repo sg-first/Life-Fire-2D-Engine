@@ -46,7 +46,7 @@ ItemNowNumber++;
 return retur;
 }
 
-int Widget::AddRectItem(int x,int y,int width,int height,QGraphicsScene *scene)
+int Widget::AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene)
 {
     QGraphicsRectItem *rect=new QGraphicsRectItem(x,y,width,height);
     scene->addItem(rect);
@@ -59,7 +59,7 @@ int Widget::AddRectItem(int x,int y,int width,int height,QGraphicsScene *scene)
     return retur;
 }
 
-int Widget::AddEllipseItem(int x,int y,int width,int height,QGraphicsScene *scene)
+int Widget::AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene)
 {
     QGraphicsEllipseItem *Ellipse=new QGraphicsEllipseItem(x,y,width,height);
     scene->addItem(Ellipse);
@@ -72,7 +72,7 @@ int Widget::AddEllipseItem(int x,int y,int width,int height,QGraphicsScene *scen
     return retur;
 }
 
-int Widget::AddLineItem(int x,int y,int fx,int fy,QGraphicsScene *scene)
+int Widget::AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene)
 {
     QGraphicsLineItem *line=new QGraphicsLineItem(x,y,fx,fy);
     scene->addItem(line);

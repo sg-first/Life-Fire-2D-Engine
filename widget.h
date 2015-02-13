@@ -30,7 +30,7 @@ public:
     Q_INVOKABLE int AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene=scene);
     Q_INVOKABLE int AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
     Q_INVOKABLE int AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
-    Q_INVOKABLE int AddLineItem(int x,int y,float fx,float fy,QGraphicsScene *scene=scene);
+    Q_INVOKABLE int AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene=scene);
     Q_INVOKABLE void RotationItem(int Number, float set,bool LastIndex=false);
     Q_INVOKABLE void ScaleItem(int Number, float set,bool LastIndexx=false);
     Q_INVOKABLE void MoveItem(int Number, float X, float Y,bool LastIndex=false);
