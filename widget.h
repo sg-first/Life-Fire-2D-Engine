@@ -16,8 +16,9 @@ public:
     ~Widget();
     //程序基础（实现于widget）
     void Initialization();//初始化函数
-    //图元管理器声明
+    //图元管理器
     QList<QGraphicsItem*> AllItem;
+    QList<myPixmap*> AllPixmapItem;
     QList<int> ItemNumber;
     int ItemNowNumber;
     //效果管理器
@@ -94,6 +95,8 @@ public:
     Q_INVOKABLE QString ReadINI(QString path,QString section,QString var);
     Q_INVOKABLE QString AESEncrypt(QString str,QString key);
     Q_INVOKABLE QString AESUncrypt(QString str,QString key);
+    Q_INVOKABLE void ChangePixmapItem(QString path,int number,bool LastIndex=false);
+    Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> address,int number,int time,QString signfun=NULL,bool cycle=true,bool LastIndex=false);
 
 
 protected:

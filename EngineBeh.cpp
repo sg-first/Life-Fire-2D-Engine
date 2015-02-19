@@ -25,6 +25,7 @@ int Widget::AddPixmapItem(QString PicPath,float X,float Y,QString fun,QString do
     ItemNumber<<ItemNowNumber;
     Blur<<NULL;
     Color<<NULL;
+    AllPixmapItem<<temp;
     int retur=ItemNowNumber;
     ItemNowNumber++;
     return retur;
@@ -32,18 +33,19 @@ int Widget::AddPixmapItem(QString PicPath,float X,float Y,QString fun,QString do
 
 int Widget::AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene)
 {
-QGraphicsTextItem *text=new QGraphicsTextItem(Text);
-text->setFont(QFont(Font,Size));
-text->setDefaultTextColor(QColor(CR,CG,CB));
-scene->addItem(text);
-text->setPos(X,Y);
-AllItem<<text;
-ItemNumber<<ItemNowNumber;
-Blur<<NULL;
-Color<<NULL;
-int retur=ItemNowNumber;
-ItemNowNumber++;
-return retur;
+    QGraphicsTextItem *text=new QGraphicsTextItem(Text);
+    text->setFont(QFont(Font,Size));
+    text->setDefaultTextColor(QColor(CR,CG,CB));
+    scene->addItem(text);
+    text->setPos(X,Y);
+    AllItem<<text;
+    ItemNumber<<ItemNowNumber;
+    Blur<<NULL;
+    Color<<NULL;
+    AllPixmapItem<<NULL;
+    int retur=ItemNowNumber;
+    ItemNowNumber++;
+    return retur;
 }
 
 int Widget::AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene)
@@ -54,6 +56,7 @@ int Widget::AddRectItem(float x,float y,float width,float height,QGraphicsScene 
     ItemNumber<<ItemNowNumber;
     Blur<<NULL;
     Color<<NULL;
+    AllPixmapItem<<NULL;
     int retur=ItemNowNumber;
     ItemNowNumber++;
     return retur;
@@ -67,6 +70,7 @@ int Widget::AddEllipseItem(float x,float y,float width,float height,QGraphicsSce
     ItemNumber<<ItemNowNumber;
     Blur<<NULL;
     Color<<NULL;
+    AllPixmapItem<<NULL;
     int retur=ItemNowNumber;
     ItemNowNumber++;
     return retur;
@@ -80,6 +84,7 @@ int Widget::AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene)
     ItemNumber<<ItemNowNumber;
     Blur<<NULL;
     Color<<NULL;
+    AllPixmapItem<<NULL;
     int retur=ItemNowNumber;
     ItemNowNumber++;
     return retur;
@@ -87,85 +92,87 @@ int Widget::AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene)
 
 void Widget::RotationItem(int Number, float set,bool LastIndex)
 {
-int Subscript=QListFindItem(LastIndex,Number);
-AllItem[Subscript]->setRotation(set);
-AllItem[Subscript]->rotation();
+    int Subscript=QListFindItem(LastIndex,Number);
+    AllItem[Subscript]->setRotation(set);
+    AllItem[Subscript]->rotation();
 }
 
 void Widget::ScaleItem(int Number, float set,bool LastIndex)
 {
-int Subscript=QListFindItem(LastIndex,Number);
-AllItem[Subscript]->setScale(set);
-AllItem[Subscript]->scale();
+    int Subscript=QListFindItem(LastIndex,Number);
+    AllItem[Subscript]->setScale(set);
+    AllItem[Subscript]->scale();
 }
 
 void Widget::BlurRadiusItem(int Number, float set,bool LastIndex)
 {
-int Subscript=QListFindItem(LastIndex,Number);
-QGraphicsBlurEffect *Effect=Blur[Subscript];
-if(Effect==NULL)
-{Effect=new QGraphicsBlurEffect(this);}
-Effect->setBlurRadius(set);
-AllItem[Subscript]->setGraphicsEffect(Effect);
-Blur[Subscript]=Effect;
+    int Subscript=QListFindItem(LastIndex,Number);
+    QGraphicsBlurEffect *Effect=Blur[Subscript];
+    if(Effect==NULL)
+    {Effect=new QGraphicsBlurEffect(this);}
+    Effect->setBlurRadius(set);
+    AllItem[Subscript]->setGraphicsEffect(Effect);
+    Blur[Subscript]=Effect;
 }
 
 void Widget::SetOpacityItem(int Number, float set,bool LastIndex)
 {
-int Subscript=QListFindItem(LastIndex,Number);
-AllItem[Subscript]->setOpacity(set);
+    int Subscript=QListFindItem(LastIndex,Number);
+    AllItem[Subscript]->setOpacity(set);
 }
 
 void Widget::SetColorItem(int Number,float R,float G,float B,bool LastIndex)
 {
-int Subscript=QListFindItem(LastIndex,Number);
-QGraphicsColorizeEffect *Effect=Color[Subscript];
-if(Effect==NULL)
-{Effect=new QGraphicsColorizeEffect(this);}
-Effect->setColor(QColor(R,G,B));
-AllItem[Subscript]->setGraphicsEffect(Effect);
-Color[Subscript]=Effect;
+    int Subscript=QListFindItem(LastIndex,Number);
+    QGraphicsColorizeEffect *Effect=Color[Subscript];
+    if(Effect==NULL)
+    {Effect=new QGraphicsColorizeEffect(this);}
+    Effect->setColor(QColor(R,G,B));
+    AllItem[Subscript]->setGraphicsEffect(Effect);
+    Color[Subscript]=Effect;
 }
 
 void Widget::ClearScene(QGraphicsScene *scene)
 {
-QMutableListIterator<QPair<int,SC *> > p(scPointer);
-p.toFront();
-while(p.hasNext())
-{p.next().second->over=1;}
+    QMutableListIterator<QPair<int,SC *> > p(scPointer);
+    p.toFront();
+    while(p.hasNext())
+    {p.next().second->over=1;}
 
-scene->clear();
-AllItem.clear();
-ItemNumber.clear();
-Blur.clear();
-Color.clear();
-ItemNowNumber=0;
+    scene->clear();
+    AllItem.clear();
+    ItemNumber.clear();
+    Blur.clear();
+    Color.clear();
+    AllPixmapItem.clear();
+    ItemNowNumber=0;
 }
 
 void Widget::DeleteItem(int Number,bool LastIndex)
 {
-endAnimation(Number);
-int Subscript=QListFindItem(LastIndex,Number);
-delete AllItem[Subscript];
-AllItem.removeAt(Subscript);
-ItemNumber.removeAt(Subscript);
-Blur.removeAt(Subscript);
-Color.removeAt(Subscript);
+    endAnimation(Number);
+    int Subscript=QListFindItem(LastIndex,Number);
+    delete AllItem[Subscript];
+    AllItem.removeAt(Subscript);
+    ItemNumber.removeAt(Subscript);
+    Blur.removeAt(Subscript);
+    Color.removeAt(Subscript);
+    AllPixmapItem.removeAt(Subscript);
 }
 
 void Widget::MoveItem(int Number, float X, float Y,bool LastIndex)
 {
-int Subscript=QListFindItem(LastIndex,Number);
-AllItem[Subscript]->setPos(X,Y);
+    int Subscript=QListFindItem(LastIndex,Number);
+    AllItem[Subscript]->setPos(X,Y);
 }
 
 QString Widget::GetPath(QString str)
 {
-QString path;
-QDir dir;
-path=dir.currentPath();
-path+="/"+str;
-return path;
+    QString path;
+    QDir dir;
+    path=dir.currentPath();
+    path+="/"+str;
+    return path;
 }
 
 void Widget::Sleep(int time)
@@ -443,6 +450,7 @@ int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStrin
     ItemNumber<<ItemNowNumber;
     Blur<<NULL;
     Color<<NULL;
+    AllPixmapItem<<temp;
     int retur=ItemNowNumber;//准备返回图元管理器序号
     ItemNowNumber++;//目前序号加1
 
@@ -606,4 +614,30 @@ QString Widget::AESUncrypt(QString str,QString key)
 {
    AesHelper aes(key);
    return aes.aesUncrypt(str);
+}
+
+void Widget::ChangePixmapItem(QString path,int Number,bool LastIndex)
+{AllPixmapItem[QListFindItem(LastIndex,Number)]->setPixmap(QPixmap(path));}
+
+void Widget::ChangePicAnimationItem(QVector<QString> address,int Number,int time,QString signfun,bool cycle,bool LastIndex)
+{
+    endAnimation(Number);
+    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
+    myPixmap *temp=AllPixmapItem[QListFindItem(LastIndex,Number)];//查找到图元序号对应的mypixmap指针
+    temp->setPixmap(QPixmap(address[0]));//变更当前图片为图集的第一帧
+
+    QMutableListIterator<QPair<int,SC *> > it(scPointer);//创建迭代器
+    SC *sc=new SC(0,0,time,it);//创建SC实例
+    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
+    sc->cycle=cycle;//定义是否循环连续播图
+
+    if(!cycle)//若不循环（默认是循环，true）
+    {sc->signfun=signfun;}//搬移一下播放完成要发出的信号
+
+    for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
+    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
+    QPair<int,SC *> p(Number,sc);//创建关联容器准备将当前实例导入SC管理器
+    scPointer<<p;//置入SC管理器
+    sc->start(7);
+    sc->num=Number;
 }

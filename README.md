@@ -4,8 +4,8 @@ Life-Fire is the SG-Studio packages graphics engine base on Qt library, enabling
 
 Version:
 -----------------------------------
-Beta v2.3
+Beta v2.36
 
 Progress:
 -----------------------------------
-Repair of the BUG that call the dynamic script function, now developers can create the dynamic function library. Add the functionality that reading and writing the configuration files and text files. Add the functionality that using the AES algorithm to encrypt and decrypt strings. Optimize the structure of the SC class. Repair of the BUG that may result in garbled and memory leak.
+Repair of the BUG that call the dynamic script function, now developers can create the dynamic function library. Add the functionality that reading and writing the configuration files and text files. Add the functionality that using the AES algorithm to encrypt and decrypt strings. Optimize the structure of the SC class. Repair of the BUG that may result in garbled and memory leak.Support the item's read-time transtormation.
