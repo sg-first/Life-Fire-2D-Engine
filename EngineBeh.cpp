@@ -175,9 +175,6 @@ QString Widget::GetPath(QString str)
     return path;
 }
 
-void Widget::Sleep(int time)
-{QThread::msleep(time);}
-
 int Widget::QListFindItem(bool LastIndex,int Number)
 {
     int Subscript;
@@ -251,12 +248,16 @@ void Widget::AnimationMoveItem(int Number,float X,float Y,int time,QString signf
     s->start(3);
 }
 
-void Widget::EasyThread(QString Fun)
+easythread* Widget::EasyThread(QString Fun)
 {
-    QByteArray ba = Fun.toLatin1();
-    const char *function = ba.data();
-    QMetaObject::invokeMethod(thob,function);
+    easythread *thread=new easythread;
+    thread->fun=Fun;
+    thread->start();
+    return thread;
 }
+
+void Widget::StopThread(easythread *thread)
+{thread->exit();}
 
 bool Widget::IsColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2)
 {return bool(Ritem1->QGraphicsItem::collidesWithItem(Ritem2));}
@@ -591,7 +592,7 @@ void Widget::WriteTXT(QString path, QString text)//这个函数等等再搞，�
     file.close();
 }
 
-QString Widget::WriteINI(QString path, QString section, QString var, QString value)
+void Widget::WriteINI(QString path, QString section, QString var, QString value)
 {
     QSettings configIniWrite(path,QSettings::IniFormat);
     configIniWrite.setValue("/"+section+"/"+var,value);

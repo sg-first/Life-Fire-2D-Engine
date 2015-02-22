@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     KeyPress.cpp \
     library.cpp \
     js.cpp \
-    AES.cpp
+    AES.cpp \
+    Thread.cpp
 
 HEADERS  += widget.h \
     head.h \

@@ -41,7 +41,6 @@ public:
     Q_INVOKABLE void ClearScene(QGraphicsScene *scene=scene);
     Q_INVOKABLE void DeleteItem(int Number,bool LastIndex=false);
     Q_INVOKABLE QString GetPath(QString str);
-    Q_INVOKABLE void Sleep(int time);
     Q_INVOKABLE int QListFindItem(bool LastIndex, int Number);
     Q_INVOKABLE void SetVisibleItem(int Number,bool Enabled,bool LastIndex=false);
     Q_INVOKABLE QMediaPlayer* PlayMusic(QString name, int volume, bool cycle=false);
@@ -53,7 +52,8 @@ public:
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void ContinueVideo(VideoPlayer *video);
     Q_INVOKABLE void StopVideo(VideoPlayer *video);
-    Q_INVOKABLE void EasyThread(QString Fun);
+    Q_INVOKABLE easythread* EasyThread(QString Fun);
+    Q_INVOKABLE void StopThread(easythread *thread);
     Q_INVOKABLE bool IsColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2);
     Q_INVOKABLE bool ItemColliding(int item1,int item2);
     Q_INVOKABLE void AnimationRotationItem(int Number, float set,int times,QString signfun=NULL,bool LastIndex=false);//旋转
@@ -91,7 +91,7 @@ public:
     Q_INVOKABLE void RotateView(float set,graphicsview *view=MainView);
     Q_INVOKABLE QString ReadTXT(QString path, int line=-1);
     Q_INVOKABLE void WriteTXT(QString path,QString text);
-    Q_INVOKABLE QString WriteINI(QString path,QString section,QString var,QString value);
+    Q_INVOKABLE void WriteINI(QString path,QString section,QString var,QString value);
     Q_INVOKABLE QString ReadINI(QString path,QString section,QString var);
     Q_INVOKABLE QString AESEncrypt(QString str,QString key);
     Q_INVOKABLE QString AESUncrypt(QString str,QString key);

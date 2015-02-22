@@ -293,3 +293,11 @@ void graphicsview::Scale(float sx,float sy)
 
 void graphicsview::Rotate(float set)
 {rotate(set);}
+
+//线程类
+void easythread::run()
+{
+    QByteArray ba = fun.toLatin1();
+    const char *function = ba.data();
+    QMetaObject::invokeMethod(thob,function,Qt::DirectConnection);
+}

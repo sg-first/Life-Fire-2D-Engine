@@ -90,7 +90,7 @@ private slots:
 };
 
 
-class myPixmap : public QGraphicsPixmapItem//重载图元类
+class myPixmap : public QGraphicsPixmapItem//图元类
 {
 public:
     myPixmap(QGraphicsItem *parent = 0):QGraphicsPixmapItem::QGraphicsPixmapItem(parent){}
@@ -128,7 +128,7 @@ private slots:
 };
 
 
-class graphicsview : public QGraphicsView//重载视图类
+class graphicsview : public QGraphicsView//视图类
 {
 public:
     graphicsview(QWidget *parent):QGraphicsView(parent){}
@@ -137,4 +137,26 @@ public:
 
 protected:
     void wheelEvent(QWheelEvent *event){}
+};
+
+class easythread : public QThread//线程类
+{
+public:
+    void run();
+    QString fun;
+};
+
+
+struct ParametersStru
+{
+    QVector<int> intVar;
+    QVector<float> floatVar;
+    QVector<QString> QStringVar;
+    QVector<bool> boolVar;
+    QVector<QMediaPlayer*> QMediaPlayerVar;
+    QVector<VideoPlayer*> VideoPlayerVar;
+    QVector<graphicsview*> graphicsviewVar;
+    QVector<QGraphicsScene*> QGraphicsSceneVar;
+    QVector<QScriptValue> QScriptValueVar;
+    QVector<easythread*> easythreadVar;
 };
