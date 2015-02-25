@@ -257,7 +257,7 @@ easythread* Widget::EasyThread(QString Fun)
 }
 
 void Widget::StopThread(easythread *thread)
-{thread->exit();}
+{thread->terminate();}
 
 bool Widget::IsColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2)
 {return bool(Ritem1->QGraphicsItem::collidesWithItem(Ritem2));}
