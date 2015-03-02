@@ -248,12 +248,19 @@ void Widget::AnimationMoveItem(int Number,float X,float Y,int time,QString signf
     s->start(3);
 }
 
-easythread* Widget::EasyThread(QString Fun)
+easythread* Widget::StartThread(QString Fun,bool track)
 {
-    easythread *thread=new easythread;
-    thread->fun=Fun;
-    thread->start();
-    return thread;
+    if(track)
+    {
+      easythread *thread=new easythread;
+      thread->fun=Fun;
+      thread->start();
+      return thread;
+    }
+    QByteArray ba = Fun.toLatin1();
+    const char *function = ba.data();
+    QMetaObject::invokeMethod(thob,function,Qt::QueuedConnection);
+    return NULL;
 }
 
 void Widget::StopThread(easythread *thread)
