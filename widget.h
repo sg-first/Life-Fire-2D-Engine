@@ -72,7 +72,7 @@ public:
     Q_INVOKABLE float GetItemRotation(int Number,bool LastIndex);
     Q_INVOKABLE float GetItemScale(int Number,bool LastIndex);
     Q_INVOKABLE int AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,bool cycle=true,QGraphicsScene *scene=scene);
-    Q_INVOKABLE void endAnimation(int Number,QString signfun=NULL);
+    Q_INVOKABLE void endAnimation(int Number, animationtype choose);
     Q_INVOKABLE void SetViewCenter(float x, float y, graphicsview *gview=MainView);
     Q_INVOKABLE void SetViewItemCenter(int Number,graphicsview *gview=MainView,bool LastIndex=false);
     Q_INVOKABLE float GetMainViewX();
@@ -97,7 +97,7 @@ public:
     Q_INVOKABLE QString AESUncrypt(QString str,QString key);
     Q_INVOKABLE void ChangePixmapItem(QString path,int number,bool LastIndex=false);
     Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> address,int number,int time,QString signfun=NULL,bool cycle=true,bool LastIndex=false);
-
+    Q_INVOKABLE void DeleteFile(QString path);
 
 protected:
     void keyPressEvent(QKeyEvent *e);

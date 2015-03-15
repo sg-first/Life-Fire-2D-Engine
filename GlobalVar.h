@@ -11,10 +11,11 @@ public:
     //您可以在此添加需要传递到js中的全局变量，成员前请加Q_INVOKABLE
     //例：Q_INVOKABLE int var;
 
+
 signals:
     //您可以在此添加异步变同步等功能需要用到的信号，只需声明，无需实现
     //例子：void FunctionFinish();
-    void ff();
+
 };
 
 //-引擎自带的全局常量

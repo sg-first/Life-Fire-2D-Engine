@@ -267,23 +267,26 @@ void SC::SlowChange()
     }
     if(over)
     {
-        if(signfun!=NULL)
-        {
+       if(over==1)
+       {
+         p.toFront();
+         while(p.hasNext())
+         {
+           if(p.next().second==this)
+           {
+             p.remove();
+             break;
+           }
+         }
+       }
+       if(signfun!=NULL)
+       {
          QByteArray ba = signfun.toLatin1();
          const char *function = ba.data();
          QMetaObject::invokeMethod(lfevent,function);
-        }
-        p.toFront();
-        while(p.hasNext())
-        {
-            if(p.next().second==this)
-            {
-                p.remove();
-                break;
-            }
-        }
-        delete timer;
-        delete this;
+       }
+       delete timer;
+       delete this;
     }
 }
 

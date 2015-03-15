@@ -59,6 +59,7 @@ public:
     void start(int choose);
     bool cycle;//连续播图是否循环播放
     int num;//动画在图元管理器中的序号
+    int choose;//start()函数的参数
 
 protected:
     float CurrentModulus;//当前系数
@@ -70,7 +71,6 @@ protected:
     int times;//变化所需【总】时间,单位：毫秒
     QTimer *timer;//计时器
     QMutableListIterator<QPair<int,SC *> > p;
-    int choose;//start()函数的参数
     float temp;//临时变量，在某些特殊情况下用于各个函数之间通信使用
     float temp1;//临时变量，在某些特殊情况下用于各个函数之间通信使用
     float temp2;//临时变量，在某些特殊情况下用于各个函数之间通信使用
@@ -146,6 +146,7 @@ public:
     QString fun;
 };
 
+enum animationtype{_,Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture};
 
 struct ParametersStru
 {

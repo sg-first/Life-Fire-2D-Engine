@@ -23,7 +23,7 @@ int Widget::AddPixmapItem(QString PicPath,float X,float Y,QString fun,QString do
     Item->setPos(X,Y);
     AllItem<<Item;
     ItemNumber<<ItemNowNumber;
-    Blur<<NULL;
+    Blur<<0;
     Color<<NULL;
     AllPixmapItem<<temp;
     int retur=ItemNowNumber;
@@ -40,7 +40,7 @@ int Widget::AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,
     text->setPos(X,Y);
     AllItem<<text;
     ItemNumber<<ItemNowNumber;
-    Blur<<NULL;
+    Blur<<0;
     Color<<NULL;
     AllPixmapItem<<NULL;
     int retur=ItemNowNumber;
@@ -54,7 +54,7 @@ int Widget::AddRectItem(float x,float y,float width,float height,QGraphicsScene 
     scene->addItem(rect);
     AllItem<<rect;
     ItemNumber<<ItemNowNumber;
-    Blur<<NULL;
+    Blur<<0;
     Color<<NULL;
     AllPixmapItem<<NULL;
     int retur=ItemNowNumber;
@@ -68,7 +68,7 @@ int Widget::AddEllipseItem(float x,float y,float width,float height,QGraphicsSce
     scene->addItem(Ellipse);
     AllItem<<Ellipse;
     ItemNumber<<ItemNowNumber;
-    Blur<<NULL;
+    Blur<<0;
     Color<<NULL;
     AllPixmapItem<<NULL;
     int retur=ItemNowNumber;
@@ -82,7 +82,7 @@ int Widget::AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene)
     scene->addItem(line);
     AllItem<<line;
     ItemNumber<<ItemNowNumber;
-    Blur<<NULL;
+    Blur<<0;
     Color<<NULL;
     AllPixmapItem<<NULL;
     int retur=ItemNowNumber;
@@ -479,23 +479,19 @@ int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStrin
     return retur;
 }
 
-void Widget::endAnimation(int Number,QString signfun)
+void Widget::endAnimation(int Number,animationtype choose)
 {
+    assert(choose!=_);
     QMutableListIterator<QPair<int,SC *> > p(scPointer);
     p.toFront();
     while(p.hasNext())
     {
-        if(p.next().first==Number)
+        if(p.next().first==Number && p.value().second->choose==choose)
         {
-            p.value().second->over=1;
+            p.value().second->over=2;
+            p.remove();
             break;
         }
-    }
-    if(signfun!=NULL)
-    {
-     QByteArray ba = signfun.toLatin1();
-     const char *function = ba.data();
-     QMetaObject::invokeMethod(lfevent,function);
     }
 }
 
@@ -625,7 +621,11 @@ QString Widget::AESUncrypt(QString str,QString key)
 }
 
 void Widget::ChangePixmapItem(QString path,int Number,bool LastIndex)
-{AllPixmapItem[QListFindItem(LastIndex,Number)]->setPixmap(QPixmap(path));}
+{
+    myPixmap *pixmap=AllPixmapItem[QListFindItem(LastIndex,Number)];
+    assert(pixmap!=NULL);
+    pixmap->setPixmap(QPixmap(path));
+}
 
 void Widget::ChangePicAnimationItem(QVector<QString> address,int Number,int time,QString signfun,bool cycle,bool LastIndex)
 {
@@ -649,3 +649,6 @@ void Widget::ChangePicAnimationItem(QVector<QString> address,int Number,int time
     sc->start(7);
     sc->num=Number;
 }
+
+void Widget::DeleteFile(QString path)
+{QFile::remove(path);}
