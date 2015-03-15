@@ -90,23 +90,23 @@ int Widget::AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene)
     return retur;
 }
 
-void Widget::RotationItem(int Number, float set,bool LastIndex)
+void Widget::RotationItem(int item, float set,bool LastIndex)
 {
-    int Subscript=QListFindItem(LastIndex,Number);
+    int Subscript=QListFindItem(LastIndex,item);
     AllItem[Subscript]->setRotation(set);
     AllItem[Subscript]->rotation();
 }
 
-void Widget::ScaleItem(int Number, float set,bool LastIndex)
+void Widget::ScaleItem(int item, float set,bool LastIndex)
 {
-    int Subscript=QListFindItem(LastIndex,Number);
+    int Subscript=QListFindItem(LastIndex,item);
     AllItem[Subscript]->setScale(set);
     AllItem[Subscript]->scale();
 }
 
-void Widget::BlurRadiusItem(int Number, float set,bool LastIndex)
+void Widget::BlurRadiusItem(int item, float set,bool LastIndex)
 {
-    int Subscript=QListFindItem(LastIndex,Number);
+    int Subscript=QListFindItem(LastIndex,item);
     QGraphicsBlurEffect *Effect=Blur[Subscript];
     if(Effect==NULL)
     {Effect=new QGraphicsBlurEffect(this);}
@@ -115,15 +115,15 @@ void Widget::BlurRadiusItem(int Number, float set,bool LastIndex)
     Blur[Subscript]=Effect;
 }
 
-void Widget::SetOpacityItem(int Number, float set,bool LastIndex)
+void Widget::SetOpacityItem(int item, float set,bool LastIndex)
 {
-    int Subscript=QListFindItem(LastIndex,Number);
+    int Subscript=QListFindItem(LastIndex,item);
     AllItem[Subscript]->setOpacity(set);
 }
 
-void Widget::SetColorItem(int Number,float R,float G,float B,bool LastIndex)
+void Widget::SetColorItem(int item,float R,float G,float B,bool LastIndex)
 {
-    int Subscript=QListFindItem(LastIndex,Number);
+    int Subscript=QListFindItem(LastIndex,item);
     QGraphicsColorizeEffect *Effect=Color[Subscript];
     if(Effect==NULL)
     {Effect=new QGraphicsColorizeEffect(this);}
@@ -148,10 +148,10 @@ void Widget::ClearScene(QGraphicsScene *scene)
     ItemNowNumber=0;
 }
 
-void Widget::DeleteItem(int Number,bool LastIndex)
+void Widget::DeleteItem(int item,bool LastIndex)
 {
-    endAnimation(Number);
-    int Subscript=QListFindItem(LastIndex,Number);
+    //endAnimation(item);
+    int Subscript=QListFindItem(LastIndex,item);
     delete AllItem[Subscript];
     AllItem.removeAt(Subscript);
     ItemNumber.removeAt(Subscript);
@@ -160,9 +160,9 @@ void Widget::DeleteItem(int Number,bool LastIndex)
     AllPixmapItem.removeAt(Subscript);
 }
 
-void Widget::MoveItem(int Number, float X, float Y,bool LastIndex)
+void Widget::MoveItem(int item, float X, float Y,bool LastIndex)
 {
-    int Subscript=QListFindItem(LastIndex,Number);
+    int Subscript=QListFindItem(LastIndex,item);
     AllItem[Subscript]->setPos(X,Y);
 }
 
@@ -175,19 +175,19 @@ QString Widget::GetPath(QString str)
     return path;
 }
 
-int Widget::QListFindItem(bool LastIndex,int Number)
+int Widget::QListFindItem(bool LastIndex,int item)
 {
     int Subscript;
     if (!LastIndex)
-    {Subscript=ItemNumber.indexOf(Number);}
+    {Subscript=ItemNumber.indexOf(item);}
     else
-    {Subscript=ItemNumber.lastIndexOf(Number);}
+    {Subscript=ItemNumber.lastIndexOf(item);}
     return Subscript;
 }
 
-void Widget::SetVisibleItem(int Number,bool Enabled,bool LastIndex)
+void Widget::SetVisibleItem(int item,bool Enabled,bool LastIndex)
 {
-    int Subscript=QListFindItem(LastIndex,Number);
+    int Subscript=QListFindItem(LastIndex,item);
     AllItem[Subscript]->setVisible(Enabled);
 }
 
@@ -234,16 +234,16 @@ void Widget::PauseMusic(QMediaPlayer *player)
 void Widget::ContinueMusic(QMediaPlayer *player)
 {player->play();}
 
-void Widget::AnimationMoveItem(int Number,float X,float Y,int time,QString signfun,bool LastIndex)
+void Widget::AnimationMoveItem(int item,float X,float Y,int time,QString signfun,bool LastIndex)
 {
-    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,Number)];
+    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,item)];
     float dx=gr->x();
     float dy=gr->y();
     QMutableListIterator<QPair<int,SC *> > it(scPointer);
     SC *s=new SC(0,0,X-dx,Y-dy,time,it);
     s->gr=gr;
     s->signfun=signfun;
-    QPair<int,SC *> p(Number,s);
+    QPair<int,SC *> p(item,s);
     scPointer<<p;
     s->start(3);
 }
@@ -293,36 +293,36 @@ void Widget::ContinueVideo(VideoPlayer *video)
 void Widget::StopVideo(VideoPlayer *video)
 {video->mediaPlayer->stop();}
 
-void Widget::AnimationRotationItem(int Number, float set,int times,QString signfun,bool LastIndex)
+void Widget::AnimationRotationItem(int item, float set,int times,QString signfun,bool LastIndex)
 {
-    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,Number)];
+    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,item)];
     float CurrentModulus=gr->rotation();
 
     QMutableListIterator<QPair<int,SC *> > it(scPointer);
     SC *s=new SC(CurrentModulus,set,times,it);
     s->gr=gr;
     s->signfun=signfun;
-    QPair<int,SC *> p(Number,s);
+    QPair<int,SC *> p(item,s);
     scPointer<<p;
     s->start(1);
 }
 
-void Widget::AnimationScaleItem(int Number, float set,int times,QString signfun,bool LastIndex)
+void Widget::AnimationScaleItem(int item, float set,int times,QString signfun,bool LastIndex)
 {
-    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,Number)];
+    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,item)];
     float CurrentModulus=gr->scale();
     QMutableListIterator<QPair<int,SC *> > it(scPointer);
     SC *s=new SC(CurrentModulus,set,times,it);
     s->gr=gr;
     s->signfun=signfun;
-    QPair<int,SC *> p(Number,s);
+    QPair<int,SC *> p(item,s);
     scPointer<<p;
     s->start(2);
 }
 
-void Widget::AnimationBlurRadiusItem(int Number, float set, int times,QString signfun,bool LastIndex)
+void Widget::AnimationBlurRadiusItem(int item, float set, int times,QString signfun,bool LastIndex)
 {
-    int sub=QListFindItem(LastIndex,Number);
+    int sub=QListFindItem(LastIndex,item);
     float CurrentModulus;//当前系数
     QGraphicsBlurEffect *Effect=Blur[sub];
     if(Blur[sub]==NULL)
@@ -338,7 +338,7 @@ void Widget::AnimationBlurRadiusItem(int Number, float set, int times,QString si
     s->gr=gr;
     s->Effect=effect;
     s->signfun=signfun;
-    QPair<int,SC *> p(Number,s);
+    QPair<int,SC *> p(item,s);
     scPointer<<p;
     s->start(4);
 
@@ -346,22 +346,22 @@ void Widget::AnimationBlurRadiusItem(int Number, float set, int times,QString si
     Blur[sub]=Effect;
 }
 
-void Widget::AnimationSetOpacityItem(int Number, float set, int times,QString signfun,bool LastIndex)
+void Widget::AnimationSetOpacityItem(int item, float set, int times,QString signfun,bool LastIndex)
 {
-    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,Number)];
+    QGraphicsItem* gr=AllItem[QListFindItem(LastIndex,item)];
     float CurrentModulus=gr->opacity();
     QMutableListIterator<QPair<int,SC *> > it(scPointer);
     SC *s=new SC(CurrentModulus,set,times,it);
     s->gr=gr;
     s->signfun=signfun;
-    QPair<int,SC *> p(Number,s);
+    QPair<int,SC *> p(item,s);
     scPointer<<p;
     s->start(5);
 }
 
-void Widget::AnimationSetColorItem(int Number, float R, float G, float B, int times,QString signfun,bool LastIndex)
+void Widget::AnimationSetColorItem(int item, float R, float G, float B, int times,QString signfun,bool LastIndex)
 {
-    int sub=QListFindItem(LastIndex,Number);
+    int sub=QListFindItem(LastIndex,item);
     //当前系数
     float CurrentModulus;
     float CurrentModulus2;
@@ -389,7 +389,7 @@ void Widget::AnimationSetColorItem(int Number, float R, float G, float B, int ti
     s->gr=gr;
     s->co=co;
     s->signfun=signfun;
-    QPair<int,SC *> p(Number,s);
+    QPair<int,SC *> p(item,s);
     scPointer<<p;
     s->start(6);
 
@@ -397,55 +397,55 @@ void Widget::AnimationSetColorItem(int Number, float R, float G, float B, int ti
     Color[sub]=Effect;
 }
 
-float Widget::GetItemX(int Number,bool LastIndex)
-{return AllItem[QListFindItem(LastIndex,Number)]->x();}
+float Widget::GetItemX(int item,bool LastIndex)
+{return AllItem[QListFindItem(LastIndex,item)]->x();}
 
-float Widget::GetItemY(int Number,bool LastIndex)
-{return AllItem[QListFindItem(LastIndex,Number)]->y();}
+float Widget::GetItemY(int item,bool LastIndex)
+{return AllItem[QListFindItem(LastIndex,item)]->y();}
 
-float Widget::GetItemR(int Number,bool LastIndex)
+float Widget::GetItemR(int item,bool LastIndex)
 {
-    int sub=QListFindItem(LastIndex,Number);
+    int sub=QListFindItem(LastIndex,item);
     if(Color[sub]==NULL)
     {return 0;}
     QColor color=Color[sub]->color();
     return color.red();
 }
 
-float Widget::GetItemG(int Number,bool LastIndex)
+float Widget::GetItemG(int item,bool LastIndex)
 {
-    int sub=QListFindItem(LastIndex,Number);
+    int sub=QListFindItem(LastIndex,item);
     if(Color[sub]==NULL)
     {return 0;}
     QColor color=Color[sub]->color();
     return color.green();
 }
 
-float Widget::GetItemB(int Number,bool LastIndex)
+float Widget::GetItemB(int item,bool LastIndex)
 {
-    int sub=QListFindItem(LastIndex,Number);
+    int sub=QListFindItem(LastIndex,item);
     if(Color[sub]==NULL)
     {return 0;}
     QColor color=Color[sub]->color();
     return color.blue();
 }
 
-float Widget::GetItemBlur(int Number,bool LastIndex)
+float Widget::GetItemBlur(int item,bool LastIndex)
 {
-    int sub=QListFindItem(LastIndex,Number);
+    int sub=QListFindItem(LastIndex,item);
     if(Blur[sub]==NULL)
     {return 0;}
     return Blur[sub]->blurRadius();
 }
 
-float Widget::GetItemOpacity(int Number,bool LastIndex)
-{return AllItem[QListFindItem(LastIndex,Number)]->opacity();}
+float Widget::GetItemOpacity(int item,bool LastIndex)
+{return AllItem[QListFindItem(LastIndex,item)]->opacity();}
 
-float Widget::GetItemRotation(int Number,bool LastIndex)
-{return AllItem[QListFindItem(LastIndex,Number)]->rotation();}
+float Widget::GetItemRotation(int item,bool LastIndex)
+{return AllItem[QListFindItem(LastIndex,item)]->rotation();}
 
-float Widget::GetItemScale(int Number,bool LastIndex)
-{return AllItem[QListFindItem(LastIndex,Number)]->scale();}
+float Widget::GetItemScale(int item,bool LastIndex)
+{return AllItem[QListFindItem(LastIndex,item)]->scale();}
 
 int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun,bool cycle,QGraphicsScene *scene)
 {
@@ -479,14 +479,14 @@ int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStrin
     return retur;
 }
 
-void Widget::endAnimation(int Number,animationtype choose)
+void Widget::endAnimation(int item,animationtype choose)
 {
     assert(choose!=_);
     QMutableListIterator<QPair<int,SC *> > p(scPointer);
     p.toFront();
     while(p.hasNext())
     {
-        if(p.next().first==Number && p.value().second->choose==choose)
+        if(p.next().first==item && p.value().second->choose==choose)
         {
             p.value().second->over=2;
             p.remove();
@@ -505,9 +505,9 @@ void Widget::SetViewCenter(float x, float y,graphicsview *gview)
     }
 }
 
-void Widget::SetViewItemCenter(int Number,graphicsview *gview,bool LastIndex)
+void Widget::SetViewItemCenter(int item,graphicsview *gview,bool LastIndex)
 {
-    int sub=QListFindItem(LastIndex,Number);
+    int sub=QListFindItem(LastIndex,item);
     gview->centerOn(AllItem[sub]);
     if(gview==MainView)
     {
@@ -557,14 +557,14 @@ void Widget::SafeSleep(int time)
     T1 TFFIRST1 time TFOVER1 Q1 FFIRSTOVER2 FDelFITST T1 FDelOVER FDelFITST Q1 FDelOVER
 }
 
-void Widget::SetItemLayer(int Number,int Layer,bool LastIndex)
+void Widget::SetItemLayer(int item,int Layer,bool LastIndex)
 {
     //Qt默认都是0，如果在不手动排序的情况下将一个item设为顶层则设为1，底层-1
-    AllItem[QListFindItem(LastIndex,Number)]->setZValue(Layer);
+    AllItem[QListFindItem(LastIndex,item)]->setZValue(Layer);
 }
 
-void Widget::SetItemOrder(int BelowNumber, int AboveNumber,bool LastIndex)
-{AllItem[QListFindItem(LastIndex,BelowNumber)]->stackBefore(AllItem[QListFindItem(LastIndex,AboveNumber)]);}
+void Widget::SetItemOrder(int Belowitem, int Aboveitem,bool LastIndex)
+{AllItem[QListFindItem(LastIndex,Belowitem)]->stackBefore(AllItem[QListFindItem(LastIndex,Aboveitem)]);}
 
 void Widget::ScaleView(float sx, float sy, graphicsview *view)
 {view->Scale(sx,sy);}
@@ -620,18 +620,18 @@ QString Widget::AESUncrypt(QString str,QString key)
    return aes.aesUncrypt(str);
 }
 
-void Widget::ChangePixmapItem(QString path,int Number,bool LastIndex)
+void Widget::ChangePixmapItem(QString path,int item,bool LastIndex)
 {
-    myPixmap *pixmap=AllPixmapItem[QListFindItem(LastIndex,Number)];
+    myPixmap *pixmap=AllPixmapItem[QListFindItem(LastIndex,item)];
     assert(pixmap!=NULL);
     pixmap->setPixmap(QPixmap(path));
 }
 
-void Widget::ChangePicAnimationItem(QVector<QString> address,int Number,int time,QString signfun,bool cycle,bool LastIndex)
+void Widget::ChangePicAnimationItem(QVector<QString> address,int item,int time,QString signfun,bool cycle,bool LastIndex)
 {
-    endAnimation(Number);
+    endAnimation(item,Picture);
     assert(!address.isEmpty());//断言，确认传入的图片容器不为空
-    myPixmap *temp=AllPixmapItem[QListFindItem(LastIndex,Number)];//查找到图元序号对应的mypixmap指针
+    myPixmap *temp=AllPixmapItem[QListFindItem(LastIndex,item)];//查找到图元序号对应的mypixmap指针
     temp->setPixmap(QPixmap(address[0]));//变更当前图片为图集的第一帧
 
     QMutableListIterator<QPair<int,SC *> > it(scPointer);//创建迭代器
@@ -644,10 +644,10 @@ void Widget::ChangePicAnimationItem(QVector<QString> address,int Number,int time
 
     for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
     {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
-    QPair<int,SC *> p(Number,sc);//创建关联容器准备将当前实例导入SC管理器
+    QPair<int,SC *> p(item,sc);//创建关联容器准备将当前实例导入SC管理器
     scPointer<<p;//置入SC管理器
     sc->start(7);
-    sc->num=Number;
+    sc->num=item;
 }
 
 void Widget::DeleteFile(QString path)
