@@ -4,7 +4,7 @@
 
 LFEvent *lfevent;
 QGraphicsScene *scene;//声明舞台
-graphicsview *MainView;//声明视图
+GraphicsView *MainView;//声明视图
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -26,14 +26,14 @@ void Widget::Initialization()
     ItemNowNumber=0;
     lfevent=new LFEvent;
     //初始化窗口
-    scene=new QGraphicsScene(0,0,10000,10000);
+    scene=new QGraphicsScene(0,0,MaximumWidth,MaximunHeigh);
     int width=QApplication::desktop()->width();//获取分辨率宽
     int height=QApplication::desktop()->height();//获取分辨率高
     width=(width-WindowsWidth)/2;height=(height-WindowsHeigh)/2;//计算窗口应该出现的位置
     setGeometry(width,height,WindowsWidth,WindowsHeigh);//设置窗口初始位置和大小
     setFixedSize(WindowsWidth,WindowsHeigh);//设置窗口最大大小
     setWindowTitle(title);//设置窗口标题
-    MainView=new graphicsview(this);//定义视图
+    MainView=new GraphicsView(this);//定义视图
     SetViewCenter(WindowsWidth/2,WindowsHeigh/2);
     MainView->setGeometry(0,0,WindowsWidth,WindowsHeigh);//定义视图大小
     MainView->setScene(scene);//视图定义到舞台

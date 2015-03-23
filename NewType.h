@@ -52,6 +52,7 @@ public:
     QGraphicsItem* gr;
     QGraphicsBlurEffect *Effect;
     QGraphicsColorizeEffect *co;
+    QTransform *tf;
     QGraphicsPixmapItem *pi;
     QVector<QPixmap> pixmap;
     QString signfun;
@@ -90,11 +91,11 @@ private slots:
 };
 
 
-class myPixmap : public QGraphicsPixmapItem//图元类
+class MyPixmap : public QGraphicsPixmapItem//图元类
 {
 public:
-    myPixmap(QGraphicsItem *parent = 0):QGraphicsPixmapItem::QGraphicsPixmapItem(parent){}
-    myPixmap(const QPixmap &pixmap, QGraphicsItem *parent = 0)
+    MyPixmap(QGraphicsItem *parent = 0):QGraphicsPixmapItem::QGraphicsPixmapItem(parent){}
+    MyPixmap(const QPixmap &pixmap, QGraphicsItem *parent = 0)
         :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent){}
     QPixmap up;
     QString fun;
@@ -128,10 +129,10 @@ private slots:
 };
 
 
-class graphicsview : public QGraphicsView//视图类
+class GraphicsView : public QGraphicsView//视图类
 {
 public:
-    graphicsview(QWidget *parent):QGraphicsView(parent){}
+    GraphicsView(QWidget *parent):QGraphicsView(parent){}
     void Scale(float sx, float sy);
     void Rotate(float set);
 
@@ -139,14 +140,31 @@ protected:
     void wheelEvent(QWheelEvent *event){}
 };
 
-class easythread : public QThread//线程类
+
+struct ParametersStru;
+class EasyThread : public QThread//线程类
 {
 public:
     void run();
     QString fun;
+    ParametersStru *par;
 };
 
-enum animationtype{_,Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture};
+
+enum AnimationType{Rotation=1,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
+
+
+struct Item
+{
+    QGraphicsItem *ItemPointer;
+    MyPixmap *PixmapItemPoniter;
+    QGraphicsBlurEffect *Blur;
+    QGraphicsColorizeEffect *Color;
+    QTransform *TransForm;
+    float ShearX;
+    float ShearY;
+};
+
 
 struct ParametersStru
 {
@@ -154,10 +172,12 @@ struct ParametersStru
     QVector<float> floatVar;
     QVector<QString> QStringVar;
     QVector<bool> boolVar;
-    QVector<QMediaPlayer*> QMediaPlayerVar;
     QVector<VideoPlayer*> VideoPlayerVar;
-    QVector<graphicsview*> graphicsviewVar;
+    QVector<GraphicsView*> GraphicsViewVar;
+    QVector<EasyThread*> EasyThreadVar;
+    QVector<AnimationType*> AnimationTypeVar;
+
+    QVector<QMediaPlayer*> QMediaPlayerVar;
     QVector<QGraphicsScene*> QGraphicsSceneVar;
     QVector<QScriptValue> QScriptValueVar;
-    QVector<easythread*> easythreadVar;
 };
