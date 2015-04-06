@@ -174,7 +174,7 @@ struct ParametersStru
     QVector<VideoPlayer*> VideoPlayerVar;
     QVector<GraphicsView*> GraphicsViewVar;
     QVector<EasyThread*> EasyThreadVar;
-    QVector<AnimationType*> AnimationTypeVar;
+    QVector<AnimationType> AnimationTypeVar;
 
     QVector<QMediaPlayer*> QMediaPlayerVar;
     QVector<QGraphicsScene*> QGraphicsSceneVar;
