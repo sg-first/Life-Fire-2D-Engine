@@ -15,7 +15,7 @@ int Widget::AddPixmapItem(QString PicPath,float X,float Y,QString fun,QString do
     scene->addItem(temp);
     temp->setPos(X,Y);
     ItemNumber<<ItemNowNumber;
-    Item *item=new Item{temp,temp,NULL,NULL,NULL,0,0};
+    Item *item=new Item{temp,temp,NULL,NULL,0,0};
     AllItem<<item;
     int retur=ItemNowNumber;
     ItemNowNumber++;
@@ -30,7 +30,7 @@ int Widget::AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,
     scene->addItem(text);
     text->setPos(X,Y);
     ItemNumber<<ItemNowNumber;
-    Item *item=new Item{text,NULL,NULL,NULL,NULL,0,0};
+    Item *item=new Item{text,NULL,NULL,NULL,0,0};
     AllItem<<item;
     int retur=ItemNowNumber;
     ItemNowNumber++;
@@ -42,7 +42,7 @@ int Widget::AddRectItem(float x,float y,float width,float height,QGraphicsScene 
     QGraphicsRectItem *rect=new QGraphicsRectItem(x,y,width,height);
     scene->addItem(rect);
     ItemNumber<<ItemNowNumber;
-    Item *item=new Item{rect,NULL,NULL,NULL,NULL,0,0};
+    Item *item=new Item{rect,NULL,NULL,NULL,0,0};
     AllItem<<item;
     int retur=ItemNowNumber;
     ItemNowNumber++;
@@ -54,7 +54,7 @@ int Widget::AddEllipseItem(float x,float y,float width,float height,QGraphicsSce
     QGraphicsEllipseItem *Ellipse=new QGraphicsEllipseItem(x,y,width,height);
     scene->addItem(Ellipse);
     ItemNumber<<ItemNowNumber;
-    Item *item=new Item{Ellipse,NULL,NULL,NULL,NULL,0,0};
+    Item *item=new Item{Ellipse,NULL,NULL,NULL,0,0};
     AllItem<<item;
     int retur=ItemNowNumber;
     ItemNowNumber++;
@@ -66,7 +66,7 @@ int Widget::AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene)
     QGraphicsLineItem *line=new QGraphicsLineItem(x,y,fx,fy);
     scene->addItem(line);
     ItemNumber<<ItemNowNumber;
-    Item *item=new Item{line,NULL,NULL,NULL,NULL,0,0};
+    Item *item=new Item{line,NULL,NULL,NULL,0,0};
     AllItem<<item;
     int retur=ItemNowNumber;
     ItemNowNumber++;
@@ -108,8 +108,6 @@ void Widget::ClearScene(QGraphicsScene *scene)
         {delete AllItem[i]->Blur;}
         if(AllItem[i]->Color!=NULL)
         {delete AllItem[i]->Color;}
-        if(AllItem[i]->TransForm!=NULL)
-        {delete AllItem[i]->TransForm;}
         //由于场景中的图元会在调用clear方法时候自动删除，所以不用在这里删了
     }
     scene->clear();
@@ -127,8 +125,6 @@ void Widget::DeleteItem(int item,bool LastIndex)
     {delete AllItem[sub]->Blur;}
     if(AllItem[sub]->Color!=NULL)
     {delete AllItem[sub]->Color;}
-    if(AllItem[sub]->TransForm!=NULL)
-    {delete AllItem[sub]->TransForm;}
     AllItem.removeAt(sub);
     ItemNumber.removeAt(sub);
 }
@@ -408,7 +404,7 @@ int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStrin
     MyPixmap *temp=new MyPixmap(QPixmap(address[0]));//将第一张图片变为图元
     scene->addItem(temp);//将第一张图片显示在场景中
     temp->setPos(x,y);//设置其位置
-    Item *item=new Item{temp,temp,NULL,NULL,NULL,0,0};
+    Item *item=new Item{temp,temp,NULL,NULL,0,0};
     AllItem<<item;
     ItemNumber<<ItemNowNumber;
     int retur=ItemNowNumber;//准备返回图元管理器序号
@@ -455,6 +451,7 @@ void Widget::EndAllAnimation(int item)
     EndAnimation(item,Opacity);
     EndAnimation(item,Color);
     EndAnimation(item,Picture);
+    EndAnimation(item,Shear);
 }
 
 void Widget::SetViewCenter(float x, float y,GraphicsView *gview)
@@ -619,12 +616,12 @@ void Widget::DeleteFile(QString path)
 void Widget::SetShearItem(int item,float x,float y,bool LastIndex)
 {
     Item *gritem=findItem(item,LastIndex);
-    if(gritem->TransForm==NULL)
-    {gritem->TransForm=new QTransform;}
-    gritem->TransForm->shear(x,y);
-    gritem->ItemPointer->setTransform(*gritem->TransForm);
+    QTransform *tranform=new QTransform;
+    tranform->shear(x,y);
+    gritem->ItemPointer->setTransform(*tranform);
     gritem->ShearX=x;
     gritem->ShearY=y;
+    delete tranform;
 }
 
 float Widget::GetItemShearX(int item, bool LastIndex)
@@ -639,9 +636,6 @@ void Widget::AnimationShearItem(int item, float fx, float fy, int time, QString 
     QMutableListIterator<QPair<int,SC *> > it(scPointer);
     SC *s=new SC(gritem->ShearX,gritem->ShearY,fx,fy,time,it);
     s->gr=gritem->ItemPointer;
-    if(gritem->TransForm==NULL)
-    {gritem->TransForm=new QTransform;}
-    s->tf=gritem->TransForm;
     s->signfun=signfun;
     QPair<int,SC *> p(item,s);
     scPointer<<p;

@@ -172,8 +172,10 @@ void SC::SlowChange()
         case 8:
         {
             temp+=2;
+            tf=new QTransform;
             tf->shear(CurrentModulus+=temp1,CurrentModulus2+=temp2);
             gr->setTransform(*tf);
+            delete tf;
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;

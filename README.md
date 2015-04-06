@@ -4,11 +4,11 @@ Life-Fire is the SG-Studio packages graphics engine base on Qt library, enabling
 
 Version:
 -----------------------------------
-Beta v2.43
+Beta v2.47
 
 Progress:
 -----------------------------------
-Repair of the BUG that continuous switching animation, improved "endAnimation" function, add the interface function to delete files.
+Repair of the BUG that continuous switching animation, improved "EndAnimation" function, add the interface function to delete files.Modify the format of item manager, regulate the type name, add the new animation type "Shear".
 
 Next version:
 -----------------------------------

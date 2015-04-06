@@ -72,9 +72,9 @@ VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh
 
 void VideoPlayer::start()
 {
-mediaPlayer->setMedia(QUrl::fromLocalFile(Path));
-mediaPlayer->play();
-QObject::connect(mediaPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(playover(QMediaPlayer::State)));
+    mediaPlayer->setMedia(QUrl::fromLocalFile(Path));
+    mediaPlayer->play();
+    QObject::connect(mediaPlayer,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(playover(QMediaPlayer::State)));
 }
 
 void VideoPlayer::playover(QMediaPlayer::State state)
