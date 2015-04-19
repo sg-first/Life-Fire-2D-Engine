@@ -8,8 +8,8 @@ class maincall : public library
 Q_OBJECT
 
 public:
-    Q_INVOKABLE QScriptValue CallJSFile(QString path, QString functionname=NULL, QString mistake=NULL);
-    Q_INVOKABLE QScriptValue CallJSCode(QString code,QString functionname=NULL,QString mistake=NULL);
+    Q_INVOKABLE QScriptValue CallJSFile(QString path,QString functionname=NULL,ParametersStru *Parame=NULL,QString ParameName=NULL,QString mistake=NULL);
+    Q_INVOKABLE QScriptValue CallJSCode(QString code,QString functionname=NULL,ParametersStru *Parame=NULL,QString ParameName=NULL,QString mistake=NULL);
 	void StartGame();
 	//在此继续添加
 	

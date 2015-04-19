@@ -165,8 +165,10 @@ struct Item
 };
 
 
-struct ParametersStru
+class ParametersStru : public QObject
 {
+    Q_OBJECT
+public:
     QVector<int> intVar;
     QVector<float> floatVar;
     QVector<QString> QStringVar;

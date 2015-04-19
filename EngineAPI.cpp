@@ -201,7 +201,7 @@ void Widget::AnimationMoveItem(int item,float X,float Y,int time,QString signfun
     s->start(3);
 }
 
-EasyThread* Widget::StartThread(QString Fun,bool track,ParametersStru *par)
+EasyThread* Widget::StartThread(QString Fun,ParametersStru *par,bool track)
 {
     if(track)
     {

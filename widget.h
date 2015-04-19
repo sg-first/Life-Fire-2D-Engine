@@ -49,7 +49,7 @@ public:
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void ContinueVideo(VideoPlayer *video);
     Q_INVOKABLE void StopVideo(VideoPlayer *video);
-    Q_INVOKABLE EasyThread* StartThread(QString Fun, bool track=true, ParametersStru *par=NULL);
+    Q_INVOKABLE EasyThread* StartThread(QString Fun, ParametersStru *par=NULL,bool track=true);
     Q_INVOKABLE void StopThread(EasyThread *thread);
     Q_INVOKABLE bool isColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2);
     Q_INVOKABLE bool ItemColliding(int item1, int item2, bool LastIndex1=false, bool LastIndex2=false);
