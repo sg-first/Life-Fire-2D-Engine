@@ -4,7 +4,7 @@ Life-Fire is the SG-Studio packages graphics engine base on Qt library, enabling
 
 Version:
 -----------------------------------
-Beta v2.47
+Beta v2.49
 
 Progress:
 -----------------------------------
