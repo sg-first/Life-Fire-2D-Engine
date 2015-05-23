@@ -103,6 +103,7 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *e);
+    void mousePressEvent(QMouseEvent *e);
 
 private:
     Ui::Widget *ui;

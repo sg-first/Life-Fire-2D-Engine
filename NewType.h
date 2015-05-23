@@ -137,7 +137,26 @@ public:
     void Rotate(float set);
 
 protected:
-    void wheelEvent(QWheelEvent *event){}
+    void wheelEvent(QWheelEvent *e)
+    {
+        //不对滚轮事件做任何处理，防止滚动view（如果忽略还会向下层机制传递消息）
+    }
+    void keyPressEvent(QKeyEvent *e)
+    {
+        switch(e->key())
+        {
+        case Qt::Key_Left:
+        {}
+        case Qt::Key_Right:
+        {}
+        case Qt::Key_Down:
+        {}
+        case Qt::Key_Up:
+        {}
+        default:
+        {e->ignore();}//忽略键盘消息，防止未定义按键滚动view
+        }
+    }
 };
 
 

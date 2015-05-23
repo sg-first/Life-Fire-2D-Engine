@@ -8,3 +8,8 @@ void Widget::keyPressEvent(QKeyEvent *e)//键盘消息响应
 
     }
 }
+
+void Widget::mousePressEvent(QMouseEvent *e)
+{
+
+}

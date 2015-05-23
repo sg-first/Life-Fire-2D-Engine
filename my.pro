@@ -16,12 +16,10 @@ SOURCES += main.cpp\
         widget.cpp \
     NewType.cpp \
     maincall.cpp \
-    event.cpp \
     KeyPress.cpp \
     library.cpp \
     js.cpp \
     AES.cpp \
-    Thread.cpp \
     EngineAPI.cpp \
     EngineBeh.cpp \
     SC.cpp
