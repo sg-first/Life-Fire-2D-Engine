@@ -680,6 +680,7 @@ void Widget::DeleteKeyEvent(Qt::Key key)
     {
         if(AllEvent[i]->key==key)
         {
+            delete AllEvent[i];
             AllEvent.removeAt(i);
             return;
         }
@@ -731,6 +732,10 @@ void Widget::DeleteKeyEvent(float MouseX, float MouseY)
     for(int i;i<AllEvent.length();i++)
     {
         if(AllEvent[i]->MouseX==MouseX&&AllEvent[i]->MouseY==MouseY)
-        {AllEvent.removeAt(i);}
+        {
+            delete AllEvent[i];
+            AllEvent.removeAt(i);
+            return;
+        }
     }
 }
