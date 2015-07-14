@@ -48,14 +48,11 @@ void MyPixmap::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-     this->setPixmap(up);
-     QByteArray ba = fun.toLatin1();
-     const char *function = ba.data();
-     QMetaObject::invokeMethod(thob,function);
+     RunSignFun(fun,par);
 }
 
 //视频类
-VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent)
+VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,ParametersStru *par,QGraphicsScene *scene,QWidget *parent)
     : QWidget(parent)
 {
     mediaPlayer=new QMediaPlayer(0,QMediaPlayer::VideoSurface);
@@ -68,6 +65,7 @@ VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh
     this->cycle=cycle;
     this->Path=Path;
     this->signfun=signfun;
+    this->par=par;
 }
 
 void VideoPlayer::start()
@@ -84,12 +82,8 @@ void VideoPlayer::playover(QMediaPlayer::State state)
     if(!cycle)
     {
         if(signfun!=NULL)
-        {
-         QByteArray ba = signfun.toLatin1();
-         const char *function = ba.data();
-         QMetaObject::invokeMethod(lfevent,function);
-        }
-    delete this;
+        {RunSignFun(signfun,par);}
+        delete this;
     }
     else
     {mediaPlayer->play();}
@@ -110,8 +104,12 @@ void GraphicsView::Rotate(float set)
 
 //线程类
 void EasyThread::run()
+{RunSignFun(fun,par);}
+
+//独立函数
+void RunSignFun(QString signfun,ParametersStru *par)
 {
-    QByteArray ba = fun.toLatin1();
+    QByteArray ba = signfun.toLatin1();
     const char *function = ba.data();
     if(par!=NULL)
     {QMetaObject::invokeMethod(thob,function,Qt::DirectConnection,Q_ARG(ParametersStru,*par));}

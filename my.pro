@@ -16,13 +16,13 @@ SOURCES += main.cpp\
         widget.cpp \
     NewType.cpp \
     maincall.cpp \
-    KeyPress.cpp \
     library.cpp \
     js.cpp \
     AES.cpp \
     EngineAPI.cpp \
     EngineBeh.cpp \
-    SC.cpp
+    SC.cpp \
+    InputEvent.cpp
 
 HEADERS  += widget.h \
     head.h \

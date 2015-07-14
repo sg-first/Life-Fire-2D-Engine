@@ -566,22 +566,57 @@ AesHelper::~AesHelper()
 
 QString AesHelper::aesEncrypt(QString mingwen)
 {
-  QString result = QString("");
-  char ch_mingwen[10240];
-  char ch_miwen[10240];
-  strcpy(ch_mingwen, mingwen.toUtf8().data());
-  aes->Cipher(ch_mingwen, ch_miwen);
-  result = QString(ch_miwen);
-  return result;
+    QString miwen="";
+    int length=mingwen.length();
+    int cishu=length/16;//计算要加密几次
+    if(length%16!=0)//有余数多加密一次
+    {
+        QString shengyu=mingwen;
+        shengyu.remove(0,16*cishu);//获取剩余字符
+        int tianchong=(16-shengyu.length())/2;//获取需要填充的乱码数量
+        for(int i=0;i<tianchong;i++)//把不够十六位的字段填充乱码字符
+        {mingwen+="½";}
+        if((16-shengyu.length())%2!=0)//有余数在结尾填充一个空格
+        {mingwen+=" ";}
+        cishu++;
+    }
+
+    QString jiami;
+    for(int i=0;i<cishu;i++)
+    {
+        jiami=mingwen.left(16);//截取前十六位
+        mingwen.remove(0,16);//前面十六位删除，留给下一次
+        char ch_mingwen[10240];
+        char ch_miwen[10240];
+        strcpy(ch_mingwen, jiami.toUtf8().data());
+        aes->Cipher(ch_mingwen, ch_miwen);
+        miwen+=QString(ch_miwen);//把该次加密的十六位的密文写入最终密文的一部分
+    }
+    return miwen;
 }
 
 QString AesHelper::aesUncrypt(QString miwen)
 {
-  QString result = QString("");
-  char ch_mingwen[10240];
-  char ch_miwen[10240];
-  strcpy(ch_miwen, miwen.toUtf8().data());
-  aes->InvCipher(ch_miwen, ch_mingwen);
-  result = QString(ch_mingwen);
-  return result;
+    QString mingwen="";
+    int cishu=miwen.length()/32;
+
+    QString jiemi;
+    for(int i=0;i<cishu;i++)
+    {
+        jiemi=miwen.left(32);
+        miwen=miwen.remove(0,32);
+        char ch_mingwen[10240];
+        char ch_miwen[10240];
+        strcpy(ch_miwen, jiemi.toUtf8().data());
+        aes->InvCipher(ch_miwen, ch_mingwen);
+        mingwen+=QString(ch_mingwen);
+    }
+
+    mingwen=mingwen.replace("½","");//把乱码删除
+    if(mingwen.right(1)==" ")//如果最后一位是空格
+    {
+        int length=mingwen.length();
+        mingwen.remove(length-1,length);//删除最后一位
+    }
+    return mingwen;
 }

@@ -21,6 +21,8 @@
 //数据
 #include <QList>
 #include <QString>
+#include <vector>
+using namespace std;
 //动画
 #include <QTimeLine>
 #include <QTimer>
@@ -40,6 +42,7 @@
 #include <QEventLoop>
 #include <QGraphicsSceneMouseEvent>
 #include <QWheelEvent>
+//#include <qnamespace.h>
 //脚本解释
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>

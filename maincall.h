@@ -12,9 +12,10 @@ public:
     Q_INVOKABLE QScriptValue CallJSCode(QString code,QString functionname=NULL,ParametersStru *Parame=NULL,QString ParameName=NULL,QString mistake=NULL);
 	void StartGame();
 	//在此继续添加
-	
+
 	
 public slots:
     //此处容纳事件处理与线程函数
+
 
 };

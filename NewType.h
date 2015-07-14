@@ -27,6 +27,7 @@
 //MS
 #define TFOVER1 );
 
+class ParametersStru;
 
 class Widget;
 class SC : public QObject//渐变使用的工具类
@@ -56,6 +57,7 @@ public:
     QGraphicsPixmapItem *pi;
     QVector<QPixmap> pixmap;
     QString signfun;
+    ParametersStru *par;
     int over;//结束标志
     void start(int choose);
     bool cycle;//连续播图是否循环播放
@@ -101,6 +103,7 @@ public:
     QString fun;
     QPixmap down;
     Widget *s;
+    ParametersStru *par;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -113,7 +116,7 @@ class VideoPlayer : public QWidget //视频类
 {
     Q_OBJECT
 public:
-    VideoPlayer(QString Path,int Volume, int x, int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent = 0);
+    VideoPlayer(QString Path,int Volume, int x, int y,int width,int heigh,bool cycle,QString signfun,ParametersStru *par,QGraphicsScene *scene,QWidget *parent = 0);
     ~VideoPlayer();
     void start();
     QMediaPlayer *mediaPlayer;
@@ -123,6 +126,7 @@ private:
     QGraphicsVideoItem *videoItem;
     bool cycle;
     QString Path;
+    ParametersStru *par;
 
 private slots:
     void playover(QMediaPlayer::State state);
@@ -145,14 +149,10 @@ protected:
     {
         switch(e->key())
         {
-        case Qt::Key_Left:
-        {}
-        case Qt::Key_Right:
-        {}
-        case Qt::Key_Down:
-        {}
-        case Qt::Key_Up:
-        {}
+        case Qt::Key_Left:{}
+        case Qt::Key_Right:{}
+        case Qt::Key_Down:{}
+        case Qt::Key_Up:{}
         default:
         {e->ignore();}//忽略键盘消息，防止未定义按键滚动view
         }
@@ -160,7 +160,6 @@ protected:
 };
 
 
-struct ParametersStru;
 class EasyThread : public QThread//线程类
 {
 public:
@@ -201,3 +200,17 @@ public:
     QVector<QGraphicsScene*> QGraphicsSceneVar;
     QVector<QScriptValue> QScriptValueVar;
 };
+
+struct InputEvent
+{
+    Qt::Key key;
+    float MouseX;
+    float MouseY;
+    float fMouseX;
+    float fMouseY;
+    int layout;
+    ParametersStru *par;
+    QString signfun;
+};
+
+void RunSignFun(QString signfun,ParametersStru *par);

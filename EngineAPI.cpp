@@ -1,11 +1,12 @@
 //-----本文件是引擎行为层给用户提供的接口的实现-----
 #include "widget.h"
 
-int Widget::AddPixmapItem(QString PicPath,float X,float Y,QString fun,QString down,QGraphicsScene *scene)
+int Widget::AddPixmapItem(QString PicPath,float X,float Y,QString signfun,QString down,ParametersStru *par,QGraphicsScene *scene)
 {
    MyPixmap *temp=new MyPixmap(QPixmap(PicPath));
-   temp->fun=fun;
+   temp->fun=signfun;
    temp->s=this;
+   temp->par=par;
 
    if(down==NULL)
    {temp->down=QPixmap(PicPath);}
@@ -187,7 +188,7 @@ void Widget::PauseMusic(QMediaPlayer *player)
 void Widget::ContinueMusic(QMediaPlayer *player)
 {player->play();}
 
-void Widget::AnimationMoveItem(int item,float X,float Y,int time,QString signfun,bool LastIndex)
+void Widget::AnimationMoveItem(int item,float X,float Y,int time,QString signfun,ParametersStru *par,bool LastIndex)
 {
    QGraphicsItem* gr=findItem(item,LastIndex)->ItemPointer;
    float dx=gr->x();
@@ -196,22 +197,23 @@ void Widget::AnimationMoveItem(int item,float X,float Y,int time,QString signfun
    SC *s=new SC(0,0,X-dx,Y-dy,time,it);
    s->gr=gr;
    s->signfun=signfun;
+   s->par=par;
    QPair<int,SC *> p(item,s);
    scPointer<<p;
    s->start(3);
 }
 
-EasyThread* Widget::StartThread(QString Fun,ParametersStru *par,bool track)
+EasyThread* Widget::StartThread(QString signfun,ParametersStru *par,bool track)
 {
    if(track)
    {
      EasyThread *thread=new EasyThread;
-     thread->fun=Fun;
+     thread->fun=signfun;
      thread->par=par;
      thread->start();
      return thread;
    }
-   QByteArray ba = Fun.toLatin1();
+   QByteArray ba = signfun.toLatin1();
    const char *function = ba.data();
    if(par==NULL)
    {QMetaObject::invokeMethod(thob,function,Qt::QueuedConnection);}
@@ -226,14 +228,14 @@ void Widget::StopThread(EasyThread *thread)
 bool Widget::ItemColliding(int item1,int item2,bool LastIndex1,bool LastIndex2)
 {return isColliding(findItem(item1,LastIndex1)->ItemPointer,findItem(item2,LastIndex2)->ItemPointer);}
 
-VideoPlayer* Widget::PlayVideo(QString path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene)
+VideoPlayer* Widget::PlayVideo(QString path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,ParametersStru *par,QGraphicsScene *scene)
 {
    if(x==-1)
    {x=viewX-(WindowsWidth/2);}
    if(y==-1)
    {y=viewY-(WindowsHeigh/2);}
    //time为视频时长，单位为秒
-   VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,scene);
+   VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,par,scene);
    video->start();
    return video;
 }
@@ -247,7 +249,7 @@ void Widget::ContinueVideo(VideoPlayer *video)
 void Widget::StopVideo(VideoPlayer *video)
 {video->mediaPlayer->stop();}
 
-void Widget::AnimationRotationItem(int item, float set,int times,QString signfun,bool LastIndex)
+void Widget::AnimationRotationItem(int item, float set,int times,QString signfun,ParametersStru *par,bool LastIndex)
 {
    QGraphicsItem* gr=findItem(item,LastIndex)->ItemPointer;
    float CurrentModulus=gr->rotation();
@@ -256,12 +258,13 @@ void Widget::AnimationRotationItem(int item, float set,int times,QString signfun
    SC *s=new SC(CurrentModulus,set,times,it);
    s->gr=gr;
    s->signfun=signfun;
+   s->par=par;
    QPair<int,SC *> p(item,s);
    scPointer<<p;
    s->start(1);
 }
 
-void Widget::AnimationScaleItem(int item, float set,int times,QString signfun,bool LastIndex)
+void Widget::AnimationScaleItem(int item, float set,int times,QString signfun,ParametersStru *par,bool LastIndex)
 {
    QGraphicsItem* gr=findItem(item,LastIndex)->ItemPointer;
    float CurrentModulus=gr->scale();
@@ -269,12 +272,13 @@ void Widget::AnimationScaleItem(int item, float set,int times,QString signfun,bo
    SC *s=new SC(CurrentModulus,set,times,it);
    s->gr=gr;
    s->signfun=signfun;
+   s->par=par;
    QPair<int,SC *> p(item,s);
    scPointer<<p;
    s->start(2);
 }
 
-void Widget::AnimationBlurRadiusItem(int item, float set, int times,QString signfun,bool LastIndex)
+void Widget::AnimationBlurRadiusItem(int item, float set, int times,QString signfun,ParametersStru *par,bool LastIndex)
 {
    Item *gritem=findItem(item,LastIndex);
    float CurrentModulus;//当前系数
@@ -292,6 +296,7 @@ void Widget::AnimationBlurRadiusItem(int item, float set, int times,QString sign
    s->gr=gr;
    s->Effect=effect;
    s->signfun=signfun;
+   s->par=par;
    QPair<int,SC *> p(item,s);
    scPointer<<p;
    s->start(4);
@@ -300,7 +305,7 @@ void Widget::AnimationBlurRadiusItem(int item, float set, int times,QString sign
    //gritem->Blur=Effect;
 }
 
-void Widget::AnimationSetOpacityItem(int item, float set, int times,QString signfun,bool LastIndex)
+void Widget::AnimationSetOpacityItem(int item, float set, int times,QString signfun,ParametersStru *par,bool LastIndex)
 {
    QGraphicsItem* gr=findItem(item,LastIndex)->ItemPointer;
    float CurrentModulus=gr->opacity();
@@ -308,12 +313,13 @@ void Widget::AnimationSetOpacityItem(int item, float set, int times,QString sign
    SC *s=new SC(CurrentModulus,set,times,it);
    s->gr=gr;
    s->signfun=signfun;
+   s->par=par;
    QPair<int,SC *> p(item,s);
    scPointer<<p;
    s->start(5);
 }
 
-void Widget::AnimationSetColorItem(int item, float R, float G, float B, int times,QString signfun,bool LastIndex)
+void Widget::AnimationSetColorItem(int item, float R, float G, float B, int times,QString signfun,ParametersStru *par,bool LastIndex)
 {
    Item *gritem=findItem(item,LastIndex);
    //当前系数
@@ -344,6 +350,7 @@ void Widget::AnimationSetColorItem(int item, float R, float G, float B, int time
    s->gr=gr;
    s->co=co;
    s->signfun=signfun;
+   s->par=par;
    QPair<int,SC *> p(item,s);
    scPointer<<p;
    s->start(6);
@@ -398,7 +405,7 @@ float Widget::GetItemRotation(int item,bool LastIndex)
 float Widget::GetItemScale(int item,bool LastIndex)
 {return findItem(item,LastIndex)->ItemPointer->scale();}
 
-int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun,bool cycle,QGraphicsScene *scene)
+int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun,ParametersStru *par,bool cycle,QGraphicsScene *scene)
 {
    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
    MyPixmap *temp=new MyPixmap(QPixmap(address[0]));//将第一张图片变为图元
@@ -415,8 +422,11 @@ int Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStrin
    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
    sc->cycle=cycle;//定义是否循环连续播图
 
-   if(!cycle)//若不循环（默认是循环，true）
-   {sc->signfun=signfun;}//搬移一下播放完成要发出的信号
+   if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
+   {
+       sc->signfun=signfun;
+       sc->par=par;
+   }
 
    for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
@@ -545,7 +555,7 @@ QString Widget::ReadTXT(QString path,int line)
    return concert;
 }
 
-void Widget::WriteTXT(QString path, QString text)//这个函数等等再搞，问题超大
+void Widget::WriteTXT(QString path, QString text)
 {
    QFile file(path);
    file.open(QFile::Text|QFile::Append);
@@ -586,7 +596,7 @@ void Widget::ChangePixmapItem(QString path,int item,bool LastIndex)
    pixmap->setPixmap(QPixmap(path));
 }
 
-void Widget::ChangePicAnimationItem(QVector<QString> address,int item,int time,QString signfun,bool cycle,bool LastIndex)
+void Widget::ChangePicAnimationItem(QVector<QString> address,int item,int time,QString signfun,ParametersStru *par,bool cycle,bool LastIndex)
 {
    EndAnimation(item,Picture);
    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
@@ -599,8 +609,11 @@ void Widget::ChangePicAnimationItem(QVector<QString> address,int item,int time,Q
    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
    sc->cycle=cycle;//定义是否循环连续播图
 
-   if(!cycle)//若不循环（默认是循环，true）
-   {sc->signfun=signfun;}//搬移一下播放完成要发出的信号
+   if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
+   {
+       sc->signfun=signfun;
+       sc->par=par;
+   }
 
    for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
@@ -630,17 +643,94 @@ float Widget::GetItemShearX(int item, bool LastIndex)
 float Widget::GetItemShearY(int item, bool LastIndex)
 {return findItem(item,LastIndex)->ShearY;}
 
-void Widget::AnimationShearItem(int item, float fx, float fy, int time, QString signfun, bool LastIndex)
+void Widget::AnimationShearItem(int item, float fx, float fy, int time, QString signfun,ParametersStru *par,bool LastIndex)
 {
    Item *gritem=findItem(item,LastIndex);
    QMutableListIterator<QPair<int,SC *> > it(scPointer);
    SC *s=new SC(gritem->ShearX,gritem->ShearY,fx,fy,time,it);
    s->gr=gritem->ItemPointer;
    s->signfun=signfun;
+   s->par=par;
    QPair<int,SC *> p(item,s);
    scPointer<<p;
    s->start(8);
 
    gritem->ShearX=fx;
    gritem->ShearY=fy;
+}
+
+void Widget::SetKeyEvent(Qt::Key key, QString signfun,ParametersStru *par)
+{
+    for(int i=0;i<AllEvent.length();i++)
+    {
+        if(AllEvent[i]->key==key)
+        {
+            AllEvent[i]->par=par;
+            AllEvent[i]->signfun=signfun;
+            return;
+        }
+    }
+    InputEvent *event=new InputEvent{key,-1,-1,-1,-1,-1,par,signfun};
+    AllEvent<<event;
+}
+
+void Widget::DeleteKeyEvent(Qt::Key key)
+{
+    for(int i=0;i<AllEvent.length();i++)
+    {
+        if(AllEvent[i]->key==key)
+        {
+            AllEvent.removeAt(i);
+            return;
+        }
+    }
+}
+
+void Widget::SetMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY,QString signfun, ParametersStru *par)
+{
+    vector <int> alllayout;
+    for(int i=0;i<AllEvent.length();i++)
+    {
+        if(MouseX>=AllEvent[i]->MouseX&&
+           MouseY>=AllEvent[i]->MouseY&&
+           fMouseX<=AllEvent[i]->fMouseX&&
+           fMouseY<=AllEvent[i]->fMouseY)
+        {
+            if(MouseX==AllEvent[i]->MouseX&&
+               MouseY==AllEvent[i]->MouseY&&
+               fMouseX==AllEvent[i]->fMouseX&&
+               fMouseY==AllEvent[i]->fMouseY)
+            {
+                AllEvent[i]->par=par;
+                AllEvent[i]->signfun=signfun;
+                return;
+            }
+            alllayout.push_back(AllEvent[i]->layout);
+        }
+    }
+    InputEvent *event=new InputEvent;
+    event->MouseX=MouseX;
+    event->MouseY=MouseY;
+    event->par=par;
+    event->fMouseX=fMouseX;
+    event->fMouseY=fMouseY;
+    if(!alllayout.empty())
+    {
+        bool(*fun)(int,int)=[](int a,int b){return a>b;};
+        sort(alllayout.begin(),alllayout.end(),fun);
+        event->layout=alllayout.at(0)+1;
+    }
+    else
+    {event->layout=0;}
+    event->signfun=signfun;
+    AllEvent<<event;
+}
+
+void Widget::DeleteKeyEvent(float MouseX, float MouseY)
+{
+    for(int i;i<AllEvent.length();i++)
+    {
+        if(AllEvent[i]->MouseX==MouseX&&AllEvent[i]->MouseY==MouseY)
+        {AllEvent.removeAt(i);}
+    }
 }

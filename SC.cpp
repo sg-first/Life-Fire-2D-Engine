@@ -21,11 +21,7 @@ void SC::changepixmap()
                 }
             }
             if(signfun!=NULL)
-            {
-             QByteArray ba = signfun.toLatin1();
-             const char *function = ba.data();
-             QMetaObject::invokeMethod(lfevent,function);
-            }
+            {RunSignFun(signfun,par);}
             return;
         }
     }
@@ -91,6 +87,7 @@ void SC::start(int choose)
             iter=pixmap.begin();//将装满连帧图元的迭代器调到头元素
             temp1=times/pixmap.size();//计算出播放每一帧需要的时间
             timer->start(int(temp1));//根据此时间开始播放
+            break;
         }
         case 8:
         {

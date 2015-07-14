@@ -16,14 +16,14 @@ public:
     ~Widget();
     //程序基础（实现于widget）
     void Initialization();//初始化函数
-    //图元管理器
+    //图元管理器（即将废除）
     QList<Item*> AllItem;
     QList<int> ItemNumber;
     int ItemNowNumber;
     //SC类管理器
     QList<QPair<int,SC *> > scPointer;
     //引擎行为（实现于enginebeh）
-    Q_INVOKABLE int AddPixmapItem(QString PicPath,float X,float Y,QString fun=NULL,QString down=NULL,QGraphicsScene *scene=scene);
+    Q_INVOKABLE int AddPixmapItem(QString PicPath,float X,float Y,QString signfun=NULL,QString down=NULL,ParametersStru *par=NULL,QGraphicsScene *scene=scene);
     Q_INVOKABLE int AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene=scene);
     Q_INVOKABLE int AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
     Q_INVOKABLE int AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
@@ -37,28 +37,29 @@ public:
     Q_INVOKABLE void ClearScene(QGraphicsScene *scene=scene);
     Q_INVOKABLE void DeleteItem(int item,bool LastIndex=false);
     Q_INVOKABLE QString GetPath(QString str);
-    Q_INVOKABLE int qListFindSubscript(bool LastIndex, int item);
-    Q_INVOKABLE Item* findItem(int item,bool LastIndex=false);
+    //即将废除的函数
+    int qListFindSubscript(bool LastIndex, int item);
+    Item* findItem(int item,bool LastIndex=false);
+    //即将废除的函数结束
     Q_INVOKABLE void SetVisibleItem(int item,bool Enabled,bool LastIndex=false);
     Q_INVOKABLE QMediaPlayer* PlayMusic(QString name, int volume, bool cycle=false);
     Q_INVOKABLE void SetBackground(QString PicturePath,QGraphicsScene *scene=scene);
     Q_INVOKABLE void SetBackground(int R, int G, int B);
     Q_INVOKABLE void PauseMusic(QMediaPlayer *player);
     Q_INVOKABLE void ContinueMusic(QMediaPlayer *player);
-    Q_INVOKABLE VideoPlayer* PlayVideo(QString path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,QString signfun=NULL,QGraphicsScene *scene=scene);
+    Q_INVOKABLE VideoPlayer* PlayVideo(QString path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,QString signfun=NULL,ParametersStru *par=NULL,QGraphicsScene *scene=scene);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void ContinueVideo(VideoPlayer *video);
     Q_INVOKABLE void StopVideo(VideoPlayer *video);
-    Q_INVOKABLE EasyThread* StartThread(QString Fun, ParametersStru *par=NULL,bool track=true);
+    Q_INVOKABLE EasyThread* StartThread(QString signfun, ParametersStru *par=NULL, bool track=true);
     Q_INVOKABLE void StopThread(EasyThread *thread);
-    Q_INVOKABLE bool isColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2);
     Q_INVOKABLE bool ItemColliding(int item1, int item2, bool LastIndex1=false, bool LastIndex2=false);
-    Q_INVOKABLE void AnimationRotationItem(int item, float set,int times,QString signfun=NULL,bool LastIndex=false);//旋转
-    Q_INVOKABLE void AnimationScaleItem(int item, float set,int times,QString signfun=NULL,bool LastIndexx=false);//缩放
-    Q_INVOKABLE void AnimationBlurRadiusItem(int item, float set,int times,QString signfun=NULL,bool LastIndex=false);//将一个图元变模糊
-    Q_INVOKABLE void AnimationSetOpacityItem(int item, float set,int times,QString signfun=NULL,bool LastIndex=false);//设置一个图元的透明度
-    Q_INVOKABLE void AnimationSetColorItem(int item, float R, float G, float B,int times,QString signfun=NULL,bool LastIndex=false);//在一个图元基础上进行着色
-    Q_INVOKABLE void AnimationMoveItem(int item,float X,float Y,int time,QString signfun=NULL,bool LastIndex=false);
+    Q_INVOKABLE void AnimationRotationItem(int item, float set,int times,QString signfun=NULL,ParametersStru *par=NULL,bool LastIndex=false);
+    Q_INVOKABLE void AnimationScaleItem(int item, float set,int times,QString signfun=NULL,ParametersStru *par=NULL,bool LastIndexx=false);
+    Q_INVOKABLE void AnimationBlurRadiusItem(int item, float set,int times,QString signfun=NULL,ParametersStru *par=NULL,bool LastIndex=false);
+    Q_INVOKABLE void AnimationSetOpacityItem(int item, float set,int times,QString signfun=NULL,ParametersStru *par=NULL,bool LastIndex=false);
+    Q_INVOKABLE void AnimationSetColorItem(int item, float R, float G, float B,int times,QString signfun=NULL,ParametersStru *par=NULL,bool LastIndex=false);
+    Q_INVOKABLE void AnimationMoveItem(int item,float X,float Y,int time,QString signfun=NULL,ParametersStru *par=NULL,bool LastIndex=false);
     Q_INVOKABLE float GetItemX(int item,bool LastIndex=false);
     Q_INVOKABLE float GetItemY(int item,bool LastIndex=false);
     Q_INVOKABLE float GetItemR(int item,bool LastIndex=false);
@@ -68,7 +69,7 @@ public:
     Q_INVOKABLE float GetItemOpacity(int item,bool LastIndex);
     Q_INVOKABLE float GetItemRotation(int item,bool LastIndex);
     Q_INVOKABLE float GetItemScale(int item,bool LastIndex);
-    Q_INVOKABLE int AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,bool cycle=true,QGraphicsScene *scene=scene);
+    Q_INVOKABLE int AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,ParametersStru *par=NULL,bool cycle=true,QGraphicsScene *scene=scene);
     Q_INVOKABLE void EndAnimation(int item, AnimationType choose);
     Q_INVOKABLE void EndAllAnimation(int item);
     Q_INVOKABLE void SetViewCenter(float x, float y, GraphicsView *gview=MainView);
@@ -94,19 +95,26 @@ public:
     Q_INVOKABLE QString AESEncrypt(QString str,QString key);
     Q_INVOKABLE QString AESUncrypt(QString str,QString key);
     Q_INVOKABLE void ChangePixmapItem(QString path,int item,bool LastIndex=false);
-    Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> address,int item,int time,QString signfun=NULL,bool cycle=true,bool LastIndex=false);
+    Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> address,int item,int time,QString signfun=NULL,ParametersStru *par=NULL,bool cycle=true,bool LastIndex=false);
     Q_INVOKABLE void DeleteFile(QString path);
     Q_INVOKABLE void SetShearItem(int item,float x,float y,bool LastIndex=NULL);
     Q_INVOKABLE float GetItemShearX(int item,bool LastIndex);
     Q_INVOKABLE float GetItemShearY(int item,bool LastIndex);
-    Q_INVOKABLE void AnimationShearItem(int item, float fx, float fy, int time, QString signfun=NULL, bool LastIndex=false);
+    Q_INVOKABLE void AnimationShearItem(int item, float fx, float fy, int time, QString signfun=NULL,ParametersStru *par=NULL,bool LastIndex=false);
+    Q_INVOKABLE void SetKeyEvent(Qt::Key key,QString signfun,ParametersStru *par=NULL);
+    Q_INVOKABLE void DeleteKeyEvent(Qt::Key key);
+    Q_INVOKABLE void SetMouseEvent(float MouseX,float MouseY,float fMouseX,float fMouseY,QString signfun,ParametersStru *par=NULL);
+    Q_INVOKABLE void DeleteKeyEvent(float MouseX,float MouseY);
+
 
 protected:
     void keyPressEvent(QKeyEvent *e);
     void mousePressEvent(QMouseEvent *e);
-
 private:
     Ui::Widget *ui;
     float viewX;
     float viewY;
+    bool isColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2);
+    //关于输入事件
+    QList<InputEvent*> AllEvent;
 };
