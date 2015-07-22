@@ -8,7 +8,7 @@ QScriptValue maincall::CallJSFile(QString path,QString functionname,ParametersSt
     QTextStream text(&scripfile);
     QString concert=text.readAll();
     scripfile.close();
-    CallJSCode(concert,functionname,Parame,ParameName,mistake);
+    return CallJSCode(concert,functionname,Parame,ParameName,mistake);
 }
 
 
@@ -20,7 +20,7 @@ QScriptValue maincall::CallJSCode(QString code, QString functionname,ParametersS
     QScriptValue lfvar=myengine.newQObject(lfevent);
     myengine.globalObject().setProperty("lfvar",lfvar);
 
-    if(Parame!=NULL&&ParameName!=NULL)
+    if(Parame!=nullptr&&ParameName!=nullptr)
     {
         QScriptValue para=myengine.newQObject(Parame);
         myengine.globalObject().setProperty(ParameName,para);

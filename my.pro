@@ -40,3 +40,4 @@ OTHER_FILES +=
 QT += multimedia multimediawidgets
 INSTALLS += target
 QT += script
+QMAKE_CXXFLAGS += -std=c++11

@@ -9,17 +9,7 @@ void SC::changepixmap()
         {iter=pixmap.begin();}//若需循环，就重播
         else//若不循环，发信号退出一切
         {
-            QList<QPair<int,SC *> > scPointer;
-            QMutableListIterator<QPair<int,SC *> > p(scPointer);
-            p.toFront();
-            while(p.hasNext())
-            {
-                if(p.next().first==num)
-                {
-                    p.value().second->over=1;
-                    break;
-                }
-            }
+            this->over=1;
             if(signfun!=NULL)
             {RunSignFun(signfun,par);}
             return;
@@ -87,7 +77,6 @@ void SC::start(int choose)
             iter=pixmap.begin();//将装满连帧图元的迭代器调到头元素
             temp1=times/pixmap.size();//计算出播放每一帧需要的时间
             timer->start(int(temp1));//根据此时间开始播放
-            break;
         }
         case 8:
         {
@@ -181,18 +170,6 @@ void SC::SlowChange()
     }
     if(over)
     {
-       if(over==1)
-       {
-         p.toFront();
-         while(p.hasNext())
-         {
-           if(p.next().second==this)
-           {
-             p.remove();
-             break;
-           }
-         }
-       }
        if(signfun!=NULL)
        {
          QByteArray ba = signfun.toLatin1();

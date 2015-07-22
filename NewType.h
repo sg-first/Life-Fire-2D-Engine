@@ -1,6 +1,7 @@
 //-----本文件所声明用于引擎的其它类型-----
 #pragma once
 #include "head.h"
+#include "NewType.h"
 
 #define FIRST1 QTimer*
 //t
@@ -30,25 +31,22 @@
 class ParametersStru;
 
 class Widget;
+class Item;
 class SC : public QObject//渐变使用的工具类
 {
     Q_OBJECT
 public:
-    SC(float CurrentModulus,float TargetModulus,int times,
-       QMutableListIterator<QPair<int,SC *> > p
-       ):CurrentModulus(CurrentModulus),
-        TargetModulus(TargetModulus),times(times),p(p){}//这个构造方法处理单渐变系数
+    SC(float CurrentModulus,float TargetModulus,int times)
+        :CurrentModulus(CurrentModulus),TargetModulus(TargetModulus),times(times){}//这个构造方法处理单渐变系数
     SC(float CurrentModulus,float CurrentModulus2,float TargetModulus,float TargetModulus2,
-       int times,
-       QMutableListIterator<QPair<int,SC *> > p
-       ):CurrentModulus(CurrentModulus),CurrentModulus2(CurrentModulus2),
-        TargetModulus(TargetModulus),TargetModulus2(TargetModulus2),times(times),p(p){}//这个构造方法处理双渐变系数
+       int times)
+        :CurrentModulus(CurrentModulus),CurrentModulus2(CurrentModulus2),
+        TargetModulus(TargetModulus),TargetModulus2(TargetModulus2),times(times){}//这个构造方法处理双渐变系数
     SC(float CurrentModulus,float CurrentModulus2,float CurrentModulus3,float TargetModulus,
-       float TargetModulus2,float TargetModulus3,int times,
-       QMutableListIterator<QPair<int,SC *> > p
-       ):CurrentModulus(CurrentModulus),
+       float TargetModulus2,float TargetModulus3,int times)
+        :CurrentModulus(CurrentModulus),
         CurrentModulus2(CurrentModulus2),CurrentModulus3(CurrentModulus3),TargetModulus(TargetModulus),
-        TargetModulus2(TargetModulus2),TargetModulus3(TargetModulus3),times(times),p(p){}//这个构造方法处理三渐变系数
+        TargetModulus2(TargetModulus2),TargetModulus3(TargetModulus3),times(times){}//这个构造方法处理三渐变系数
 
     QGraphicsItem* gr;
     QGraphicsBlurEffect *Effect;
@@ -61,7 +59,7 @@ public:
     int over;//结束标志
     void start(int choose);
     bool cycle;//连续播图是否循环播放
-    int num;//动画在图元管理器中的序号
+    Item* num;//动画在图元管理器中的序号
     int choose;//start()函数的参数
 
 protected:
@@ -73,19 +71,19 @@ protected:
     float TargetModulus3;//目标系数3
     int times;//变化所需【总】时间,单位：毫秒
     QTimer *timer;//计时器
-    QMutableListIterator<QPair<int,SC *> > p;
     float temp;//临时变量，在某些特殊情况下用于各个函数之间通信使用
     float temp1;//临时变量，在某些特殊情况下用于各个函数之间通信使用
     float temp2;//临时变量，在某些特殊情况下用于各个函数之间通信使用
     float temp3;//临时变量，在某些特殊情况下用于各个函数之间通信使用
 
-    //旋转                         choose==1
-    //缩放                          choose==2
+    //旋转                           choose==1
+    //缩放                           choose==2
     //相对移动一个图元                 chose==3
     //将一个图元变模糊                 choose==4
     //设置一个图元的透明度              choose==5
     //在一个图元基础上进行着色           choose==6
     void changepixmap();//Gif改变图元  choose==7
+    //剪切一个图元                      choose==8
     QVector<QPixmap>::iterator iter;
 
 private slots:
@@ -172,14 +170,18 @@ public:
 enum AnimationType{Rotation=1,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
 
 
-struct Item
+class Item
 {
+public:
+    Item(MyPixmap* pixmap=nullptr,QGraphicsItem *graphicsiten=nullptr);
+
     QGraphicsItem *ItemPointer;
     MyPixmap *PixmapItemPoniter;
     QGraphicsBlurEffect *Blur;
     QGraphicsColorizeEffect *Color;
     float ShearX;
     float ShearY;
+    SC* scPointer[8];
 };
 
 

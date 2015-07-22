@@ -1,7 +1,7 @@
 //-----本文件是对于NewType.h中定义的新类型的成员函数的实现部分-----
 #include "widget.h"
 
-//重载图元类
+//MyPixmap
 void MyPixmap::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(fun==NULL || event->button()!=Qt::LeftButton)//检测图元是否是按钮、按下的是否是左键
@@ -51,7 +51,7 @@ void MyPixmap::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
      RunSignFun(fun,par);
 }
 
-//视频类
+//VideoPlayer
 VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,ParametersStru *par,QGraphicsScene *scene,QWidget *parent)
     : QWidget(parent)
 {
@@ -95,23 +95,39 @@ VideoPlayer::~VideoPlayer()
     delete videoItem;
 }
 
-//视图类
+//GraphicsView
 void GraphicsView::Scale(float sx,float sy)
 {scale(sx,sy);}
 
 void GraphicsView::Rotate(float set)
 {rotate(set);}
 
-//线程类
+//EasyThread
 void EasyThread::run()
 {RunSignFun(fun,par);}
+
+//item
+Item::Item(MyPixmap *pixmap, QGraphicsItem *graphicsiten)
+{
+    this->PixmapItemPoniter=pixmap;
+    if(graphicsiten!=nullptr)
+        this->ItemPointer=graphicsiten;
+    else
+        this->ItemPointer=pixmap;
+    this->Blur=nullptr;
+    this->Color=nullptr;
+    this->ShearX=-1;
+    this->ShearY=-1;
+    for(int a=0;a<sizeof(this->scPointer)/sizeof(this->scPointer[0]);++a)
+        this->scPointer[a]=nullptr;
+}
 
 //独立函数
 void RunSignFun(QString signfun,ParametersStru *par)
 {
     QByteArray ba = signfun.toLatin1();
     const char *function = ba.data();
-    if(par!=NULL)
+    if(par!=nullptr)
     {QMetaObject::invokeMethod(thob,function,Qt::DirectConnection,Q_ARG(ParametersStru,*par));}
     else
     {QMetaObject::invokeMethod(thob,function,Qt::DirectConnection);}

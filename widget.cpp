@@ -23,13 +23,13 @@ Widget::~Widget()
 void Widget::Initialization()
 {
     //初始化
-    ItemNowNumber=0;
     lfevent=new LFEvent;
     //初始化窗口
     scene=new QGraphicsScene(0,0,MaximumWidth,MaximunHeigh);
     int width=QApplication::desktop()->width();//获取分辨率宽
     int height=QApplication::desktop()->height();//获取分辨率高
-    width=(width-WindowsWidth)/2;height=(height-WindowsHeigh)/2;//计算窗口应该出现的位置
+    width=(width-WindowsWidth)/2;
+    height=(height-WindowsHeigh)/2;
     setGeometry(width,height,WindowsWidth,WindowsHeigh);//设置窗口初始位置和大小
     setFixedSize(WindowsWidth,WindowsHeigh);//设置窗口最大大小
     setWindowTitle(title);//设置窗口标题
