@@ -42,7 +42,6 @@ using namespace std;
 #include <QEventLoop>
 #include <QGraphicsSceneMouseEvent>
 #include <QWheelEvent>
-//#include <qnamespace.h>
 //脚本解释
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>
