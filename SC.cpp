@@ -27,21 +27,21 @@ void SC::start(int choose)
     over=0;
     switch(choose)
     {
-        case 1:
+        case 0:
         {
             temp=0;
             temp1=2*TargetModulus/times;
             timer->start(2);
             break;
         }
-        case 2:
+        case 1:
         {
             temp=0;
             temp1=2*(TargetModulus-CurrentModulus)/times;
             timer->start(2);
             break;
         }
-        case 3:
+        case 2:
         {
             temp=0;
             temp1=2*TargetModulus/times;
@@ -49,21 +49,21 @@ void SC::start(int choose)
             timer->start(2);
             break;
         }
-        case 4:
+        case 3:
         {
             temp=0;
             temp1=2*TargetModulus/times;
             timer->start(3);
             break;
         }
-        case 5:
+        case 4:
         {
             temp=0;
             temp1=2*(TargetModulus-CurrentModulus)/times;
             timer->start(2);
             break;
         }
-        case 6:
+        case 5:
         {
             temp=0;
             temp1=2*(TargetModulus-CurrentModulus)/times;
@@ -72,13 +72,14 @@ void SC::start(int choose)
             timer->start(2);
             break;
         }
-        case 7:
+        case 6:
         {
             iter=pixmap.begin();//将装满连帧图元的迭代器调到头元素
             temp1=times/pixmap.size();//计算出播放每一帧需要的时间
             timer->start(int(temp1));//根据此时间开始播放
+            break;
         }
-        case 8:
+        case 7:
         {
             temp=0;
             temp1=2*(TargetModulus-CurrentModulus)/times;
@@ -97,7 +98,7 @@ void SC::SlowChange()
     {
         switch(choose)
         {
-        case 1:
+        case 0:
         {
             temp+=2;
             gr->setRotation(CurrentModulus+=temp1);
@@ -106,7 +107,7 @@ void SC::SlowChange()
                 over=1;
             break;
         }
-        case 2:
+        case 1:
         {
             temp+=2;
             gr->setScale(CurrentModulus+=temp1);
@@ -115,7 +116,7 @@ void SC::SlowChange()
                 over=1;
            break;
         }
-        case 3:
+        case 2:
         {
             temp+=2;
             gr->moveBy(temp1,temp2);
@@ -123,7 +124,7 @@ void SC::SlowChange()
                 over=1;
             break;
         }
-        case 4:
+        case 3:
         {
             temp+=3;
             Effect->setBlurRadius(CurrentModulus+=temp1);
@@ -132,16 +133,15 @@ void SC::SlowChange()
                 over=1;
             break;
         }
-        case 5:
+        case 4:
         {
             temp+=2;
-            //SetOpacityItem(CurrentModulus+=temp1);
             gr->setOpacity(CurrentModulus+=temp1);
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;
         }
-        case 6:
+        case 5:
         {
             temp+=2;
             co->setColor(QColor(CurrentModulus+=temp1,CurrentModulus2+=temp2,CurrentModulus3+=temp3));
@@ -150,12 +150,12 @@ void SC::SlowChange()
                 over=1;
             break;
         }
-        case 7:
+        case 6:
         {
             changepixmap();
             break;
         }
-        case 8:
+        case 7:
         {
             temp+=2;
             tf=new QTransform;

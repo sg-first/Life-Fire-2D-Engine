@@ -213,7 +213,6 @@ VideoPlayer* Widget::PlayVideo(QString path,int Volume,int x,int y,int width,int
    {x=viewX-(WindowsWidth/2);}
    if(y==-1)
    {y=viewY-(WindowsHeigh/2);}
-   //time为视频时长，单位为秒
    VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,par,scene);
    video->start();
    return video;
@@ -230,50 +229,47 @@ void Widget::StopVideo(VideoPlayer *video)
 
 void Widget::AnimationRotationItem(Item* item, float set,int times,QString signfun,ParametersStru *par)
 {
-   assert(item->scPointer[0]==nullptr);
+   assert(item->scPointer[Rotation]==nullptr);
    QGraphicsItem* gr=item->ItemPointer;
    float CurrentModulus=gr->rotation();
    SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[0]=s;
+   item->scPointer[Rotation]=s;
    s->gr=gr;
    s->signfun=signfun;
    s->par=par;
-   QPair<Item*,SC *> p(item,s);
-   s->start(1);
+   s->start(Rotation);
 }
 
 void Widget::AnimationScaleItem(Item* item, float set,int times,QString signfun,ParametersStru *par)
 {
-   assert(item->scPointer[1]==nullptr);
+   assert(item->scPointer[Scale]==nullptr);
    QGraphicsItem* gr=item->ItemPointer;
    float CurrentModulus=gr->scale();
    SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[1]=s;
+   item->scPointer[Scale]=s;
    s->gr=gr;
    s->signfun=signfun;
    s->par=par;
-   QPair<Item*,SC *> p(item,s);
-   s->start(2);
+   s->start(Scale);
 }
 
 void Widget::AnimationMoveItem(Item* item,float X,float Y,int time,QString signfun,ParametersStru *par)
 {
-   assert(item->scPointer[2]==nullptr);
+   assert(item->scPointer[Move]==nullptr);
    QGraphicsItem* gr=item->ItemPointer;
    float dx=gr->x();
    float dy=gr->y();
    SC *s=new SC(0,0,X-dx,Y-dy,time);
-   item->scPointer[2]=s;
+   item->scPointer[Move]=s;
    s->gr=gr;
    s->signfun=signfun;
    s->par=par;
-   QPair<Item*,SC *> p(item,s);
-   s->start(3);
+   s->start(Move);
 }
 
 void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,QString signfun,ParametersStru *par)
 {
-   assert(item->scPointer[3]==nullptr);
+   assert(item->scPointer[BlurRadius]==nullptr);
    Item *gritem=item;
    float CurrentModulus;//当前系数
    if(gritem->Blur==nullptr)
@@ -281,39 +277,33 @@ void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,QString si
        CurrentModulus=0;
        gritem->Blur=new QGraphicsBlurEffect(this);
    }
-
    QGraphicsItem* gr=gritem->ItemPointer;
    QGraphicsBlurEffect *effect=new QGraphicsBlurEffect(this);
    SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[3]=s;
+   item->scPointer[BlurRadius]=s;
    s->gr=gr;
    s->Effect=effect;
    s->signfun=signfun;
    s->par=par;
-   QPair<Item*,SC *> p(item,s);
-   s->start(4);
-
-   gritem->Blur->setBlurRadius(set);
-   //gritem->Blur=Effect;
+   s->start(BlurRadius);
 }
 
 void Widget::AnimationSetOpacityItem(Item* item, float set, int times,QString signfun,ParametersStru *par)
 {
-   assert(item->scPointer[4]==nullptr);
+   assert(item->scPointer[Opacity]==nullptr);
    QGraphicsItem* gr=item->ItemPointer;
    float CurrentModulus=gr->opacity();
    SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[4]=s;
+   item->scPointer[Opacity]=s;
    s->gr=gr;
    s->signfun=signfun;
    s->par=par;
-   QPair<Item*,SC *> p(item,s);
-   s->start(5);
+   s->start(Opacity);
 }
 
 void Widget::AnimationSetColorItem(Item* item, float R, float G, float B, int times,QString signfun,ParametersStru *par)
 {
-   assert(item->scPointer[5]==nullptr);
+   assert(item->scPointer[Color]==nullptr);
    Item *gritem=item;
    //当前系数
    float CurrentModulus;
@@ -338,13 +328,12 @@ void Widget::AnimationSetColorItem(Item* item, float R, float G, float B, int ti
    QGraphicsItem* gr=gritem->ItemPointer;
    QGraphicsColorizeEffect *co = new QGraphicsColorizeEffect(this);
    SC *s=new SC(CurrentModulus,CurrentModulus2,CurrentModulus3,R,G,B,times);
-   item->scPointer[5]=s;
+   item->scPointer[Color]=s;
    s->gr=gr;
    s->co=co;
    s->signfun=signfun;
    s->par=par;
-   QPair<Item*,SC *> p(item,s);
-   s->start(6);
+   s->start(Color);
 
    gritem->Color->setColor(QColor(R,G,B));
 }
@@ -359,7 +348,7 @@ Item* Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStr
    AllItem<<item;
 
    SC *sc=new SC(0,0,time);//创建SC实例
-   item->scPointer[6]=sc;
+   item->scPointer[Picture]=sc;
    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
    sc->cycle=cycle;//定义是否循环连续播图
 
@@ -371,8 +360,7 @@ Item* Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStr
 
    for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
-   QPair<Item*,SC *> p(item,sc);//创建关联容器准备将当前实例导入SC管理器
-   sc->start(7);
+   sc->start(Picture);
    sc->num=item;
    return item;
 }
@@ -381,39 +369,38 @@ Item* Widget::AddPicAnimation(QVector<MyPixmap *> allpixmap, int x, int y, int t
 {
     //注意：本函数参数中的事件指的是播放完成之后的事件，而并非被鼠标点击时，如果想设置鼠标点击时的事件，请通过NewMyPixmap创建容器中的元素并填写事件相关的参数
 
-    assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
-    scene->addItem(allpixmap[0]);//将第一张图片显示在场景中
-    allpixmap[0]->setPos(x,y);//设置其位置
+    assert(!allpixmap.isEmpty());
+    scene->addItem(allpixmap[0]);
+    allpixmap[0]->setPos(x,y);
     Item *item=new Item(allpixmap[0]);
     AllItem<<item;
 
-    SC *sc=new SC(0,0,time);//创建SC实例
-    item->scPointer[6]=sc;
-    sc->pi=allpixmap[0];//将SC操作的图元成员写为第一张图片的图元
-    sc->cycle=cycle;//定义是否循环连续播图
+    SC *sc=new SC(0,0,time);
+    item->scPointer[Picture]=sc;
+    sc->pi=allpixmap[0];
+    sc->cycle=cycle;
 
-    if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
+    if(!cycle)
     {
         sc->signfun=signfun;
         sc->par=par;
     }
 
-    for(int i=0;i<allpixmap.size();i++)//遍历容器中的所有图片
-    {sc->pixmap.push_back(allpixmap[i]->up);}//将所有图片压入SC类中储存图片的成员中
-    QPair<Item*,SC *> p(item,sc);
-    sc->start(7);
+    for(int i=0;i<allpixmap.size();i++)
+    {sc->pixmap.push_back(allpixmap[i]->up);}
+    sc->start(Picture);
     sc->num=item;
     return item;
 }
 
 void Widget::ChangePicAnimationItem(QVector<QString> address,Item* item,int time,QString signfun,ParametersStru *par,bool cycle)
 {
-   assert(item->scPointer[6]==nullptr);
+   assert(item->scPointer[Picture]==nullptr);
    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
    MyPixmap *temp=item->PixmapItemPoniter;//查找到图元序号对应的MyPixmap指针
    temp->setPixmap(QPixmap(address[0]));//变更当前图片为图集的第一帧
    SC *sc=new SC(0,0,time);//创建SC实例
-   item->scPointer[6]=sc;
+   item->scPointer[Picture]=sc;
    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
    sc->cycle=cycle;//定义是否循环连续播图
 
@@ -425,18 +412,18 @@ void Widget::ChangePicAnimationItem(QVector<QString> address,Item* item,int time
 
    for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
-   sc->start(7);
+   sc->start(Picture);
    sc->num=item;
 }
 
 void Widget::ChangePicAnimationItem(QVector<MyPixmap *> allpixmap, Item *item, int time, QString signfun, ParametersStru *par, bool cycle)
 {
-    assert(item->scPointer[6]==nullptr);
+    assert(item->scPointer[Picture]==nullptr);
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     MyPixmap *temp=allpixmap[0];//查找到图元序号对应的MyPixmap指针
     temp->setPixmap(temp->up);//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time);//创建SC实例
-    item->scPointer[6]=sc;
+    item->scPointer[Picture]=sc;
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
     sc->cycle=cycle;//定义是否循环连续播图
 
@@ -448,21 +435,20 @@ void Widget::ChangePicAnimationItem(QVector<MyPixmap *> allpixmap, Item *item, i
 
     for(int i=0;i<allpixmap.size();i++)//遍历容器中的所有图片
     {sc->pixmap.push_back(allpixmap[i]->up);}//将所有图片压入SC类中储存图片的成员中
-    sc->start(7);
+    sc->start(Picture);
     sc->num=item;
 }
 
 void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun,ParametersStru *par)
 {
-   assert(item->scPointer[7]==nullptr);
+   assert(item->scPointer[Shear]==nullptr);
    Item *gritem=item;
    SC *s=new SC(gritem->ShearX,gritem->ShearY,fx,fy,time);
-   item->scPointer[7]=s;
+   item->scPointer[Shear]=s;
    s->gr=gritem->ItemPointer;
    s->signfun=signfun;
    s->par=par;
-   QPair<Item*,SC *> p(item,s);
-   s->start(8);
+   s->start(Shear);
 
    gritem->ShearX=fx;
    gritem->ShearY=fy;
@@ -517,10 +503,10 @@ float Widget::GetItemScale(Item* item)
 
 void Widget::EndAnimation(Item* item,AnimationType choose)
 {
-    if(item->scPointer[choose-1]!=nullptr)
+    if(item->scPointer[choose]!=nullptr)
     {
-        item->scPointer[choose-1]->over=2;
-        item->scPointer[choose-1]=nullptr;
+        item->scPointer[choose]->over=2;
+        item->scPointer[choose]=nullptr;
     }
 }
 
@@ -593,9 +579,12 @@ void Widget::SetScene(GraphicsView *view, QGraphicsScene *scene)
 
 void Widget::SafeSleep(int time)
 {
-   FIRST1 T1 OVER1 FIRST2 Q1 OVER2 T1 FIRSTOVER3
-   connect(T1,SIGNAL(timeout()),Q1,SLOT(quit()));
-   T1 TFFIRST1 time TFOVER1 Q1 FFIRSTOVER2 FDelFITST T1 FDelOVER FDelFITST Q1 FDelOVER
+   QTimer T1;
+   QEventLoop Q1;
+   T1.setSingleShot(true);
+   connect(&T1,SIGNAL(timeout()),&Q1,SLOT(quit()));
+   T1.start(time);
+   Q1.exec();
 }
 
 void Widget::SetItemLayer(Item* item,int Layer)

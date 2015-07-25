@@ -3,30 +3,11 @@
 #include "head.h"
 #include "NewType.h"
 
-#define FIRST1 QTimer*
-//t
-#define OVER1 =new QTimer;
-#define FIRST2 QEventLoop*
-//q
-#define OVER2 =new QEventLoop;
-//t
-#define FIRSTOVER3 ->setSingleShot(true);
-//connect(lfevent,SIGNAL(ff()),q,SLOT(quit()));
-//connect(t,SIGNAL(timeout()),q,SLOT(quit()));
-
-//t
-#define FFIRSTOVER1 ->start();
-//q
-#define FFIRSTOVER2 ->exec();
-//t
-#define FDelFITST delete
-//t/q
-#define FDelOVER ;
-
-//t
-#define TFFIRST1 ->start(
-//MS
-#define TFOVER1 );
+#define SynchronousStart(fun) {QTimer t;\
+                    QEventLoop q;\
+                    t.setSingleShot(true);\
+                    connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
+#define SynchronousFinish() t.start();q.exec();}
 
 class ParametersStru;
 
@@ -167,7 +148,7 @@ public:
 };
 
 
-enum AnimationType{Rotation=1,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
+enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
 
 
 class Item

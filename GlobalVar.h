@@ -15,13 +15,14 @@ public:
 signals:
     //您可以在此添加异步变同步等功能需要用到的信号，只需声明，无需实现
     //例子：void FunctionFinish();
+    void ff();
 
 };
 
 //-引擎自带的全局常量
 static const QString title="Life-Fire Engine";//窗口标题
-static const int WindowsWidth=800;//窗口宽
-static const int WindowsHeigh=600;//窗口高
+static const int WindowsWidth=1000;//窗口宽
+static const int WindowsHeigh=1000;//窗口高
 static const int MaximumWidth=10000;//舞台最大宽
 static const int MaximunHeigh=10000;//舞台最大高
 //-引擎自带的全局变量
