@@ -16,7 +16,6 @@ SOURCES += main.cpp\
         widget.cpp \
     NewType.cpp \
     maincall.cpp \
-    library.cpp \
     js.cpp \
     AES.cpp \
     EngineAPI.cpp \

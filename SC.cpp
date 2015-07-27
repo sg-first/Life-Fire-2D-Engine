@@ -11,7 +11,7 @@ void SC::changepixmap()
         {
             this->over=1;
             if(signfun!=NULL)
-            {RunSignFun(signfun,par);}
+            {RunFun(signfun,par);}
             return;
         }
     }

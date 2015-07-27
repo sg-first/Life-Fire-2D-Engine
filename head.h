@@ -21,8 +21,6 @@
 //数据
 #include <QList>
 #include <QString>
-#include <vector>
-using namespace std;
 //动画
 #include <QTimeLine>
 #include <QTimer>

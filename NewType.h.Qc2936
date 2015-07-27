@@ -182,6 +182,7 @@ public:
     QVector<QMediaPlayer*> QMediaPlayerVar;
     QVector<QGraphicsScene*> QGraphicsSceneVar;
     QVector<QScriptValue> QScriptValueVar;
+
     QVector<Qt::Key> QtKeyVar;
 };
 
@@ -192,8 +193,9 @@ struct InputEvent
     float MouseY;
     float fMouseX;
     float fMouseY;
+    int layout;
     ParametersStru *par;
     QString slotfun;
 };
 
-void RunFun(QString fun, ParametersStru *par=nullptr, Qt::ConnectionType CT=Qt::QueuedConnection);
+void RunFun(QString fun,ParametersStru *par=nullptr);

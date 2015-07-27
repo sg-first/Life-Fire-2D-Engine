@@ -48,11 +48,11 @@ void MyPixmap::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-     RunSignFun(fun,par);
+     RunFun(fun,par);
 }
 
 //VideoPlayer
-VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,ParametersStru *par,QGraphicsScene *scene,QWidget *parent)
+VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent)
     : QWidget(parent)
 {
     mediaPlayer=new QMediaPlayer(0,QMediaPlayer::VideoSurface);
@@ -65,7 +65,6 @@ VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh
     this->cycle=cycle;
     this->Path=Path;
     this->signfun=signfun;
-    this->par=par;
 }
 
 void VideoPlayer::start()
@@ -82,7 +81,7 @@ void VideoPlayer::playover(QMediaPlayer::State state)
     if(!cycle)
     {
         if(signfun!=NULL)
-        {RunSignFun(signfun,par);}
+        {RunFun(signfun);}
         delete this;
     }
     else
@@ -104,7 +103,9 @@ void GraphicsView::Rotate(float set)
 
 //EasyThread
 void EasyThread::run()
-{RunSignFun(fun,par);}
+{
+    RunFun(this->fun,this->par,Qt::DirectConnection);//同步执行
+}
 
 //item
 Item::Item(MyPixmap *pixmap, QGraphicsItem *graphicsiten)
@@ -118,17 +119,18 @@ Item::Item(MyPixmap *pixmap, QGraphicsItem *graphicsiten)
     this->Color=nullptr;
     this->ShearX=-1;
     this->ShearY=-1;
-    for(int a=0;a<sizeof(this->scPointer)/sizeof(this->scPointer[0]);++a)
+    for(unsigned int a=0;a<sizeof(this->scPointer)/sizeof(this->scPointer[0]);++a)
         this->scPointer[a]=nullptr;
 }
 
 //独立函数
-void RunSignFun(QString signfun,ParametersStru *par)
+void RunFun(QString signfun,ParametersStru *par,Qt::ConnectionType CT)
 {
+    //默认异步执行
     QByteArray ba = signfun.toLatin1();
     const char *function = ba.data();
     if(par!=nullptr)
-    {QMetaObject::invokeMethod(thob,function,Qt::DirectConnection,Q_ARG(ParametersStru,*par));}
+    {QMetaObject::invokeMethod(thob,function,CT,Q_ARG(ParametersStru,*par));}
     else
-    {QMetaObject::invokeMethod(thob,function,Qt::DirectConnection);}
+    {QMetaObject::invokeMethod(thob,function,CT);}
 }
