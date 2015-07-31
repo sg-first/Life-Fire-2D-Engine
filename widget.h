@@ -18,6 +18,8 @@ public:
     QList<Item*> AllItem;
     //引擎行为（实现于enginebeh）
     Q_INVOKABLE MyPixmap* NewMyPixmap(QString PicPath, QString slotfun=NULL, QString down=NULL, ParametersStru *par=nullptr);
+    Q_INVOKABLE float GetMyPixmapWidth(MyPixmap *pixmap);
+    Q_INVOKABLE float GetMyPixmapHeight(MyPixmap *pixmap);
     Q_INVOKABLE Item* AddPixmapItem(QString PicPath,float X,float Y,QString slotfun=NULL,QString down=NULL,ParametersStru *par=nullptr,QGraphicsScene *scene=scene);
     Q_INVOKABLE Item* AddPixmapItem(MyPixmap *pixmap, float X, float Y, QGraphicsScene *scene=scene);
     Q_INVOKABLE Item* AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene=scene);

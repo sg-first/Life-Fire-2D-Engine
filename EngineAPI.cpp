@@ -16,6 +16,16 @@ MyPixmap* Widget::NewMyPixmap(QString PicPath,QString slotfun,QString down,Param
     return pixmap;
 }
 
+float Widget::GetMyPixmapWidth(MyPixmap *pixmap)
+{
+    return pixmap->up.width();
+}
+
+float Widget::GetMyPixmapHeight(MyPixmap *pixmap)
+{
+    return pixmap->up.height();
+}
+
 Item* Widget::AddPixmapItem(QString PicPath,float X,float Y,QString slotfun,QString down,ParametersStru *par,QGraphicsScene *scene)
 {return AddPixmapItem(NewMyPixmap(PicPath,slotfun,down,par),X,Y,scene);}
 
