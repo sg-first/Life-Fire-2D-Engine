@@ -40,7 +40,7 @@ public:
     int over;//结束标志
     void start(int choose);
     bool cycle;//连续播图是否循环播放
-    Item* num;//动画在图元管理器中的序号
+    Item* num;//动画的图元指针
     int choose;//start()函数的参数
 
 protected:
@@ -72,11 +72,11 @@ private slots:
 };
 
 
-class MyPixmap : public QGraphicsPixmapItem//图元类
+class MyItem : public QGraphicsPixmapItem//图元类
 {
 public:
-    MyPixmap(QGraphicsItem *parent = 0):QGraphicsPixmapItem::QGraphicsPixmapItem(parent){}
-    MyPixmap(const QPixmap &pixmap, QGraphicsItem *parent = 0)
+    MyItem(QGraphicsItem *parent = 0):QGraphicsPixmapItem::QGraphicsPixmapItem(parent){}
+    MyItem(const QPixmap &pixmap, QGraphicsItem *parent = 0)
         :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent){}
     QPixmap up;
     QString fun;
@@ -153,10 +153,11 @@ enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
 class Item
 {
 public:
-    Item(MyPixmap* pixmap=nullptr,QGraphicsItem *graphicsiten=nullptr);
+    Item(MyItem* pixmapitem=nullptr,QGraphicsItem *graphicsitem=nullptr);
+    Item(QPixmap *pixmap);
 
     QGraphicsItem *ItemPointer;
-    MyPixmap *PixmapItemPoniter;
+    MyItem *PixmapItemPoniter;
     QGraphicsBlurEffect *Blur;
     QGraphicsColorizeEffect *Color;
     float ShearX;
@@ -177,7 +178,7 @@ public:
     QVector<GraphicsView*> GraphicsViewVar;
     QVector<EasyThread*> EasyThreadVar;
     QVector<AnimationType> AnimationTypeVar;
-    QVector<MyPixmap*> MyPixmapVar;
+    QVector<MyItem*> MyPixmapVar;
 
     QVector<QMediaPlayer*> QMediaPlayerVar;
     QVector<QGraphicsScene*> QGraphicsSceneVar;

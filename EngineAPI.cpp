@@ -1,41 +1,52 @@
 //-----本文件是引擎行为层给用户提供的接口的实现-----
 #include "widget.h"
 
-MyPixmap* Widget::NewMyPixmap(QString PicPath,QString slotfun,QString down,ParametersStru *par)
-{
-    QPixmap mainpix(PicPath);
-    MyPixmap *pixmap=new MyPixmap(mainpix);
-    pixmap->fun=slotfun;
-    pixmap->s=this;
-    pixmap->par=par;
-    if(down==NULL)
-    {pixmap->down=QPixmap(down);}
-    else
-    {pixmap->down=mainpix;}
-    pixmap->up=mainpix;
-    return pixmap;
-}
+QPixmap* Widget::NewQPixmap(QString PicPath)
+{return new QPixmap(PicPath);}
 
-float Widget::GetMyPixmapWidth(MyPixmap *pixmap)
-{
-    return pixmap->up.width();
-}
+float Widget::GetQPixmapWidth(QPixmap *pixmap)
+{return pixmap->width();}
 
-float Widget::GetMyPixmapHeight(MyPixmap *pixmap)
-{
-    return pixmap->up.height();
-}
+float Widget::GetQPixmapHeight(QPixmap *pixmap)
+{return pixmap->height();}
 
 Item* Widget::AddPixmapItem(QString PicPath,float X,float Y,QString slotfun,QString down,ParametersStru *par,QGraphicsScene *scene)
-{return AddPixmapItem(NewMyPixmap(PicPath,slotfun,down,par),X,Y,scene);}
-
-Item* Widget::AddPixmapItem(MyPixmap *pixmap, float X, float Y, QGraphicsScene *scene)
 {
-    scene->addItem(pixmap);
-    pixmap->setPos(X,Y);
-    Item *item=new Item(pixmap);
-    AllItem<<item;
-    return item;
+    QPixmap mainpix(PicPath);
+    MyItem *item=new MyItem(mainpix);
+    item->fun=slotfun;
+    item->s=this;
+    item->par=par;
+    if(down==NULL)
+    {item->down=mainpix;}
+    else
+    {item->down=QPixmap(down);}
+    item->up=mainpix;
+
+    scene->addItem(item);
+    item->setPos(X,Y);
+    Item *ritem=new Item(item);
+    AllItem<<ritem;
+    return ritem;
+}
+
+Item* Widget::AddPixmapItem(QPixmap *pixmap,float X,float Y,QString slotfun,QPixmap *down,ParametersStru *par,QGraphicsScene *scene)
+{
+    MyItem *item=new MyItem(*pixmap);
+    item->fun=slotfun;
+    item->s=this;
+    item->par=par;
+    if(down==NULL)
+    {item->down=*pixmap;}
+    else
+    {item->down=*down;}
+    item->up=*pixmap;
+
+    scene->addItem(item);
+    item->setPos(X,Y);
+    Item *ritem=new Item(pixmap);
+    AllItem<<ritem;
+    return ritem;
 }
 
 Item* Widget::AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene)
@@ -124,18 +135,19 @@ void Widget::ClearScene(QGraphicsScene *scene)
 void Widget::DeleteItem(Item* item)
 {
    EndAllAnimation(item);
-   delete item->ItemPointer;
+
+   if(item->PixmapItemPoniter==nullptr)
+   {delete item->ItemPointer;}
+   else
+   {delete item->PixmapItemPoniter;}
+
    if(item->Blur!=nullptr)
    {delete item->Blur;}
    if(item->Color!=nullptr)
    {delete item->Color;}
-   int sub;
-   for(sub=0;sub<AllItem.length();++sub)
-   {
-   		if(AllItem[sub]==item)
-   			break;
-   }
-   AllItem.removeAt(sub);
+
+   AllItem.removeAt(AllItem.indexOf(item));
+   delete item;
 }
 
 QString Widget::GetPath(QString str)
@@ -343,7 +355,7 @@ void Widget::AnimationSetColorItem(Item* item, float R, float G, float B, int ti
 Item* Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun,bool cycle,QGraphicsScene *scene)
 {
    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
-   MyPixmap *temp=new MyPixmap(QPixmap(address[0]));//将第一张图片变为图元
+   MyItem *temp=new MyItem(address[0]);//将第一张图片变为图元
    scene->addItem(temp);//将第一张图片显示在场景中
    temp->setPos(x,y);//设置其位置
    Item *item=new Item(temp);
@@ -364,57 +376,56 @@ Item* Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStr
    return item;
 }
 
-Item* Widget::AddPicAnimation(QVector<MyPixmap *> allpixmap, int x, int y, int time, QString signfun, bool cycle, QGraphicsScene *scene)
+Item* Widget::AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int time, QString signfun, bool cycle, QGraphicsScene *scene)
 {
-    //注意：本函数参数中的事件指的是播放完成之后的事件，而并非被鼠标点击时，如果想设置鼠标点击时的事件，请通过NewMyPixmap创建容器中的元素并填写事件相关的参数
-
     assert(!allpixmap.isEmpty());
-    scene->addItem(allpixmap[0]);
-    allpixmap[0]->setPos(x,y);
-    Item *item=new Item(allpixmap[0]);
-    AllItem<<item;
+    MyItem *item=new MyItem(*allpixmap[0]);
+    Item *ritem=new Item(item);
+    scene->addItem(item);
+    item->setPos(x,y);
+    AllItem<<ritem;
 
     SC *sc=new SC(0,0,time);
-    item->scPointer[Picture]=sc;
-    sc->pi=allpixmap[0];
+    ritem->scPointer[Picture]=sc;
+    sc->pi=item;
     sc->cycle=cycle;
 
     if(!cycle)
     {sc->signfun=signfun;}
 
     for(int i=0;i<allpixmap.size();i++)
-    {sc->pixmap.push_back(allpixmap[i]->up);}
+    {sc->pixmap.push_back(*allpixmap[i]);}
     sc->start(Picture);
-    sc->num=item;
-    return item;
+    sc->num=ritem;
+    return ritem;
 }
 
-void Widget::ChangePicAnimationItem(QVector<QString> address,Item* item,int time,QString signfun,bool cycle)
-{
-   assert(item->scPointer[Picture]==nullptr);
-   assert(!address.isEmpty());//断言，确认传入的图片容器不为空
-   MyPixmap *temp=item->PixmapItemPoniter;//查找到图元序号对应的MyPixmap指针
-   temp->setPixmap(QPixmap(address[0]));//变更当前图片为图集的第一帧
-   SC *sc=new SC(0,0,time);//创建SC实例
-   item->scPointer[Picture]=sc;
-   sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
-   sc->cycle=cycle;//定义是否循环连续播图
-
-   if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
-   {sc->signfun=signfun;}
-
-   for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
-   {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
-   sc->start(Picture);
-   sc->num=item;
-}
-
-void Widget::ChangePicAnimationItem(QVector<MyPixmap *> allpixmap, Item *item, int time, QString signfun, bool cycle)
+void Widget::ChangePicAnimationItem(QVector<QString>allpixmap,Item* item,int time,QString signfun,bool cycle)
 {
     assert(item->scPointer[Picture]==nullptr);
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
-    MyPixmap *temp=allpixmap[0];//查找到图元序号对应的MyPixmap指针
-    temp->setPixmap(temp->up);//变更当前图片为图集的第一帧
+    MyItem *temp=item->PixmapItemPoniter;//查找到图元序号对应的MyPixmap指针
+    temp->setPixmap(QPixmap(allpixmap[0]));//变更当前图片为图集的第一帧
+    SC *sc=new SC(0,0,time);//创建SC实例
+    item->scPointer[Picture]=sc;
+    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
+    sc->cycle=cycle;//定义是否循环连续播图
+
+    if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
+    {sc->signfun=signfun;}
+
+    for(QVector<QString>::iterator iter=allpixmap.begin();iter!=allpixmap.end();++iter)//遍历容器中的所有图片
+    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
+    sc->start(Picture);
+    sc->num=item;
+}
+
+void Widget::ChangePicAnimationItem(QVector<QPixmap*> allpixmap, Item *item, int time, QString signfun, bool cycle)
+{
+    assert(item->scPointer[Picture]==nullptr);
+    assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
+    MyItem *temp=new MyItem(*allpixmap[0]);//创建MyItem指针
+    temp->setPixmap(*allpixmap[0]);//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time);//创建SC实例
     item->scPointer[Picture]=sc;
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
@@ -424,7 +435,7 @@ void Widget::ChangePicAnimationItem(QVector<MyPixmap *> allpixmap, Item *item, i
     {sc->signfun=signfun;}
 
     for(int i=0;i<allpixmap.size();i++)//遍历容器中的所有图片
-    {sc->pixmap.push_back(allpixmap[i]->up);}//将所有图片压入SC类中储存图片的成员中
+    {sc->pixmap.push_back(*allpixmap[i]);}//将所有图片压入SC类中储存图片的成员中
     sc->start(Picture);
     sc->num=item;
 }
@@ -639,27 +650,11 @@ QString Widget::AESUncrypt(QString str,QString key)
   return aes.aesUncrypt(str);
 }
 
-void Widget::ChangePixmapItem(QString path,Item* item,QString slotfun,QString down,ParametersStru *par)
-{
-   assert(item->PixmapItemPoniter!=nullptr);
-   QPixmap mainpix(path);
-   MyPixmap *pixmap=new MyPixmap(mainpix);
-   item->PixmapItemPoniter=pixmap;
-   pixmap->fun=slotfun;
-   pixmap->setPixmap(mainpix);
-   pixmap->par=par;
-   if(down==NULL)
-   {pixmap->down=QPixmap(down);}
-   else
-   {pixmap->down=mainpix;}
-   pixmap->up=mainpix;
-}
+void Widget::ChangePixmapItem(QString path,Item* item)
+{item->PixmapItemPoniter->setPixmap(QPixmap(path));}
 
-void Widget::ChangePixmapItem(MyPixmap *pixmap, Item *item)
-{
-    assert(item->PixmapItemPoniter!=nullptr);
-    item->PixmapItemPoniter->setPixmap(pixmap->up);
-}
+void Widget::ChangePixmapItem(QPixmap* pixmap,Item* item)
+{item->PixmapItemPoniter->setPixmap(*pixmap);}
 
 void Widget::DeleteFile(QString path)
 {QFile::remove(path);}

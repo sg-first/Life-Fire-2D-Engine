@@ -17,11 +17,11 @@ public:
 
     QList<Item*> AllItem;
     //引擎行为（实现于enginebeh）
-    Q_INVOKABLE MyPixmap* NewMyPixmap(QString PicPath, QString slotfun=NULL, QString down=NULL, ParametersStru *par=nullptr);
-    Q_INVOKABLE float GetMyPixmapWidth(MyPixmap *pixmap);
-    Q_INVOKABLE float GetMyPixmapHeight(MyPixmap *pixmap);
+    Q_INVOKABLE QPixmap* NewQPixmap(QString PicPath);
+    Q_INVOKABLE float GetQPixmapWidth(QPixmap *pixmap);
+    Q_INVOKABLE float GetQPixmapHeight(QPixmap *pixmap);
     Q_INVOKABLE Item* AddPixmapItem(QString PicPath,float X,float Y,QString slotfun=NULL,QString down=NULL,ParametersStru *par=nullptr,QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddPixmapItem(MyPixmap *pixmap, float X, float Y, QGraphicsScene *scene=scene);
+    Q_INVOKABLE Item* AddPixmapItem(QPixmap *pixmap, float X, float Y, QString slotfun=NULL, QPixmap *down=nullptr, ParametersStru *par=nullptr, QGraphicsScene *scene=scene);
     Q_INVOKABLE Item* AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene=scene);
     Q_INVOKABLE Item* AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
     Q_INVOKABLE Item* AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
@@ -64,7 +64,7 @@ public:
     Q_INVOKABLE float GetItemRotation(Item* item);
     Q_INVOKABLE float GetItemScale(Item* item);
     Q_INVOKABLE Item* AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,bool cycle=true,QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddPicAnimation(QVector<MyPixmap*> allpixmap, int x, int y, int time, QString signfun=NULL, bool cycle=true, QGraphicsScene *scene=scene);
+    Q_INVOKABLE Item* AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int time, QString signfun=NULL, bool cycle=true, QGraphicsScene *scene=scene);
     Q_INVOKABLE void EndAnimation(Item* item, AnimationType choose);
     Q_INVOKABLE void EndAllAnimation(Item* item);
     Q_INVOKABLE void SetViewCenter(float x, float y, GraphicsView *gview=MainView);
@@ -89,10 +89,10 @@ public:
     Q_INVOKABLE QString ReadINI(QString path,QString section,QString var);
     Q_INVOKABLE QString AESEncrypt(QString str,QString key);
     Q_INVOKABLE QString AESUncrypt(QString str,QString key);
-    Q_INVOKABLE void ChangePixmapItem(QString path,Item* item,QString slotfun=NULL,QString down=NULL,ParametersStru *par=nullptr);
-    Q_INVOKABLE void ChangePixmapItem(MyPixmap* pixmap,Item* item);
-    Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> address,Item* item,int time,QString signfun=NULL,bool cycle=true);
-    Q_INVOKABLE void ChangePicAnimationItem(QVector<MyPixmap*> allpixmap, Item* item, int time, QString signfun=NULL, bool cycle=true);
+    Q_INVOKABLE void ChangePixmapItem(QString path, Item* item);
+    Q_INVOKABLE void ChangePixmapItem(QPixmap* pixmap,Item* item);
+    Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> allpixmap, Item* item, int time, QString signfun=NULL, bool cycle=true);
+    Q_INVOKABLE void ChangePicAnimationItem(QVector<QPixmap*> allpixmap, Item* item, int time, QString signfun=NULL, bool cycle=true);
     Q_INVOKABLE void DeleteFile(QString path);
     Q_INVOKABLE void SetShearItem(Item* item,float x,float y);
     Q_INVOKABLE float GetItemShearX(Item* item);

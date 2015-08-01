@@ -1,15 +1,15 @@
 //-----本文件是对于NewType.h中定义的新类型的成员函数的实现部分-----
 #include "widget.h"
 
-//MyPixmap
-void MyPixmap::mousePressEvent(QGraphicsSceneMouseEvent *event)
+//MyItem
+void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(fun==NULL || event->button()!=Qt::LeftButton)//检测图元是否是按钮、按下的是否是左键
     {return;}
     this->setPixmap(down);
 }
 
-void MyPixmap::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if(fun==NULL)
     {return;}
@@ -108,13 +108,13 @@ void EasyThread::run()
 }
 
 //item
-Item::Item(MyPixmap *pixmap, QGraphicsItem *graphicsiten)
+Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
 {
-    this->PixmapItemPoniter=pixmap;
-    if(graphicsiten!=nullptr)
-        this->ItemPointer=graphicsiten;
+    this->PixmapItemPoniter=pixmapitem;
+    if(graphicsitem!=nullptr)
+        this->ItemPointer=graphicsitem;
     else
-        this->ItemPointer=pixmap;
+        this->ItemPointer=pixmapitem;
     this->Blur=nullptr;
     this->Color=nullptr;
     this->ShearX=-1;
@@ -122,6 +122,9 @@ Item::Item(MyPixmap *pixmap, QGraphicsItem *graphicsiten)
     for(unsigned int a=0;a<sizeof(this->scPointer)/sizeof(this->scPointer[0]);++a)
         this->scPointer[a]=nullptr;
 }
+
+Item::Item(QPixmap *pixmap)
+{Item(new MyItem(*pixmap));}
 
 //独立函数
 void RunFun(QString signfun,ParametersStru *par,Qt::ConnectionType CT)

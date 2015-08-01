@@ -10,8 +10,7 @@ void maincall::StartGame()//入口函数
     //addr<<"D:/梦影测试/陈的混混/2.jpg";
     AddPicAnimation(addr,0,0,700);
     AddTextItem("C++是垃圾语言","宋体",20,0,0,230,0,0);*/
-    MyPixmap *pixmap=NewMyPixmap("D:/梦影测试/陈的混混/2.jpg");
+    QPixmap *pixmap=NewQPixmap("D:/梦影测试/陈的混混/2.jpg");
     AddPixmapItem(pixmap,0,0);
     AddPixmapItem(pixmap,200,300);
-
 }
