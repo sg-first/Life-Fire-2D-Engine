@@ -208,9 +208,7 @@ EasyThread* Widget::StartThread(QString slotfun,ParametersStru *par,bool track)
 {
    if(track)
    {
-     EasyThread *thread=new EasyThread;
-     thread->fun=slotfun;
-     thread->par=par;
+     EasyThread *thread=new EasyThread(slotfun,par);
      thread->start();
      return thread;
    }

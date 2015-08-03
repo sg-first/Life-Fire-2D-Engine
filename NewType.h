@@ -141,6 +141,8 @@ protected:
 class EasyThread : public QThread//线程类
 {
 public:
+    EasyThread(QString fun,ParametersStru *par=nullptr):
+        fun(fun),par(par){}
     void run();
     QString fun;
     ParametersStru *par;
