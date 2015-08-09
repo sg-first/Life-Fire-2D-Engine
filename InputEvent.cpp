@@ -3,7 +3,7 @@
 
 void Widget::keyPressEvent(QKeyEvent *e)//键盘事件响应
 {
-    for(int i;i<AllEvent.length();i++)
+    for(int i=0;i<AllEvent.length();i++)
     {
         if(AllEvent[i]->key==e->key())
         {
@@ -15,7 +15,7 @@ void Widget::keyPressEvent(QKeyEvent *e)//键盘事件响应
 
 void Widget::mousePressEvent(QMouseEvent *e)//鼠标事件响应
 {
-    for(int i;i<AllEvent.length();i++)
+    for(int i=0;i<AllEvent.length();i++)
     {
         if(AllEvent[i]->MouseX<=e->x()&&
            AllEvent[i]->MouseY<=e->y()&&
