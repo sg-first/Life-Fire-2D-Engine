@@ -101,8 +101,9 @@ public:
     Q_INVOKABLE void SetKeyEvent(Qt::Key key,QString slotfun,ParametersStru *par=nullptr);
     Q_INVOKABLE void DeleteKeyEvent(Qt::Key key);
     Q_INVOKABLE void SetMouseEvent(float MouseX,float MouseY,float fMouseX,float fMouseY,QString slotfun,ParametersStru *par=nullptr);
-    Q_INVOKABLE void DeleteKeyEvent(float MouseX, float MouseY,float fMouseX,float fMouseY);
+    Q_INVOKABLE void DeleteMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY);
     Q_INVOKABLE void DeleteAllEvent();
+    Q_INVOKABLE void WaitSign(QString signfun);
 
 protected:
     void keyPressEvent(QKeyEvent *e);

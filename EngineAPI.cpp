@@ -714,7 +714,7 @@ void Widget::SetMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouse
     AllEvent<<event;
 }
 
-void Widget::DeleteKeyEvent(float MouseX, float MouseY,float fMouseX,float fMouseY)
+void Widget::DeleteMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY)
 {
     for(int i=0;i<AllEvent.length();i++)
     {
@@ -734,4 +734,16 @@ void Widget::DeleteAllEvent()
     for(int i=0;i<AllEvent.length();i++)
     {delete AllEvent[i];}
     AllEvent.clear();
+}
+
+void Widget::WaitSign(QString signfun)
+{
+    QTimer t;
+    QEventLoop q;
+    t.setSingleShot(true);
+    QByteArray ba = signfun.toLatin1();
+    const char *function = ba.data();
+    connect(lfevent,function,&q,SLOT(quit()));
+    t.start();
+    q.exec();
 }
