@@ -292,6 +292,8 @@ void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,QString si
        CurrentModulus=0;
        gritem->Blur=new QGraphicsBlurEffect(this);
    }
+   else
+   {CurrentModulus=gritem->Blur->blurRadius();}
    QGraphicsItem* gr=gritem->ItemPointer;
    QGraphicsBlurEffect *effect=new QGraphicsBlurEffect(this);
    SC *s=new SC(CurrentModulus,set,times);

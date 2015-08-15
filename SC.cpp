@@ -30,7 +30,7 @@ void SC::start(int choose)
         case 0:
         {
             temp=0;
-            temp1=2*TargetModulus/times;
+            temp1=2*(TargetModulus-CurrentModulus)/times;
             timer->start(2);
             break;
         }
@@ -44,15 +44,15 @@ void SC::start(int choose)
         case 2:
         {
             temp=0;
-            temp1=2*TargetModulus/times;
-            temp2=2*TargetModulus2/times;
+            temp1=2*(TargetModulus-CurrentModulus)/times;
+            temp2=2*(TargetModulus2-CurrentModulus2)/times;
             timer->start(2);
             break;
         }
         case 3:
         {
             temp=0;
-            temp1=2*TargetModulus/times;
+            temp1=3*(TargetModulus-CurrentModulus)/times;
             timer->start(3);
             break;
         }
