@@ -49,11 +49,19 @@ public:
     Q_INVOKABLE void StopThread(EasyThread *thread);
     Q_INVOKABLE bool ItemColliding(Item* item1, Item* item2);
     Q_INVOKABLE void AnimationRotationItem(Item* item, float set,int times,QString signfun=NULL);
+    Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,int times,QString signfun=NULL);
     Q_INVOKABLE void AnimationScaleItem(Item* item, float set,int times,QString signfun=NULL);
+    Q_INVOKABLE void AnimationScaleItem(Item* item,SCFun scfun,int times,QString signfun=NULL);
     Q_INVOKABLE void AnimationBlurRadiusItem(Item* item, float set,int times,QString signfun=NULL);
+    Q_INVOKABLE void AnimationBlurRadiusItem(Item* item,SCFun scfun,int times,QString signfun=NULL);
     Q_INVOKABLE void AnimationSetOpacityItem(Item* item, float set,int times,QString signfun=NULL);
-    Q_INVOKABLE void AnimationSetColorItem(Item* item, float R, float G, float B,int times,QString signfun=NULL);
+    Q_INVOKABLE void AnimationSetOpacityItem(Item* item,SCFun scfun,int times,QString signfun=NULL);
     Q_INVOKABLE void AnimationMoveItem(Item* item,float X,float Y,int time,QString signfun=NULL);
+    Q_INVOKABLE void AnimationMoveItem(Item* item,SCFun scfun,int time,QString signfun=NULL);
+    Q_INVOKABLE void AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun=NULL);
+    Q_INVOKABLE void AnimationShearItem(Item* item,SCFun scfun,int time, QString signfun=NULL);
+    Q_INVOKABLE void AnimationSetColorItem(Item* item, float R, float G, float B,int times,QString signfun=NULL);
+    Q_INVOKABLE void AnimationSetColorItem(Item* item,SCFun scfun,int times,QString signfun=NULL);
     Q_INVOKABLE float GetItemX(Item* item);
     Q_INVOKABLE float GetItemY(Item* item);
     Q_INVOKABLE float GetItemR(Item* item);
@@ -97,7 +105,6 @@ public:
     Q_INVOKABLE void SetShearItem(Item* item,float x,float y);
     Q_INVOKABLE float GetItemShearX(Item* item);
     Q_INVOKABLE float GetItemShearY(Item* item);
-    Q_INVOKABLE void AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun=NULL);
     Q_INVOKABLE void SetKeyEvent(Qt::Key key,QString slotfun,ParametersStru *par=nullptr);
     Q_INVOKABLE void DeleteKeyEvent(Qt::Key key);
     Q_INVOKABLE void SetMouseEvent(float MouseX,float MouseY,float fMouseX,float fMouseY,QString slotfun,ParametersStru *par=nullptr);

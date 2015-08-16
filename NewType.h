@@ -10,9 +10,18 @@
 #define SynchronousFinish() t.start();q.exec();}
 
 class ParametersStru;
-
 class Widget;
 class Item;
+
+struct SCCurrentModulus
+{
+    float CurrentModulus;
+    float CurrentModulus2;
+    float CurrentModulus3;
+};
+
+typedef SCCurrentModulus(*SCFun)(int);//SC系数获取函数使用的函数指针
+
 class SC : public QObject//渐变使用的工具类
 {
     Q_OBJECT
@@ -28,6 +37,7 @@ public:
         :CurrentModulus(CurrentModulus),
         CurrentModulus2(CurrentModulus2),CurrentModulus3(CurrentModulus3),TargetModulus(TargetModulus),
         TargetModulus2(TargetModulus2),TargetModulus3(TargetModulus3),times(times){}//这个构造方法处理三渐变系数
+    void UesSCFun(SCFun scfun);
 
     QGraphicsItem* gr;
     QGraphicsBlurEffect *Effect;
@@ -57,15 +67,12 @@ protected:
     float temp2;//临时变量，在某些特殊情况下用于各个函数之间通信使用
     float temp3;//临时变量，在某些特殊情况下用于各个函数之间通信使用
 
-    //旋转                           choose==1
-    //缩放                           choose==2
-    //相对移动一个图元                 chose==3
-    //将一个图元变模糊                 choose==4
-    //设置一个图元的透明度              choose==5
-    //在一个图元基础上进行着色           choose==6
     void changepixmap();//Gif改变图元  choose==7
-    //剪切一个图元                      choose==8
     QVector<QPixmap>::iterator iter;
+
+    //使用函数获取系数的部分
+    bool isfunction=false;//是否使用函数获取渐变系数
+    SCFun scfun;
 
 private slots:
     void SlowChange();

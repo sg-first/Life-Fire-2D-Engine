@@ -257,6 +257,17 @@ void Widget::AnimationRotationItem(Item* item, float set,int times,QString signf
    s->start(Rotation);
 }
 
+void Widget::AnimationRotationItem(Item *item, SCFun scfun, int times, QString signfun)
+{
+    assert(item->scPointer[Rotation]==nullptr);
+    SC *s=new SC(0,0,times);
+    item->scPointer[Rotation]=s;
+    s->gr=item->ItemPointer;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(Rotation);
+}
+
 void Widget::AnimationScaleItem(Item* item, float set,int times,QString signfun)
 {
    assert(item->scPointer[Scale]==nullptr);
@@ -264,9 +275,76 @@ void Widget::AnimationScaleItem(Item* item, float set,int times,QString signfun)
    float CurrentModulus=gr->scale();
    SC *s=new SC(CurrentModulus,set,times);
    item->scPointer[Scale]=s;
-   s->gr=gr;
+   s->gr=item->ItemPointer;
    s->signfun=signfun;
    s->start(Scale);
+}
+
+void Widget::AnimationScaleItem(Item *item, SCFun scfun, int times, QString signfun)
+{
+    assert(item->scPointer[Scale]==nullptr);
+    SC *s=new SC(0,0,times);
+    item->scPointer[Scale]=s;
+    s->gr=item->ItemPointer;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(Scale);
+}
+
+void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,QString signfun)
+{
+   assert(item->scPointer[BlurRadius]==nullptr);
+   float CurrentModulus;//当前系数
+   if(item->Blur==nullptr)
+   {
+       CurrentModulus=0;
+       item->Blur=new QGraphicsBlurEffect(this);
+   }
+   else
+   {CurrentModulus=item->Blur->blurRadius();}
+   SC *s=new SC(CurrentModulus,set,times);
+   item->scPointer[BlurRadius]=s;
+   s->gr=item->ItemPointer;
+   s->Effect=item->Blur;
+   s->signfun=signfun;
+   s->start(BlurRadius);
+}
+
+void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int times, QString signfun)
+{
+    assert(item->scPointer[BlurRadius]==nullptr);
+    if(item->Blur==nullptr)
+    {item->Blur=new QGraphicsBlurEffect(this);}
+    SC *s=new SC(0,0,times);
+    item->scPointer[BlurRadius]=s;
+    s->gr=item->ItemPointer;
+    s->Effect=item->Blur;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(BlurRadius);
+}
+
+void Widget::AnimationSetOpacityItem(Item* item, float set, int times,QString signfun)
+{
+   assert(item->scPointer[Opacity]==nullptr);
+   QGraphicsItem* gr=item->ItemPointer;
+   float CurrentModulus=gr->opacity();
+   SC *s=new SC(CurrentModulus,set,times);
+   item->scPointer[Opacity]=s;
+   s->gr=gr;
+   s->signfun=signfun;
+   s->start(Opacity);
+}
+
+void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int times, QString signfun)
+{
+    assert(item->scPointer[Opacity]==nullptr);
+    SC *s=new SC(0,0,times);
+    item->scPointer[Opacity]=s;
+    s->gr=item->ItemPointer;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(Opacity);
 }
 
 void Widget::AnimationMoveItem(Item* item,float X,float Y,int time,QString signfun)
@@ -282,74 +360,85 @@ void Widget::AnimationMoveItem(Item* item,float X,float Y,int time,QString signf
    s->start(Move);
 }
 
-void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,QString signfun)
+void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, QString signfun)
 {
-   assert(item->scPointer[BlurRadius]==nullptr);
-   Item *gritem=item;
-   float CurrentModulus;//当前系数
-   if(gritem->Blur==nullptr)
-   {
-       CurrentModulus=0;
-       gritem->Blur=new QGraphicsBlurEffect(this);
-   }
-   else
-   {CurrentModulus=gritem->Blur->blurRadius();}
-   QGraphicsItem* gr=gritem->ItemPointer;
-   QGraphicsBlurEffect *effect=new QGraphicsBlurEffect(this);
-   SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[BlurRadius]=s;
-   s->gr=gr;
-   s->Effect=effect;
-   s->signfun=signfun;
-   s->start(BlurRadius);
+    assert(item->scPointer[Move]==nullptr);
+    SC *s=new SC(0,0,0,0,time);
+    item->scPointer[Move]=s;
+    s->gr=item->ItemPointer;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(Move);
 }
 
-void Widget::AnimationSetOpacityItem(Item* item, float set, int times,QString signfun)
+void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun)
 {
-   assert(item->scPointer[Opacity]==nullptr);
-   QGraphicsItem* gr=item->ItemPointer;
-   float CurrentModulus=gr->opacity();
-   SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[Opacity]=s;
-   s->gr=gr;
+   assert(item->scPointer[Shear]==nullptr);
+   SC *s=new SC(item->ShearX,item->ShearY,fx,fy,time);
+   item->scPointer[Shear]=s;
+   s->gr=item->ItemPointer;
    s->signfun=signfun;
-   s->start(Opacity);
+   s->start(Shear);
+
+   item->ShearX=fx;
+   item->ShearY=fy;
+}
+
+void Widget::AnimationShearItem(Item *item, SCFun scfun, int time, QString signfun)
+{
+    assert(item->scPointer[Shear]==nullptr);
+    SC *s=new SC(0,0,0,0,time);
+    item->scPointer[Shear]=s;
+    s->gr=item->ItemPointer;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(Shear);
+
+    SCCurrentModulus scc=scfun(time);
+    item->ShearX=scc.CurrentModulus;
+    item->ShearY=scc.CurrentModulus2;
 }
 
 void Widget::AnimationSetColorItem(Item* item, float R, float G, float B, int times,QString signfun)
 {
    assert(item->scPointer[Color]==nullptr);
-   Item *gritem=item;
    //当前系数
    float CurrentModulus;
    float CurrentModulus2;
    float CurrentModulus3;
-   if(gritem->Color==nullptr)
+   if(item->Color==nullptr)
    {
        //如果之前没有进行过着色,从0,0,0开始着色
        CurrentModulus=0;
        CurrentModulus2=0;
        CurrentModulus3=0;
-       gritem->Color=new QGraphicsColorizeEffect(this);
+       item->Color=new QGraphicsColorizeEffect(this);
    }
    else
    {
-        QColor color=gritem->Color->color();
+        QColor color=item->Color->color();
         CurrentModulus=color.red();
         CurrentModulus2=color.green();
         CurrentModulus3=color.blue();
    }
-
-   QGraphicsItem* gr=gritem->ItemPointer;
-   QGraphicsColorizeEffect *co = new QGraphicsColorizeEffect(this);
    SC *s=new SC(CurrentModulus,CurrentModulus2,CurrentModulus3,R,G,B,times);
    item->scPointer[Color]=s;
-   s->gr=gr;
-   s->co=co;
+   s->gr=item->ItemPointer;
+   s->co=item->Color;
    s->signfun=signfun;
    s->start(Color);
+}
 
-   gritem->Color->setColor(QColor(R,G,B));
+void Widget::AnimationSetColorItem(Item *item, SCFun scfun, int times, QString signfun)
+{
+    assert(item->scPointer[Color]==nullptr);
+    SC *s=new SC(0,0,0,0,0,0,times);
+    item->scPointer[Color]=s;
+    s->gr=item->ItemPointer;
+    s->co=item->Color;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(Color);
 }
 
 Item* Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun,bool cycle,QGraphicsScene *scene)
@@ -438,20 +527,6 @@ void Widget::ChangePicAnimationItem(QVector<QPixmap*> allpixmap, Item *item, int
     {sc->pixmap.push_back(*allpixmap[i]);}//将所有图片压入SC类中储存图片的成员中
     sc->start(Picture);
     sc->num=item;
-}
-
-void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun)
-{
-   assert(item->scPointer[Shear]==nullptr);
-   Item *gritem=item;
-   SC *s=new SC(gritem->ShearX,gritem->ShearY,fx,fy,time);
-   item->scPointer[Shear]=s;
-   s->gr=gritem->ItemPointer;
-   s->signfun=signfun;
-   s->start(Shear);
-
-   gritem->ShearX=fx;
-   gritem->ShearY=fy;
 }
 
 float Widget::GetItemX(Item* item)

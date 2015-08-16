@@ -1,6 +1,12 @@
 //-----本文件是SC类成员函数的实现部分-----
 #include "widget.h"
 
+void SC::UesSCFun(SCFun scfun)
+{
+    this->scfun=scfun;
+    this->isfunction=true;
+}
+
 void SC::changepixmap()
 {
     if(iter==pixmap.end())
@@ -101,7 +107,10 @@ void SC::SlowChange()
         case 0:
         {
             temp+=2;
-            gr->setRotation(CurrentModulus+=temp1);
+            if(!isfunction)
+            {gr->setRotation(CurrentModulus+=temp1);}
+            else
+            {gr->setRotation(scfun(temp).CurrentModulus);}
             gr->rotation();
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
@@ -110,7 +119,10 @@ void SC::SlowChange()
         case 1:
         {
             temp+=2;
-            gr->setScale(CurrentModulus+=temp1);
+            if(!isfunction)
+            {gr->setScale(CurrentModulus+=temp1);}
+            else
+            {gr->setScale(scfun(temp).CurrentModulus);}
             gr->scale();
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
@@ -119,7 +131,13 @@ void SC::SlowChange()
         case 2:
         {
             temp+=2;
-            gr->moveBy(temp1,temp2);
+            if(!isfunction)
+            {gr->moveBy(temp1,temp2);}
+            else
+            {
+                SCCurrentModulus scc=scfun(temp);
+                gr->setPos(scc.CurrentModulus,scc.CurrentModulus2);
+            }
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;
@@ -127,7 +145,10 @@ void SC::SlowChange()
         case 3:
         {
             temp+=3;
-            Effect->setBlurRadius(CurrentModulus+=temp1);
+            if(!isfunction)
+            {Effect->setBlurRadius(CurrentModulus+=temp1);}
+            else
+            {Effect->setBlurRadius(scfun(temp).CurrentModulus);}
             gr->setGraphicsEffect(Effect);
             if(temp==times || temp==times+1 || temp==times-1 || temp==times+2 || temp==times-2)
                 over=1;
@@ -136,7 +157,10 @@ void SC::SlowChange()
         case 4:
         {
             temp+=2;
-            gr->setOpacity(CurrentModulus+=temp1);
+            if(!isfunction)
+            {gr->setOpacity(CurrentModulus+=temp1);}
+            else
+            {gr->setOpacity(scfun(temp).CurrentModulus);}
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
             break;
@@ -144,7 +168,13 @@ void SC::SlowChange()
         case 5:
         {
             temp+=2;
-            co->setColor(QColor(CurrentModulus+=temp1,CurrentModulus2+=temp2,CurrentModulus3+=temp3));
+            if(!isfunction)
+            {co->setColor(QColor(CurrentModulus+=temp1,CurrentModulus2+=temp2,CurrentModulus3+=temp3));}
+            else
+            {
+                SCCurrentModulus scc=scfun(temp);
+                co->setColor(QColor(scc.CurrentModulus,scc.CurrentModulus2,scc.CurrentModulus3));
+            }
             gr->setGraphicsEffect(co);
             if(temp==times || temp==times+1 || temp==times-1)
                 over=1;
@@ -159,7 +189,13 @@ void SC::SlowChange()
         {
             temp+=2;
             tf=new QTransform;
-            tf->shear(CurrentModulus+=temp1,CurrentModulus2+=temp2);
+            if(!isfunction)
+            {tf->shear(CurrentModulus+=temp1,CurrentModulus2+=temp2);}
+            else
+            {
+                SCCurrentModulus scc=scfun(temp);
+                tf->shear(scc.CurrentModulus,scc.CurrentModulus2);
+            }
             gr->setTransform(*tf);
             delete tf;
             if(temp==times || temp==times+1 || temp==times-1)

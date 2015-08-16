@@ -15,6 +15,7 @@ public:
 signals:
     //您可以在此添加异步变同步等功能需要用到的信号，只需声明，无需实现
     //例子：void FunctionFinish();
+    void ff();
 
 };
 
