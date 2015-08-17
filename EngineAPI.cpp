@@ -166,7 +166,7 @@ void Widget::SetBackground(QString PicturePath,QGraphicsScene *scene)
 {scene->setBackgroundBrush(QPixmap(PicturePath));}
 
 void Widget::SetBackground(int R,int G,int B)
-{scene->setBackgroundBrush(QColor(R,G,B));}
+{MainScene->setBackgroundBrush(QColor(R,G,B));}
 
 QMediaPlayer* Widget::PlayMusic(QString name,int volume,bool cycle)
 {
@@ -228,9 +228,9 @@ bool Widget::ItemColliding(Item* item1,Item* item2)
 VideoPlayer* Widget::PlayVideo(QString path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene)
 {
    if(x==-1)
-   {x=viewX-(WindowsWidth/2);}
+   {x=MainView->viewX-(WindowsWidth/2);}
    if(y==-1)
-   {y=viewY-(WindowsHeigh/2);}
+   {y=MainView->viewY-(WindowsHeigh/2);}
    VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,scene);
    video->start();
    return video;
@@ -599,30 +599,24 @@ void Widget::EndAllAnimation(Item* item)
 
 void Widget::SetViewCenter(float x, float y,GraphicsView *gview)
 {
-   gview->centerOn(x,y);
-   if(gview==MainView)
-   {
-       this->viewX=x;
-       this->viewY=y;
-   }
+    gview->centerOn(x,y);
+    gview->viewX=x;
+    gview->viewY=y;
 }
 
-void Widget::SetViewItemCenter(Item* item,GraphicsView *gview)
+void Widget::SetViewCenter(Item* item,GraphicsView *gview)
 {
    Item *gritem=item;
    gview->centerOn(gritem->ItemPointer);
-   if(gview==MainView)
-   {
-       this->viewX=gritem->ItemPointer->x();
-       this->viewY=gritem->ItemPointer->y();
-   }
+   gview->viewX=gritem->ItemPointer->x();
+   gview->viewY=gritem->ItemPointer->y();
 }
 
-float Widget::GetMainViewX()
-{return viewX;}
+float Widget::GetViewX(GraphicsView *gview)
+{return gview->viewX;}
 
-float Widget::GetMainViewY()
-{return viewY;}
+float Widget::GetViewY(GraphicsView *gview)
+{return gview->viewY;}
 
 GraphicsView* Widget::AddView(float x, float y, float width, float height)
 {
@@ -635,7 +629,11 @@ GraphicsView* Widget::AddView(float x, float y, float width, float height)
 }
 
 void Widget::SetViewSize(float x, float y, float width, float height, GraphicsView *gview)
-{gview->setGeometry(x,y,width,height);}
+{
+    gview->setGeometry(x,y,width,height);
+    gview->viewX=width/2;
+    gview->viewY=height/2;
+}
 
 float Widget::GetScreenWidth()
 {return QApplication::desktop()->width();}
@@ -644,13 +642,17 @@ float Widget::GetScreenHeigh()
 {return QApplication::desktop()->height();}
 
 QGraphicsScene* Widget::AddScene(int width, int height)
-{
-   QGraphicsScene *scene=new QGraphicsScene(0,0,width,height);
-   return scene;
-}
+{return new QGraphicsScene(0,0,width,height);}
 
-void Widget::SetScene(GraphicsView *view, QGraphicsScene *scene)
-{view->setScene(scene);}
+void Widget::SetScene(GraphicsView *view, QGraphicsScene *scene,float viewX,float viewY)
+{
+    view->setScene(scene);
+    if(viewX==-1)
+    {viewX=view->width()/2;}
+    if(viewY==-1)
+    {viewY=view->height()/2;}
+    SetViewCenter(viewX,viewY);
+}
 
 void Widget::SafeSleep(int time)
 {
@@ -679,38 +681,62 @@ void Widget::RotateView(float set, GraphicsView *view)
 
 QString Widget::ReadTXT(QString path,int line)
 {
-   QFile file(path);
-   file.open(QIODevice::ReadOnly);
-   QTextStream text(&file);
-   QString concert;
-   if(line==-1)
-   {concert=text.readAll();}
-   else
-   {concert=text.readLine(line);}
-   file.close();
-   return concert;
+    if(path!=PreQFileName)
+    {
+        if(PreQFile!=nullptr)
+        {delete PreQFile;}
+        PreQFile=new QFile(path);
+        PreQFileName=path;
+    }
+    PreQFile->open(QIODevice::ReadOnly);
+    QTextStream text(PreQFile);
+    QString concert;
+    if(line==-1)
+    {concert=text.readAll();}
+    else
+    {concert=text.readLine(line);}
+    PreQFile->close();
+    return concert;
 }
 
 void Widget::WriteTXT(QString path, QString text)//这个函数等等再搞，问题超大
 {
-   QFile file(path);
-   file.open(QFile::Text|QFile::Append);
-   QTextStream out(&file);
+   if(path!=PreQFileName)
+   {
+       if(PreQFile!=nullptr)
+       {delete PreQFile;}
+       PreQFile=new QFile(path);
+       PreQFileName=path;
+   }
+   PreQFile->open(QFile::Text|QFile::Append);
+   QTextStream out(PreQFile);
    out<<text;
-   file.close();
+   PreQFile->close();
 }
 
 void Widget::WriteINI(QString path, QString section, QString var, QString value)
 {
-   QSettings configIniWrite(path,QSettings::IniFormat);
-   configIniWrite.setValue("/"+section+"/"+var,value);
+   if(path!=PreQSetName)
+   {
+       if(PreQSet!=nullptr)
+       {delete PreQSet;}
+       PreQSet=new QSettings(path,QSettings::IniFormat);
+       PreQSetName=path;
+   }
+   PreQSet->setValue("/"+section+"/"+var,value);
 }
 
 QString Widget::ReadINI(QString path, QString section, QString var)
 {
-   QSettings configIniRead(path,QSettings::IniFormat);
-   QString result=configIniRead.value("/"+section+"/"+var).toString();
-   return result;
+    if(path!=PreQSetName)
+    {
+        if(PreQSet!=nullptr)
+        {delete PreQSet;}
+        PreQSet=new QSettings(path,QSettings::IniFormat);
+        PreQSetName=path;
+    }
+    QString result=PreQSet->value("/"+section+"/"+var).toString();
+    return result;
 }
 
 QString Widget::AESEncrypt(QString str,QString key)

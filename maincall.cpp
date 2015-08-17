@@ -9,4 +9,5 @@ void maincall::StartGame()//入口函数
     addr<<"D:/梦影测试/陈的混混/3.jpg";
     addr<<"D:/梦影测试/陈的混混/2.jpg";
     AddPicAnimation(addr,0,0,700);*/
+    AddPixmapItem("D:/梦影测试/陈的混混/2.jpg",0,0);
 }

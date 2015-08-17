@@ -15,7 +15,6 @@ public:
 signals:
     //您可以在此添加异步变同步等功能需要用到的信号，只需声明，无需实现
     //例子：void FunctionFinish();
-    void ff();
 
 };
 
@@ -28,6 +27,6 @@ static const int MaximunHeigh=10000;//舞台最大高
 //-引擎自带的全局变量
 extern LFEvent *lfevent;
 extern QObject *thob;
-extern QGraphicsScene *scene;//声明舞台
+extern QGraphicsScene *MainScene;//声明舞台
 extern GraphicsView *MainView;//声明视图
 //-用户自行添加的全局变量

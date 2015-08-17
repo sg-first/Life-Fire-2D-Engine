@@ -20,28 +20,28 @@ public:
     Q_INVOKABLE QPixmap* NewQPixmap(QString PicPath);
     Q_INVOKABLE float GetQPixmapWidth(QPixmap *pixmap);
     Q_INVOKABLE float GetQPixmapHeight(QPixmap *pixmap);
-    Q_INVOKABLE Item* AddPixmapItem(QString PicPath,float X,float Y,QString slotfun=NULL,QString down=NULL,ParametersStru *par=nullptr,QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddPixmapItem(QPixmap *pixmap, float X, float Y, QString slotfun=NULL, QPixmap *down=nullptr, ParametersStru *par=nullptr, QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene=scene);
+    Q_INVOKABLE Item* AddPixmapItem(QString PicPath,float X,float Y,QString slotfun=NULL,QString down=NULL,ParametersStru *par=nullptr,QGraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddPixmapItem(QPixmap *pixmap, float X, float Y, QString slotfun=NULL, QPixmap *down=nullptr, ParametersStru *par=nullptr, QGraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene=MainScene);
     Q_INVOKABLE void RotationItem(Item* item, float set);
     Q_INVOKABLE void ScaleItem(Item* item, float set);
     Q_INVOKABLE void MoveItem(Item* item, float X, float Y);
     Q_INVOKABLE void BlurRadiusItem(Item* item, float set);
     Q_INVOKABLE void SetOpacityItem(Item* item, float set);
     Q_INVOKABLE void SetColorItem(Item* item, float R, float G, float B);
-    Q_INVOKABLE void ClearScene(QGraphicsScene *scene=scene);
+    Q_INVOKABLE void ClearScene(QGraphicsScene *scene=MainScene);
     Q_INVOKABLE void DeleteItem(Item* item);
     Q_INVOKABLE QString GetPath(QString str);
     Q_INVOKABLE void SetVisibleItem(Item* item,bool Enabled);
     Q_INVOKABLE QMediaPlayer* PlayMusic(QString name, int volume, bool cycle=false);
-    Q_INVOKABLE void SetBackground(QString PicturePath,QGraphicsScene *scene=scene);
+    Q_INVOKABLE void SetBackground(QString PicturePath,QGraphicsScene *scene=MainScene);
     Q_INVOKABLE void SetBackground(int R, int G, int B);
     Q_INVOKABLE void PauseMusic(QMediaPlayer *player);
     Q_INVOKABLE void ContinueMusic(QMediaPlayer *player);
-    Q_INVOKABLE VideoPlayer* PlayVideo(QString path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,QString signfun=NULL,QGraphicsScene *scene=scene);
+    Q_INVOKABLE VideoPlayer* PlayVideo(QString path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,QString signfun=NULL,QGraphicsScene *scene=MainScene);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void ContinueVideo(VideoPlayer *video);
     Q_INVOKABLE void StopVideo(VideoPlayer *video);
@@ -71,20 +71,20 @@ public:
     Q_INVOKABLE float GetItemOpacity(Item* item);
     Q_INVOKABLE float GetItemRotation(Item* item);
     Q_INVOKABLE float GetItemScale(Item* item);
-    Q_INVOKABLE Item* AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,bool cycle=true,QGraphicsScene *scene=scene);
-    Q_INVOKABLE Item* AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int time, QString signfun=NULL, bool cycle=true, QGraphicsScene *scene=scene);
+    Q_INVOKABLE Item* AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,bool cycle=true,QGraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int time, QString signfun=NULL, bool cycle=true, QGraphicsScene *scene=MainScene);
     Q_INVOKABLE void EndAnimation(Item* item, AnimationType choose);
     Q_INVOKABLE void EndAllAnimation(Item* item);
     Q_INVOKABLE void SetViewCenter(float x, float y, GraphicsView *gview=MainView);
-    Q_INVOKABLE void SetViewItemCenter(Item* item,GraphicsView *gview=MainView);
-    Q_INVOKABLE float GetMainViewX();
-    Q_INVOKABLE float GetMainViewY();
+    Q_INVOKABLE void SetViewCenter(Item* item,GraphicsView *gview=MainView);
+    Q_INVOKABLE float GetViewX(GraphicsView *gview=MainView);
+    Q_INVOKABLE float GetViewY(GraphicsView *gview=MainView);
     Q_INVOKABLE GraphicsView* AddView(float x,float y,float width,float height);
     Q_INVOKABLE void SetViewSize(float x,float y,float width=WindowsWidth,float height=WindowsHeigh,GraphicsView *gview=MainView);
     Q_INVOKABLE float GetScreenWidth();
     Q_INVOKABLE float GetScreenHeigh();
     Q_INVOKABLE QGraphicsScene* AddScene(int width,int height);
-    Q_INVOKABLE void SetScene(GraphicsView *view=MainView,QGraphicsScene *scene=scene);
+    Q_INVOKABLE void SetScene(GraphicsView *view=MainView, QGraphicsScene *scene=MainScene, float viewX=-1, float viewY=-1);
     Q_INVOKABLE void SafeSleep(int time);
     Q_INVOKABLE void SetItemLayer(Item* item, int Layer);
     //collidingItems(QGraphicsItem *item)，返回一个与item碰撞的item的表，可以留着做物理引擎用
@@ -118,10 +118,14 @@ protected:
 
 private:
     Ui::Widget *ui;
-    void Initialization();//初始化函数
-    float viewX;
-    float viewY;
-    Q_INVOKABLE bool isColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2);
+    //引擎行为函数
+    void Initialization();
+    bool isColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2);
     //关于输入事件
     QList<InputEvent*> AllEvent;
+    //关于IO优化
+    QFile *PreQFile=nullptr;
+    QString PreQFileName;
+    QSettings *PreQSet=nullptr;
+    QString PreQSetName;
 };

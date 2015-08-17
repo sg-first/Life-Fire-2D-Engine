@@ -124,6 +124,8 @@ public:
     GraphicsView(QWidget *parent):QGraphicsView(parent){}
     void Scale(float sx, float sy);
     void Rotate(float set);
+    float viewX;
+    float viewY;
 
 protected:
     void wheelEvent(QWheelEvent *e)

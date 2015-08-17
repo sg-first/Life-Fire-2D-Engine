@@ -3,7 +3,7 @@
 #include "ui_widget.h"
 
 LFEvent *lfevent;
-QGraphicsScene *scene;//声明舞台
+QGraphicsScene *MainScene;//声明舞台
 GraphicsView *MainView;//声明视图
 
 Widget::Widget(QWidget *parent) :
@@ -22,26 +22,19 @@ Widget::~Widget()
 //程序启动时调用的函数
 void Widget::Initialization()
 {
-    //初始化
-    lfevent=new LFEvent;
-    //初始化窗口
-    scene=new QGraphicsScene(0,0,MaximumWidth,MaximunHeigh);
-    int width=QApplication::desktop()->width();//获取分辨率宽
-    int height=QApplication::desktop()->height();//获取分辨率高
-    width=(width-WindowsWidth)/2;
-    height=(height-WindowsHeigh)/2;
-    setGeometry(width,height,WindowsWidth,WindowsHeigh);//设置窗口初始位置和大小
-    setFixedSize(WindowsWidth,WindowsHeigh);//设置窗口最大大小
-    setWindowTitle(title);//设置窗口标题
-    MainView=new GraphicsView(this);//定义视图
-    SetViewCenter(WindowsWidth/2,WindowsHeigh/2);
-    MainView->setGeometry(0,0,WindowsWidth,WindowsHeigh);//定义视图大小
-    MainView->setScene(scene);//视图定义到舞台
-    MainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//禁用竖直滚动条
-    MainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//禁用水平滚动条
-    MainView->show();//视图显示
-    SetViewCenter(WindowsWidth/2,WindowsHeigh/2);
+    lfevent=new LFEvent;//初始化全局变量
     //编码校正
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
+    //计算窗口出现位置
+    int widX=(GetScreenWidth()-WindowsWidth)/2;
+    int widY=(GetScreenHeigh()-WindowsHeigh)/2;
+    //设置窗口参数
+    setGeometry(widX,widY,WindowsWidth,WindowsHeigh);
+    setFixedSize(WindowsWidth,WindowsHeigh);
+    setWindowTitle(title);
+    MainScene=AddScene(MaximumWidth,MaximunHeigh);//初始化舞台
+    //定义视图并显示
+    MainView=AddView(0,0,WindowsWidth,WindowsHeigh);
+    SetScene();
 }
