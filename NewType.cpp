@@ -115,10 +115,6 @@ Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
         this->ItemPointer=graphicsitem;
     else
         this->ItemPointer=pixmapitem;
-    this->Blur=nullptr;
-    this->Color=nullptr;
-    this->ShearX=-1;
-    this->ShearY=-1;
     for(unsigned int a=0;a<sizeof(this->scPointer)/sizeof(this->scPointer[0]);++a)
         this->scPointer[a]=nullptr;
 }

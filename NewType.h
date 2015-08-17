@@ -169,10 +169,10 @@ public:
 
     QGraphicsItem *ItemPointer;
     MyItem *PixmapItemPoniter;
-    QGraphicsBlurEffect *Blur;
-    QGraphicsColorizeEffect *Color;
-    float ShearX;
-    float ShearY;
+    QGraphicsBlurEffect *Blur=nullptr;
+    QGraphicsColorizeEffect *Color=nullptr;
+    float ShearX=0;
+    float ShearY=0;
     SC* scPointer[8];
 };
 

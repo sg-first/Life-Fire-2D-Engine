@@ -102,7 +102,7 @@ public:
     Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> allpixmap, Item* item, int time, QString signfun=NULL, bool cycle=true);
     Q_INVOKABLE void ChangePicAnimationItem(QVector<QPixmap*> allpixmap, Item* item, int time, QString signfun=NULL, bool cycle=true);
     Q_INVOKABLE void DeleteFile(QString path);
-    Q_INVOKABLE void SetShearItem(Item* item,float x,float y);
+    Q_INVOKABLE void ShearItem(Item* item,float x,float y);
     Q_INVOKABLE float GetItemShearX(Item* item);
     Q_INVOKABLE float GetItemShearY(Item* item);
     Q_INVOKABLE void SetKeyEvent(Qt::Key key,QString slotfun,ParametersStru *par=nullptr);
@@ -111,6 +111,10 @@ public:
     Q_INVOKABLE void DeleteMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY);
     Q_INVOKABLE void DeleteAllEvent();
     Q_INVOKABLE void WaitSign(QString signfun);
+    Q_INVOKABLE void HorizontallyFlip(Item *item);
+    Q_INVOKABLE QPixmap* HorizontallyFlip(QPixmap *pixmap);
+    Q_INVOKABLE void VerticalFlip(Item *item);
+    Q_INVOKABLE QPixmap* VerticalFlip(QPixmap *pixmap);
 
 protected:
     void keyPressEvent(QKeyEvent *e);
@@ -121,6 +125,7 @@ private:
     //引擎行为函数
     void Initialization();
     bool isColliding(QGraphicsItem* Ritem1,QGraphicsItem* Ritem2);
+    QPixmap* mirrorAndChange(QPixmap *pixmap, bool mirrorMode);
     //关于输入事件
     QList<InputEvent*> AllEvent;
     //关于IO优化

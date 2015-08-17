@@ -760,7 +760,7 @@ void Widget::ChangePixmapItem(QPixmap* pixmap,Item* item)
 void Widget::DeleteFile(QString path)
 {QFile::remove(path);}
 
-void Widget::SetShearItem(Item* item,float x,float y)
+void Widget::ShearItem(Item* item,float x,float y)
 {
    Item *gritem=item;
    QTransform *tranform=new QTransform;
@@ -850,3 +850,23 @@ void Widget::WaitSign(QString signfun)
     t.start();
     q.exec();
 }
+
+void Widget::HorizontallyFlip(Item *item)
+{
+    assert(item->PixmapItemPoniter!=nullptr);
+    QPixmap pixmap=item->PixmapItemPoniter->pixmap();
+    ChangePixmapItem(mirrorAndChange(&pixmap,true),item);
+}
+
+QPixmap* Widget::HorizontallyFlip(QPixmap *pixmap)
+{return mirrorAndChange(pixmap,true);}
+
+void Widget::VerticalFlip(Item *item)
+{
+    assert(item->PixmapItemPoniter!=nullptr);
+    QPixmap pixmap=item->PixmapItemPoniter->pixmap();
+    ChangePixmapItem(mirrorAndChange(&pixmap,false),item);
+}
+
+QPixmap* Widget::VerticalFlip(QPixmap *pixmap)
+{return mirrorAndChange(pixmap,false);}
