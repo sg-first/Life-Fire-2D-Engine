@@ -58,6 +58,8 @@ public:
     Q_INVOKABLE void AnimationSetOpacityItem(Item* item,SCFun scfun,int times,QString signfun=NULL);
     Q_INVOKABLE void AnimationMoveItem(Item* item,float X,float Y,int time,QString signfun=NULL);
     Q_INVOKABLE void AnimationMoveItem(Item* item,SCFun scfun,int time,QString signfun=NULL);
+    Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,float X,float Y,int time,QString signfun=NULL);
+    Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,SCFun scfun,int time,QString signfun=NULL);
     Q_INVOKABLE void AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun=NULL);
     Q_INVOKABLE void AnimationShearItem(Item* item,SCFun scfun,int time, QString signfun=NULL);
     Q_INVOKABLE void AnimationSetColorItem(Item* item, float R, float G, float B,int times,QString signfun=NULL);

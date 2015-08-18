@@ -351,9 +351,7 @@ void Widget::AnimationMoveItem(Item* item,float X,float Y,int time,QString signf
 {
    assert(item->scPointer[Move]==nullptr);
    QGraphicsItem* gr=item->ItemPointer;
-   float dx=gr->x();
-   float dy=gr->y();
-   SC *s=new SC(0,0,X-dx,Y-dy,time);
+   SC *s=new SC(gr->x(),gr->y(),X,Y,time);
    item->scPointer[Move]=s;
    s->gr=gr;
    s->signfun=signfun;
@@ -369,6 +367,23 @@ void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, QString signfu
     s->signfun=signfun;
     s->UesSCFun(scfun);
     s->start(Move);
+}
+
+void Widget::AnimationSetViewCenter(GraphicsView *view, float X, float Y, int time, QString signfun)
+{
+    SC *s=new SC(view->viewX,view->viewY,X,Y,time);
+    s->gv=view;
+    s->signfun=signfun;
+    s->start(20);
+}
+
+void Widget::AnimationSetViewCenter(GraphicsView *view, SCFun scfun, int time, QString signfun)
+{
+    SC *s=new SC(0,0,0,0,time);
+    s->gv=view;
+    s->signfun=signfun;
+    s->UesSCFun(scfun);
+    s->start(20);
 }
 
 void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun)
@@ -598,19 +613,10 @@ void Widget::EndAllAnimation(Item* item)
 }
 
 void Widget::SetViewCenter(float x, float y,GraphicsView *gview)
-{
-    gview->centerOn(x,y);
-    gview->viewX=x;
-    gview->viewY=y;
-}
+{gview->SetCenter(x,y);}
 
 void Widget::SetViewCenter(Item* item,GraphicsView *gview)
-{
-   Item *gritem=item;
-   gview->centerOn(gritem->ItemPointer);
-   gview->viewX=gritem->ItemPointer->x();
-   gview->viewY=gritem->ItemPointer->y();
-}
+{gview->SetCenter(item->ItemPointer);}
 
 float Widget::GetViewX(GraphicsView *gview)
 {return gview->viewX;}

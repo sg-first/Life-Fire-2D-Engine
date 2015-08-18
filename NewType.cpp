@@ -101,6 +101,20 @@ void GraphicsView::Scale(float sx,float sy)
 void GraphicsView::Rotate(float set)
 {rotate(set);}
 
+void GraphicsView::SetCenter(float x, float y)
+{
+    this->centerOn(x,y);
+    this->viewX=x;
+    this->viewY=y;
+}
+
+void GraphicsView::SetCenter(QGraphicsItem *item)
+{
+    this->centerOn(item);
+    this->viewX=item->x();
+    this->viewY=item->y();
+}
+
 //EasyThread
 void EasyThread::run()
 {

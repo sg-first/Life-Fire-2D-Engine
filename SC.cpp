@@ -93,9 +93,23 @@ void SC::start(int choose)
             timer->start(2);
             break;
         }
+        case 20:
+        {
+            temp=0;
+            temp1=2*(TargetModulus-CurrentModulus)/times;
+            temp2=2*(TargetModulus2-CurrentModulus2)/times;
+            timer->start(2);
+            break;
+        }
 
     }
     connect(timer,SIGNAL(timeout()),this,SLOT(SlowChange()));
+}
+
+void SC::isend()
+{
+    if(temp==times || temp==times+1 || temp==times-1)
+        over=1;
 }
 
 void SC::SlowChange()
@@ -112,8 +126,7 @@ void SC::SlowChange()
             else
             {gr->setRotation(scfun(temp).CurrentModulus);}
             gr->rotation();
-            if(temp==times || temp==times+1 || temp==times-1)
-                over=1;
+            isend();
             break;
         }
         case 1:
@@ -124,9 +137,8 @@ void SC::SlowChange()
             else
             {gr->setScale(scfun(temp).CurrentModulus);}
             gr->scale();
-            if(temp==times || temp==times+1 || temp==times-1)
-                over=1;
-           break;
+            isend();
+            break;
         }
         case 2:
         {
@@ -138,8 +150,7 @@ void SC::SlowChange()
                 SCCurrentModulus scc=scfun(temp);
                 gr->setPos(scc.CurrentModulus,scc.CurrentModulus2);
             }
-            if(temp==times || temp==times+1 || temp==times-1)
-                over=1;
+            isend();
             break;
         }
         case 3:
@@ -150,8 +161,7 @@ void SC::SlowChange()
             else
             {Effect->setBlurRadius(scfun(temp).CurrentModulus);}
             gr->setGraphicsEffect(Effect);
-            if(temp==times || temp==times+1 || temp==times-1 || temp==times+2 || temp==times-2)
-                over=1;
+            isend();
             break;
         }
         case 4:
@@ -161,8 +171,7 @@ void SC::SlowChange()
             {gr->setOpacity(CurrentModulus+=temp1);}
             else
             {gr->setOpacity(scfun(temp).CurrentModulus);}
-            if(temp==times || temp==times+1 || temp==times-1)
-                over=1;
+            isend();
             break;
         }
         case 5:
@@ -176,8 +185,7 @@ void SC::SlowChange()
                 co->setColor(QColor(scc.CurrentModulus,scc.CurrentModulus2,scc.CurrentModulus3));
             }
             gr->setGraphicsEffect(co);
-            if(temp==times || temp==times+1 || temp==times-1)
-                over=1;
+            isend();
             break;
         }
         case 6:
@@ -198,8 +206,20 @@ void SC::SlowChange()
             }
             gr->setTransform(*tf);
             delete tf;
-            if(temp==times || temp==times+1 || temp==times-1)
-                over=1;
+            isend();
+            break;
+        }
+        case 20:
+        {
+            temp+=2;
+            if(!isfunction)
+            {gv->SetCenter(CurrentModulus+=temp1,CurrentModulus2+=temp2);}
+            else
+            {
+                SCCurrentModulus scc=scfun(temp);
+                gv->SetCenter(scc.CurrentModulus,scc.CurrentModulus2);
+            }
+            isend();
             break;
         }
         }

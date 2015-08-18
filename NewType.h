@@ -12,6 +12,7 @@
 class ParametersStru;
 class Widget;
 class Item;
+class GraphicsView;
 
 struct SCCurrentModulus
 {
@@ -44,6 +45,7 @@ public:
     QGraphicsColorizeEffect *co;
     QTransform *tf;
     QGraphicsPixmapItem *pi;
+    GraphicsView *gv;
     QVector<QPixmap> pixmap;
     QString signfun;
     ParametersStru *par;
@@ -68,6 +70,7 @@ protected:
     float temp3;//临时变量，在某些特殊情况下用于各个函数之间通信使用
 
     void changepixmap();//Gif改变图元  choose==7
+    void isend();//判断动画是否结束
     QVector<QPixmap>::iterator iter;
 
     //使用函数获取系数的部分
@@ -124,6 +127,8 @@ public:
     GraphicsView(QWidget *parent):QGraphicsView(parent){}
     void Scale(float sx, float sy);
     void Rotate(float set);
+    void SetCenter(float x,float y);
+    void SetCenter(QGraphicsItem *item);
     float viewX;
     float viewY;
 
