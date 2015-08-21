@@ -26,6 +26,9 @@ void Widget::Initialization()
     //编码校正
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
+    //注册类型
+    qRegisterMetaType<ParametersStru*>("ParametersStru*");
+    qRegisterMetaType<LFEvent*>("LFEvent*");
     //计算窗口出现位置
     int widX=(GetScreenWidth()-WindowsWidth)/2;
     int widY=(GetScreenHeigh()-WindowsHeigh)/2;

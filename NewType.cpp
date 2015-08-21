@@ -143,7 +143,7 @@ void RunFun(QString signfun,ParametersStru *par,Qt::ConnectionType CT)
     QByteArray ba = signfun.toLatin1();
     const char *function = ba.data();
     if(par!=nullptr)
-    {QMetaObject::invokeMethod(thob,function,CT,Q_ARG(ParametersStru,*par));}
+    {QMetaObject::invokeMethod(thob,function,CT,Q_ARG(ParametersStru*,par));}
     else
     {QMetaObject::invokeMethod(thob,function,CT);}
 }
