@@ -197,12 +197,22 @@ void SC::SlowChange()
         {
             temp+=2;
             tf=new QTransform;
+            float shearX;
+            float shearY;
             if(!isfunction)
-            {tf->shear(CurrentModulus+=temp1,CurrentModulus2+=temp2);}
+            {
+                shearX=CurrentModulus+=temp1;
+                shearY=CurrentModulus2+=temp2;
+                tf->shear(shearX,shearY);
+                num->ShearX=shearX;
+                num->ShearY=shearY;
+            }
             else
             {
                 SCCurrentModulus scc=scfun(temp);
                 tf->shear(scc.CurrentModulus,scc.CurrentModulus2);
+                num->ShearX=scc.CurrentModulus;
+                num->ShearY=scc.CurrentModulus2;
             }
             gr->setTransform(*tf);
             delete tf;
@@ -232,6 +242,7 @@ void SC::SlowChange()
          const char *function = ba.data();
          QMetaObject::invokeMethod(lfevent,function);
        }
+       num->scPointer[choose]=nullptr;
        delete timer;
        delete this;
     }

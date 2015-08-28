@@ -30,6 +30,7 @@ public:
     Q_INVOKABLE void ScaleItem(Item* item, float set);
     Q_INVOKABLE void MoveItem(Item* item, float X, float Y);
     Q_INVOKABLE void BlurRadiusItem(Item* item, float set);
+    Q_INVOKABLE void DropShadowItem(Item* item, float shadowX,float shadowY);
     Q_INVOKABLE void SetOpacityItem(Item* item, float set);
     Q_INVOKABLE void SetColorItem(Item* item, float R, float G, float B);
     Q_INVOKABLE void ClearScene(QGraphicsScene *scene=MainScene);
@@ -76,6 +77,7 @@ public:
     Q_INVOKABLE Item* AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun=NULL,bool cycle=true,QGraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int time, QString signfun=NULL, bool cycle=true, QGraphicsScene *scene=MainScene);
     Q_INVOKABLE void EndAnimation(Item* item, AnimationType choose);
+    Q_INVOKABLE bool IsAnimation(Item* item,AnimationType choose);
     Q_INVOKABLE void EndAllAnimation(Item* item);
     Q_INVOKABLE void SetViewCenter(float x, float y, GraphicsView *gview=MainView);
     Q_INVOKABLE void SetViewCenter(Item* item,GraphicsView *gview=MainView);
