@@ -11,9 +11,12 @@ void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    this->setPixmap(up);
+
     if(fun==NULL)
     {return;}
 
+    //算坐标大业
     int x=this->x();
     int width=this->pixmap().width();
     int y=this->y();
@@ -32,21 +35,15 @@ void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     ymax=y+height;
 
     if(y<0)
-        ymin=0;
+    {ymin=0;}
     if(y+height>WindowsHeigh)
-        ymax=WindowsHeigh;
+    {ymax=WindowsHeigh;}
+    //大业完成
 
     if(xmax<s->mapFromGlobal(QCursor::pos()).x() || xmin>s->mapFromGlobal(QCursor::pos()).x())
-    {
-        this->setPixmap(up);
-        return;
-    }
-
+    {return;}
     if(ymax<s->mapFromGlobal(QCursor::pos()).y() || ymin>s->mapFromGlobal(QCursor::pos()).y())
-    {
-        this->setPixmap(up);
-        return;
-    }
+    {return;}
 
      RunFun(fun,par);
 }

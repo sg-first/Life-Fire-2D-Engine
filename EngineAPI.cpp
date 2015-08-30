@@ -44,7 +44,7 @@ Item* Widget::AddPixmapItem(QPixmap *pixmap,float X,float Y,QString slotfun,QPix
 
     scene->addItem(item);
     item->setPos(X,Y);
-    Item *ritem=new Item(pixmap);
+    Item *ritem=new Item(item);
     AllItem<<ritem;
     return ritem;
 }
@@ -204,6 +204,12 @@ void Widget::PauseMusic(QMediaPlayer *player)
 void Widget::ContinueMusic(QMediaPlayer *player)
 {player->play();}
 
+void Widget::StopMusic(QMediaPlayer *player)
+{
+    player->stop();
+    delete player;
+}
+
 EasyThread* Widget::StartThread(QString slotfun,ParametersStru *par,bool track)
 {
    if(track)
@@ -243,7 +249,10 @@ void Widget::ContinueVideo(VideoPlayer *video)
 {video->mediaPlayer->play();}
 
 void Widget::StopVideo(VideoPlayer *video)
-{video->mediaPlayer->stop();}
+{
+    video->mediaPlayer->stop();
+    delete video;
+}
 
 void Widget::AnimationRotationItem(Item* item, float set,int times,QString signfun)
 {
@@ -513,9 +522,9 @@ Item* Widget::AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int tim
 
 void Widget::ChangePicAnimationItem(QVector<QString>allpixmap,Item* item,int time,QString signfun,bool cycle)
 {
-    assert(item->scPointer[Picture]==nullptr);
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
-    MyItem *temp=item->PixmapItemPoniter;//查找到图元序号对应的MyPixmap指针
+    EndAnimation(item,Picture);
+    MyItem *temp=item->PixmapItemPoniter;
     temp->setPixmap(QPixmap(allpixmap[0]));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time);//创建SC实例
     item->scPointer[Picture]=sc;
@@ -533,9 +542,9 @@ void Widget::ChangePicAnimationItem(QVector<QString>allpixmap,Item* item,int tim
 
 void Widget::ChangePicAnimationItem(QVector<QPixmap*> allpixmap, Item *item, int time, QString signfun, bool cycle)
 {
-    assert(item->scPointer[Picture]==nullptr);
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
-    MyItem *temp=new MyItem(*allpixmap[0]);//创建MyItem指针
+    EndAnimation(item,Picture);
+    MyItem *temp=item->PixmapItemPoniter;
     temp->setPixmap(*allpixmap[0]);//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time);//创建SC实例
     item->scPointer[Picture]=sc;
@@ -773,6 +782,12 @@ void Widget::ChangePixmapItem(QString path,Item* item)
 void Widget::ChangePixmapItem(QPixmap* pixmap,Item* item)
 {item->PixmapItemPoniter->setPixmap(*pixmap);}
 
+void Widget::ChangeItemEvent(Item *item, QString slotfun)
+{
+    assert(item->PixmapItemPoniter!=nullptr);
+    item->PixmapItemPoniter->fun=slotfun;
+}
+
 void Widget::DeleteFile(QString path)
 {QFile::remove(path);}
 
@@ -792,7 +807,7 @@ float Widget::GetItemShearX(Item* item)
 float Widget::GetItemShearY(Item* item)
 {return item->ShearY;}
 
-void Widget::SetKeyEvent(Qt::Key key, QString slotfun,ParametersStru *par)
+void Widget::AddKeyEvent(Qt::Key key, QString slotfun,ParametersStru *par)
 {
     for(int i=0;i<AllEvent.length();i++)
     {
@@ -820,7 +835,7 @@ void Widget::DeleteKeyEvent(Qt::Key key)
     }
 }
 
-void Widget::SetMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY,QString slotfun, ParametersStru *par)
+void Widget::AddMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY,QString slotfun, ParametersStru *par)
 {
     InputEvent *event=new InputEvent;
     event->MouseX=MouseX;

@@ -42,6 +42,7 @@ public:
     Q_INVOKABLE void SetBackground(int R, int G, int B);
     Q_INVOKABLE void PauseMusic(QMediaPlayer *player);
     Q_INVOKABLE void ContinueMusic(QMediaPlayer *player);
+    Q_INVOKABLE void StopMusic(QMediaPlayer *player);
     Q_INVOKABLE VideoPlayer* PlayVideo(QString path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,QString signfun=NULL,QGraphicsScene *scene=MainScene);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void ContinueVideo(VideoPlayer *video);
@@ -105,13 +106,14 @@ public:
     Q_INVOKABLE void ChangePixmapItem(QPixmap* pixmap,Item* item);
     Q_INVOKABLE void ChangePicAnimationItem(QVector<QString> allpixmap, Item* item, int time, QString signfun=NULL, bool cycle=true);
     Q_INVOKABLE void ChangePicAnimationItem(QVector<QPixmap*> allpixmap, Item* item, int time, QString signfun=NULL, bool cycle=true);
+    Q_INVOKABLE void ChangeItemEvent(Item *item,QString slotfun);
     Q_INVOKABLE void DeleteFile(QString path);
     Q_INVOKABLE void ShearItem(Item* item,float x,float y);
     Q_INVOKABLE float GetItemShearX(Item* item);
     Q_INVOKABLE float GetItemShearY(Item* item);
-    Q_INVOKABLE void SetKeyEvent(Qt::Key key,QString slotfun,ParametersStru *par=nullptr);
+    Q_INVOKABLE void AddKeyEvent(Qt::Key key,QString slotfun,ParametersStru *par=nullptr);
     Q_INVOKABLE void DeleteKeyEvent(Qt::Key key);
-    Q_INVOKABLE void SetMouseEvent(float MouseX,float MouseY,float fMouseX,float fMouseY,QString slotfun,ParametersStru *par=nullptr);
+    Q_INVOKABLE void AddMouseEvent(float MouseX,float MouseY,float fMouseX,float fMouseY,QString slotfun,ParametersStru *par=nullptr);
     Q_INVOKABLE void DeleteMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY);
     Q_INVOKABLE void DeleteAllEvent();
     Q_INVOKABLE void WaitSign(QString signfun);

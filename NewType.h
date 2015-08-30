@@ -48,7 +48,7 @@ public:
     GraphicsView *gv;
     QVector<QPixmap> pixmap;
     QString signfun;
-    ParametersStru *par;
+    ParametersStru *par=nullptr;
     int over;//结束标志
     void start(int choose);
     bool cycle;//连续播图是否循环播放
@@ -92,7 +92,7 @@ public:
     QString fun;
     QPixmap down;
     Widget *s;
-    ParametersStru *par;
+    ParametersStru *par=nullptr;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -141,12 +141,12 @@ protected:
     {
         switch(e->key())
         {
-        case Qt::Key_Left:{}
-        case Qt::Key_Right:{}
-        case Qt::Key_Down:{}
-        case Qt::Key_Up:{}
-        default:
-        {e->ignore();}//忽略键盘消息，防止未定义按键滚动view
+            case Qt::Key_Left:{}
+            case Qt::Key_Right:{}
+            case Qt::Key_Down:{}
+            case Qt::Key_Up:{}
+            default:
+            {e->ignore();}//忽略键盘消息，防止未定义按键滚动view
         }
     }
 };

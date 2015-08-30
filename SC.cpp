@@ -17,7 +17,11 @@ void SC::changepixmap()
         {
             this->over=1;
             if(signfun!=NULL)
-            {RunFun(signfun,par);}
+            {
+              QByteArray ba = signfun.toLatin1();
+              const char *function = ba.data();
+              QMetaObject::invokeMethod(lfevent,function);
+            }
             return;
         }
     }
@@ -242,7 +246,8 @@ void SC::SlowChange()
          const char *function = ba.data();
          QMetaObject::invokeMethod(lfevent,function);
        }
-       num->scPointer[choose]=nullptr;
+       if(choose!=20)
+       {num->scPointer[choose]=nullptr;}
        delete timer;
        delete this;
     }
