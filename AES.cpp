@@ -586,8 +586,8 @@ QString AesHelper::aesEncrypt(QString mingwen)
     {
         jiami=mingwen.left(16);//截取前十六位
         mingwen.remove(0,16);//前面十六位删除，留给下一次
-        char ch_mingwen[10240];
-        char ch_miwen[10240];
+        char ch_mingwen[1024];
+        char ch_miwen[1024];
         strcpy(ch_mingwen, jiami.toUtf8().data());
         aes->Cipher(ch_mingwen, ch_miwen);
         miwen+=QString(ch_miwen);//把该次加密的十六位的密文写入最终密文的一部分
@@ -605,8 +605,8 @@ QString AesHelper::aesUncrypt(QString miwen)
     {
         jiemi=miwen.left(32);
         miwen=miwen.remove(0,32);
-        char ch_mingwen[10240];
-        char ch_miwen[10240];
+        char ch_mingwen[1024];
+        char ch_miwen[1024];
         strcpy(ch_miwen, jiemi.toUtf8().data());
         aes->InvCipher(ch_miwen, ch_mingwen);
         mingwen+=QString(ch_mingwen);

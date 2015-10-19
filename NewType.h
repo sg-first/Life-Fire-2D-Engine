@@ -197,7 +197,8 @@ public:
     QVector<GraphicsView*> GraphicsViewVar;
     QVector<EasyThread*> EasyThreadVar;
     QVector<AnimationType> AnimationTypeVar;
-    QVector<MyItem*> MyPixmapVar;
+    QVector<QPixmap*> QPixmapVar;
+    QVector<Item*> ItemVar;
 
     QVector<QMediaPlayer*> QMediaPlayerVar;
     QVector<QGraphicsScene*> QGraphicsSceneVar;
