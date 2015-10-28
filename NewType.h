@@ -9,6 +9,12 @@
                     connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
 #define SynchronousFinish() t.start();q.exec();}
 
+typedef QPixmap Pixmap;
+typedef QColor RGBColor;
+typedef QString String;
+typedef QMediaPlayer MusicPlayer;
+typedef QGraphicsScene GraphicsScene;
+
 class ParametersStru;
 class Widget;
 class Item;

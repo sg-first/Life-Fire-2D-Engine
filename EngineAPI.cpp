@@ -1,18 +1,21 @@
 //-----本文件是引擎行为层给用户提供的接口的实现-----
 #include "widget.h"
 
-QPixmap* Widget::NewQPixmap(QString PicPath)
-{return new QPixmap(PicPath);}
+Pixmap* Widget::NewPixmap(String PicPath)
+{return new Pixmap(PicPath);}
 
-float Widget::GetQPixmapWidth(QPixmap *pixmap)
+RGBColor Widget::NewRGBColor(int R, int G, int B)
+{return RGBColor(R,G,B);}
+
+float Widget::GetPixmapWidth(Pixmap *pixmap)
 {return pixmap->width();}
 
-float Widget::GetQPixmapHeight(QPixmap *pixmap)
+float Widget::GetPixmapHeight(Pixmap *pixmap)
 {return pixmap->height();}
 
-Item* Widget::AddPixmapItem(QString PicPath,float X,float Y,QString slotfun,QString down,ParametersStru *par,QGraphicsScene *scene)
+Item* Widget::AddPixmapItem(String PicPath,float X,float Y,String slotfun,String down,ParametersStru *par,GraphicsScene *scene)
 {
-    QPixmap mainpix(PicPath);
+    Pixmap mainpix(PicPath);
     MyItem *item=new MyItem(mainpix);
     item->fun=slotfun;
     item->s=this;
@@ -20,7 +23,7 @@ Item* Widget::AddPixmapItem(QString PicPath,float X,float Y,QString slotfun,QStr
     if(down==NULL)
     {item->down=mainpix;}
     else
-    {item->down=QPixmap(down);}
+    {item->down=Pixmap(down);}
     item->up=mainpix;
 
     scene->addItem(item);
@@ -30,7 +33,7 @@ Item* Widget::AddPixmapItem(QString PicPath,float X,float Y,QString slotfun,QStr
     return ritem;
 }
 
-Item* Widget::AddPixmapItem(QPixmap *pixmap,float X,float Y,QString slotfun,QPixmap *down,ParametersStru *par,QGraphicsScene *scene)
+Item* Widget::AddPixmapItem(Pixmap *pixmap,float X,float Y,String slotfun,Pixmap *down,ParametersStru *par,GraphicsScene *scene)
 {
     MyItem *item=new MyItem(*pixmap);
     item->fun=slotfun;
@@ -49,19 +52,22 @@ Item* Widget::AddPixmapItem(QPixmap *pixmap,float X,float Y,QString slotfun,QPix
     return ritem;
 }
 
-Item* Widget::AddTextItem(QString Text,QString Font,int Size,int CR,int CG,int CB,float X,float Y,QGraphicsScene *scene)
+Item* Widget::AddTextItem(String Text,String Font,int Size,int CR,int CG,int CB,float X,float Y,GraphicsScene *scene)
+{return AddTextItem(Text,Font,Size,RGBColor(CR,CG,CB),X,Y,scene);}
+
+Item* Widget::AddTextItem(String Text, String Font, int Size, RGBColor color, float X, float Y, GraphicsScene *scene)
 {
-   QGraphicsTextItem *text=new QGraphicsTextItem(Text);
-   text->setFont(QFont(Font,Size));
-   text->setDefaultTextColor(QColor(CR,CG,CB));
-   scene->addItem(text);
-   text->setPos(X,Y);
-   Item *item=new Item(nullptr,text);
-   AllItem<<item;
-   return item;
+    QGraphicsTextItem *text=new QGraphicsTextItem(Text);
+    text->setFont(QFont(Font,Size));
+    text->setDefaultTextColor(color);
+    scene->addItem(text);
+    text->setPos(X,Y);
+    Item *item=new Item(nullptr,text);
+    AllItem<<item;
+    return item;
 }
 
-Item* Widget::AddRectItem(float x,float y,float width,float height,QGraphicsScene *scene)
+Item* Widget::AddRectItem(float x,float y,float width,float height,GraphicsScene *scene)
 {
    QGraphicsRectItem *rect=new QGraphicsRectItem(x,y,width,height);
    scene->addItem(rect);
@@ -70,7 +76,7 @@ Item* Widget::AddRectItem(float x,float y,float width,float height,QGraphicsScen
    return item;
 }
 
-Item* Widget::AddEllipseItem(float x,float y,float width,float height,QGraphicsScene *scene)
+Item* Widget::AddEllipseItem(float x,float y,float width,float height,GraphicsScene *scene)
 {
    QGraphicsEllipseItem *Ellipse=new QGraphicsEllipseItem(x,y,width,height);
    scene->addItem(Ellipse);
@@ -79,7 +85,7 @@ Item* Widget::AddEllipseItem(float x,float y,float width,float height,QGraphicsS
    return item;
 }
 
-Item* Widget::AddLineItem(float x,float y,float fx,float fy,QGraphicsScene *scene)
+Item* Widget::AddLineItem(float x,float y,float fx,float fy,GraphicsScene *scene)
 {
    QGraphicsLineItem *line=new QGraphicsLineItem(x,y,fx,fy);
    scene->addItem(line);
@@ -115,15 +121,15 @@ void Widget::MoveItem(Item* item, float X, float Y)
 void Widget::SetOpacityItem(Item* item, float set)
 {item->ItemPointer->setOpacity(set);}
 
-void Widget::SetColorItem(Item* item,float R,float G,float B)
+void Widget::SetRGBColorItem(Item* item,float R,float G,float B)
 {
    if(item->Color==nullptr)
    {item->Color=new QGraphicsColorizeEffect(this);}
-   item->Color->setColor(QColor(R,G,B));
+   item->Color->setColor(RGBColor(R,G,B));
    item->ItemPointer->setGraphicsEffect(item->Color);
 }
 
-void Widget::ClearScene(QGraphicsScene *scene)
+void Widget::ClearScene(GraphicsScene *scene)
 {
    for(int i=0;i<AllItem.length();i++)
    {
@@ -150,9 +156,9 @@ void Widget::DeleteItem(Item* item)
    delete item;
 }
 
-QString Widget::GetPath(QString str)
+String Widget::GetPath(String str)
 {
-   QString path;
+   String path;
    QDir dir;
    path=dir.currentPath();
    path+="/"+str;
@@ -162,15 +168,18 @@ QString Widget::GetPath(QString str)
 void Widget::SetVisibleItem(Item* item,bool Enabled)
 {item->ItemPointer->setVisible(Enabled);}
 
-void Widget::SetBackground(QString PicturePath,QGraphicsScene *scene)
-{scene->setBackgroundBrush(QPixmap(PicturePath));}
+void Widget::SetBackground(String PicturePath,GraphicsScene *scene)
+{scene->setBackgroundBrush(Pixmap(PicturePath));}
 
 void Widget::SetBackground(int R,int G,int B)
-{MainScene->setBackgroundBrush(QColor(R,G,B));}
+{SetBackground(RGBColor(R,G,B));}
 
-QMediaPlayer* Widget::PlayMusic(QString name,int volume,bool cycle)
+void Widget::SetBackground(RGBColor color)
+{MainScene->setBackgroundBrush(color);}
+
+MusicPlayer* Widget::AddMusic(String name,int volume,bool cycle)
 {
-   QMediaPlayer *player=new QMediaPlayer;
+   MusicPlayer *player=new MusicPlayer;
    if(!cycle)
    {
        player->setMedia(QUrl::fromLocalFile(name));
@@ -183,7 +192,7 @@ QMediaPlayer* Widget::PlayMusic(QString name,int volume,bool cycle)
        QUrl backgroundMusicUrl = QUrl::fromLocalFile(name);
        if (QFile::exists(backgroundMusicUrl.toLocalFile()))
        {
-          player=new QMediaPlayer;
+          player=new MusicPlayer;
           player->setVolume(volume);
           QMediaPlaylist *backgroundMusicList = new QMediaPlaylist();
           QMediaContent media(backgroundMusicUrl);
@@ -198,19 +207,22 @@ QMediaPlayer* Widget::PlayMusic(QString name,int volume,bool cycle)
    return player;
 }
 
-void Widget::PauseMusic(QMediaPlayer *player)
+void Widget::PauseMusic(MusicPlayer *player)
 {player->pause();}
 
-void Widget::ContinueMusic(QMediaPlayer *player)
+void Widget::PlayMusic(MusicPlayer *player)
 {player->play();}
 
-void Widget::StopMusic(QMediaPlayer *player)
+void Widget::DeleteMusic(MusicPlayer *player)
 {
     player->stop();
     delete player;
 }
 
-EasyThread* Widget::StartThread(QString slotfun,ParametersStru *par,bool track)
+void Widget::StopMusic(MusicPlayer *player)
+{player->stop();}
+
+EasyThread* Widget::StartThread(String slotfun,ParametersStru *par,bool track)
 {
    if(track)
    {
@@ -231,7 +243,7 @@ void Widget::StopThread(EasyThread *thread)
 bool Widget::ItemColliding(Item* item1,Item* item2)
 {return isColliding(item1->ItemPointer,item2->ItemPointer);}
 
-VideoPlayer* Widget::PlayVideo(QString path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene)
+VideoPlayer* Widget::AddVideo(String path,int Volume,int x,int y,int width,int heigh,bool cycle,String signfun,GraphicsScene *scene)
 {
    if(x==-1)
    {x=MainView->viewX-(WindowsWidth/2);}
@@ -245,16 +257,19 @@ VideoPlayer* Widget::PlayVideo(QString path,int Volume,int x,int y,int width,int
 void Widget::PauseVideo(VideoPlayer *video)
 {video->mediaPlayer->pause();}
 
-void Widget::ContinueVideo(VideoPlayer *video)
+void Widget::PlayVideo(VideoPlayer *video)
 {video->mediaPlayer->play();}
 
-void Widget::StopVideo(VideoPlayer *video)
+void Widget::DeleteVideo(VideoPlayer *video)
 {
     video->mediaPlayer->stop();
     delete video;
 }
 
-void Widget::AnimationRotationItem(Item* item, float set,int times,QString signfun)
+void Widget::StopVideo(VideoPlayer *video)
+{video->mediaPlayer->stop();}
+
+void Widget::AnimationRotationItem(Item* item, float set,int times,String signfun)
 {
    EndAnimation(item,Rotation);
    QGraphicsItem* gr=item->ItemPointer;
@@ -267,7 +282,7 @@ void Widget::AnimationRotationItem(Item* item, float set,int times,QString signf
    s->start(Rotation);
 }
 
-void Widget::AnimationRotationItem(Item *item, SCFun scfun, int times, QString signfun)
+void Widget::AnimationRotationItem(Item *item, SCFun scfun, int times, String signfun)
 {
     EndAnimation(item,Rotation);
     SC *s=new SC(0,0,times);
@@ -279,7 +294,7 @@ void Widget::AnimationRotationItem(Item *item, SCFun scfun, int times, QString s
     s->start(Rotation);
 }
 
-void Widget::AnimationScaleItem(Item* item, float set,int times,QString signfun)
+void Widget::AnimationScaleItem(Item* item, float set,int times,String signfun)
 {
    EndAnimation(item,Scale);
    QGraphicsItem* gr=item->ItemPointer;
@@ -292,7 +307,7 @@ void Widget::AnimationScaleItem(Item* item, float set,int times,QString signfun)
    s->start(Scale);
 }
 
-void Widget::AnimationScaleItem(Item *item, SCFun scfun, int times, QString signfun)
+void Widget::AnimationScaleItem(Item *item, SCFun scfun, int times, String signfun)
 {
     EndAnimation(item,Scale);
     SC *s=new SC(0,0,times);
@@ -304,7 +319,7 @@ void Widget::AnimationScaleItem(Item *item, SCFun scfun, int times, QString sign
     s->start(Scale);
 }
 
-void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,QString signfun)
+void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,String signfun)
 {
    EndAnimation(item,BlurRadius);
    float CurrentModulus;//当前系数
@@ -324,7 +339,7 @@ void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,QString si
    s->start(BlurRadius);
 }
 
-void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int times, QString signfun)
+void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int times, String signfun)
 {
     EndAnimation(item,BlurRadius);
     if(item->Blur==nullptr)
@@ -339,7 +354,7 @@ void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int times, QString
     s->start(BlurRadius);
 }
 
-void Widget::AnimationSetOpacityItem(Item* item, float set, int times,QString signfun)
+void Widget::AnimationSetOpacityItem(Item* item, float set, int times,String signfun)
 {
    EndAnimation(item,Opacity);
    QGraphicsItem* gr=item->ItemPointer;
@@ -352,7 +367,7 @@ void Widget::AnimationSetOpacityItem(Item* item, float set, int times,QString si
    s->start(Opacity);
 }
 
-void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int times, QString signfun)
+void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int times, String signfun)
 {
     EndAnimation(item,Opacity);
     SC *s=new SC(0,0,times);
@@ -364,7 +379,7 @@ void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int times, QString
     s->start(Opacity);
 }
 
-void Widget::AnimationMoveItem(Item* item,float X,float Y,int time,QString signfun)
+void Widget::AnimationMoveItem(Item* item,float X,float Y,int time,String signfun)
 {
    EndAnimation(item,Move);
    QGraphicsItem* gr=item->ItemPointer;
@@ -376,7 +391,7 @@ void Widget::AnimationMoveItem(Item* item,float X,float Y,int time,QString signf
    s->start(Move);
 }
 
-void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, QString signfun)
+void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Move);
     SC *s=new SC(0,0,0,0,time);
@@ -388,7 +403,7 @@ void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, QString signfu
     s->start(Move);
 }
 
-void Widget::AnimationSetViewCenter(GraphicsView *view, float X, float Y, int time, QString signfun)
+void Widget::AnimationSetViewCenter(GraphicsView *view, float X, float Y, int time, String signfun)
 {
     SC *s=new SC(view->viewX,view->viewY,X,Y,time);
     s->gv=view;
@@ -396,7 +411,7 @@ void Widget::AnimationSetViewCenter(GraphicsView *view, float X, float Y, int ti
     s->start(20);
 }
 
-void Widget::AnimationSetViewCenter(GraphicsView *view, SCFun scfun, int time, QString signfun)
+void Widget::AnimationSetViewCenter(GraphicsView *view, SCFun scfun, int time, String signfun)
 {
     SC *s=new SC(0,0,0,0,time);
     s->gv=view;
@@ -405,7 +420,7 @@ void Widget::AnimationSetViewCenter(GraphicsView *view, SCFun scfun, int time, Q
     s->start(20);
 }
 
-void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, QString signfun)
+void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, String signfun)
 {
    EndAnimation(item,Shear);
    SC *s=new SC(item->ShearX,item->ShearY,fx,fy,time);
@@ -416,7 +431,7 @@ void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, QStrin
    s->start(Shear);
 }
 
-void Widget::AnimationShearItem(Item *item, SCFun scfun, int time, QString signfun)
+void Widget::AnimationShearItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Shear);
     SC *s=new SC(0,0,0,0,time);
@@ -428,7 +443,7 @@ void Widget::AnimationShearItem(Item *item, SCFun scfun, int time, QString signf
     s->start(Shear);
 }
 
-void Widget::AnimationSetColorItem(Item* item, float R, float G, float B, int times,QString signfun)
+void Widget::AnimationSetRGBColorItem(Item* item, float R, float G, float B, int times,String signfun)
 {
    EndAnimation(item,Color);
    //当前系数
@@ -445,7 +460,7 @@ void Widget::AnimationSetColorItem(Item* item, float R, float G, float B, int ti
    }
    else
    {
-        QColor color=item->Color->color();
+        RGBColor color=item->Color->color();
         CurrentModulus=color.red();
         CurrentModulus2=color.green();
         CurrentModulus3=color.blue();
@@ -459,7 +474,7 @@ void Widget::AnimationSetColorItem(Item* item, float R, float G, float B, int ti
    s->start(Color);
 }
 
-void Widget::AnimationSetColorItem(Item *item, SCFun scfun, int times, QString signfun)
+void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, int times, String signfun)
 {
     EndAnimation(item,Color);
     SC *s=new SC(0,0,0,0,0,0,times);
@@ -472,7 +487,7 @@ void Widget::AnimationSetColorItem(Item *item, SCFun scfun, int times, QString s
     s->start(Color);
 }
 
-Item* Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QString signfun,bool cycle,QGraphicsScene *scene)
+Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,String signfun,bool cycle,GraphicsScene *scene)
 {
    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
    MyItem *temp=new MyItem(address[0]);//将第一张图片变为图元
@@ -489,14 +504,14 @@ Item* Widget::AddPicAnimation(QVector<QString> address,int x,int y,int time,QStr
    if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
    {sc->signfun=signfun;}
 
-   for(QVector<QString>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
-   {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
+   for(QVector<String>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
+   {sc->pixmap.push_back(Pixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
    sc->start(Picture);
    sc->num=item;
    return item;
 }
 
-Item* Widget::AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int time, QString signfun, bool cycle, QGraphicsScene *scene)
+Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time, String signfun, bool cycle, GraphicsScene *scene)
 {
     assert(!allpixmap.isEmpty());
     MyItem *item=new MyItem(*allpixmap[0]);
@@ -520,12 +535,12 @@ Item* Widget::AddPicAnimation(QVector<QPixmap*> allpixmap, int x, int y, int tim
     return ritem;
 }
 
-void Widget::ChangePicAnimationItem(QVector<QString>allpixmap,Item* item,int time,QString signfun,bool cycle)
+void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,int time,String signfun,bool cycle)
 {
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
     MyItem *temp=item->PixmapItemPoniter;
-    temp->setPixmap(QPixmap(allpixmap[0]));//变更当前图片为图集的第一帧
+    temp->setPixmap(Pixmap(allpixmap[0]));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time);//创建SC实例
     item->scPointer[Picture]=sc;
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
@@ -534,13 +549,13 @@ void Widget::ChangePicAnimationItem(QVector<QString>allpixmap,Item* item,int tim
     if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
     {sc->signfun=signfun;}
 
-    for(QVector<QString>::iterator iter=allpixmap.begin();iter!=allpixmap.end();++iter)//遍历容器中的所有图片
-    {sc->pixmap.push_back(QPixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
+    for(QVector<String>::iterator iter=allpixmap.begin();iter!=allpixmap.end();++iter)//遍历容器中的所有图片
+    {sc->pixmap.push_back(Pixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
     sc->start(Picture);
     sc->num=item;
 }
 
-void Widget::ChangePicAnimationItem(QVector<QPixmap*> allpixmap, Item *item, int time, QString signfun, bool cycle)
+void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int time, String signfun, bool cycle)
 {
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
@@ -567,32 +582,16 @@ float Widget::GetItemY(Item* item)
 {return item->ItemPointer->y();}
 
 float Widget::GetItemR(Item* item)
-{
-   if(item->Color==nullptr)
-   {return -1;}
-   return item->Color->color().red();
-}
+{return (item->Color==nullptr)?-1:item->Color->color().red();}
 
 float Widget::GetItemG(Item* item)
-{
-   if(item->Color==nullptr)
-   {return -1;}
-   return item->Color->color().green();
-}
+{return (item->Color==nullptr)?-1:item->Color->color().green();}
 
 float Widget::GetItemB(Item* item)
-{
-   if(item->Color==nullptr)
-   {return -1;}
-   return item->Color->color().blue();
-}
+{return (item->Color==nullptr)?-1:item->Color->color().blue();}
 
 float Widget::GetItemBlur(Item* item)
-{
-   if(item->Blur==nullptr)
-   {return 0;}
-   return item->Blur->blurRadius();
-}
+{return (item->Blur==nullptr)?0:item->Blur->blurRadius();}
 
 float Widget::GetItemOpacity(Item* item)
 {return item->ItemPointer->opacity();}
@@ -613,11 +612,7 @@ void Widget::EndAnimation(Item* item,AnimationType choose)
 }
 
 bool Widget::IsAnimation(Item* item,AnimationType choose)
-{
-    if(item->scPointer[choose]!=nullptr)
-    {return true;}
-    return false;
-}
+{return (item->scPointer[choose]!=nullptr)?true:false;}
 
 void Widget::EndAllAnimation(Item* item)
 {
@@ -666,10 +661,10 @@ float Widget::GetScreenWidth()
 float Widget::GetScreenHeigh()
 {return QApplication::desktop()->height();}
 
-QGraphicsScene* Widget::AddScene(int width, int height)
-{return new QGraphicsScene(0,0,width,height);}
+GraphicsScene* Widget::AddScene(int width, int height)
+{return new GraphicsScene(0,0,width,height);}
 
-void Widget::SetScene(GraphicsView *view, QGraphicsScene *scene,float viewX,float viewY)
+void Widget::SetScene(GraphicsView *view, GraphicsScene *scene,float viewX,float viewY)
 {
     view->setScene(scene);
     if(viewX==-1)
@@ -704,7 +699,7 @@ void Widget::ScaleView(float sx, float sy, GraphicsView *view)
 void Widget::RotateView(float set, GraphicsView *view)
 {view->Rotate(set);}
 
-QString Widget::ReadTXT(QString path,int line)
+String Widget::ReadTXT(String path,int line)
 {
     if(path!=PreQFileName)
     {
@@ -715,7 +710,7 @@ QString Widget::ReadTXT(QString path,int line)
     }
     PreQFile->open(QIODevice::ReadOnly);
     QTextStream text(PreQFile);
-    QString concert;
+    String concert;
     if(line==-1)
     {concert=text.readAll();}
     else
@@ -724,7 +719,7 @@ QString Widget::ReadTXT(QString path,int line)
     return concert;
 }
 
-void Widget::WriteTXT(QString path, QString text)//这个函数等等再搞，问题超大
+void Widget::WriteTXT(String path, String text)//这个函数等等再搞，问题超大
 {
    if(path!=PreQFileName)
    {
@@ -739,7 +734,7 @@ void Widget::WriteTXT(QString path, QString text)//这个函数等等再搞，�
    PreQFile->close();
 }
 
-void Widget::WriteINI(QString path, QString section, QString var, QString value)
+void Widget::WriteINI(String path, String section, String var, String value)
 {
    if(path!=PreQSetName)
    {
@@ -751,7 +746,7 @@ void Widget::WriteINI(QString path, QString section, QString var, QString value)
    PreQSet->setValue("/"+section+"/"+var,value);
 }
 
-QString Widget::ReadINI(QString path, QString section, QString var)
+String Widget::ReadINI(String path, String section, String var)
 {
     if(path!=PreQSetName)
     {
@@ -760,35 +755,35 @@ QString Widget::ReadINI(QString path, QString section, QString var)
         PreQSet=new QSettings(path,QSettings::IniFormat);
         PreQSetName=path;
     }
-    QString result=PreQSet->value("/"+section+"/"+var).toString();
+    String result=PreQSet->value("/"+section+"/"+var).toString();
     return result;
 }
 
-QString Widget::AESEncrypt(QString str,QString key)
+String Widget::AESEncrypt(String str,String key)
 {
   AesHelper aes(key);
   return aes.aesEncrypt(str);
 }
 
-QString Widget::AESUncrypt(QString str,QString key)
+String Widget::AESUncrypt(String str,String key)
 {
   AesHelper aes(key);
   return aes.aesUncrypt(str);
 }
 
-void Widget::ChangePixmapItem(QString path,Item* item)
-{item->PixmapItemPoniter->setPixmap(QPixmap(path));}
+void Widget::ChangePixmapItem(String path,Item* item)
+{item->PixmapItemPoniter->setPixmap(Pixmap(path));}
 
-void Widget::ChangePixmapItem(QPixmap* pixmap,Item* item)
+void Widget::ChangePixmapItem(Pixmap* pixmap,Item* item)
 {item->PixmapItemPoniter->setPixmap(*pixmap);}
 
-void Widget::ChangeItemEvent(Item *item, QString slotfun)
+void Widget::ChangeItemEvent(Item *item, String slotfun)
 {
     assert(item->PixmapItemPoniter!=nullptr);
     item->PixmapItemPoniter->fun=slotfun;
 }
 
-void Widget::DeleteFile(QString path)
+void Widget::DeleteFile(String path)
 {QFile::remove(path);}
 
 void Widget::ShearItem(Item* item,float x,float y)
@@ -807,7 +802,7 @@ float Widget::GetItemShearX(Item* item)
 float Widget::GetItemShearY(Item* item)
 {return item->ShearY;}
 
-void Widget::AddKeyEvent(Qt::Key key, QString slotfun,ParametersStru *par)
+void Widget::AddKeyEvent(Qt::Key key, String slotfun,ParametersStru *par)
 {
     for(int i=0;i<AllEvent.length();i++)
     {
@@ -869,7 +864,7 @@ void Widget::DeleteAllEvent()
     AllEvent.clear();
 }
 
-void Widget::WaitSign(QString signfun)
+void Widget::WaitSign(String signfun)
 {
     QTimer t;
     QEventLoop q;
@@ -884,19 +879,20 @@ void Widget::WaitSign(QString signfun)
 void Widget::HorizontallyFlip(Item *item)
 {
     assert(item->PixmapItemPoniter!=nullptr);
-    QPixmap pixmap=item->PixmapItemPoniter->pixmap();
+    Pixmap pixmap=item->PixmapItemPoniter->pixmap();
     ChangePixmapItem(mirrorAndChange(&pixmap,true),item);
 }
 
-QPixmap* Widget::HorizontallyFlip(QPixmap *pixmap)
+Pixmap* Widget::HorizontallyFlip(Pixmap *pixmap)
 {return mirrorAndChange(pixmap,true);}
 
 void Widget::VerticalFlip(Item *item)
 {
     assert(item->PixmapItemPoniter!=nullptr);
-    QPixmap pixmap=item->PixmapItemPoniter->pixmap();
+    Pixmap pixmap=item->PixmapItemPoniter->pixmap();
     ChangePixmapItem(mirrorAndChange(&pixmap,false),item);
 }
 
-QPixmap* Widget::VerticalFlip(QPixmap *pixmap)
+Pixmap* Widget::VerticalFlip(Pixmap *pixmap)
 {return mirrorAndChange(pixmap,false);}
+
