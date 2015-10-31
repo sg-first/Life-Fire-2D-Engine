@@ -4,13 +4,13 @@
 
 class maincall : public library
 {
-    //对js的处理函数
 Q_OBJECT
-
 public:
-    Q_INVOKABLE QScriptValue CallJSFile(QString path,QString functionname=NULL,ParametersStru *Parame=nullptr,QString ParameName=NULL,QString mistake=NULL);
-    Q_INVOKABLE QScriptValue CallJSCode(QString code,QString functionname=NULL,ParametersStru *Parame=nullptr,QString ParameName=NULL,QString mistake=NULL);
-	void StartGame();
+    //关于JS操作
+    Q_INVOKABLE QScriptValue CallJSFile(String path,String functionname=NULL,ParametersStru *Parame=nullptr,String ParameName=NULL,String *mistake=nullptr);
+    Q_INVOKABLE QScriptValue CallJSCode(String code,String functionname=NULL,ParametersStru *Parame=nullptr,String ParameName=NULL,String *mistake=nullptr);
+    //入口函数
+    void StartGame();
     //在此继续添加
 	
 	

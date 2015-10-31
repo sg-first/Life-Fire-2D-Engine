@@ -197,17 +197,17 @@ public:
 
     QVector<int> intVar;
     QVector<float> floatVar;
-    QVector<QString> QStringVar;
+    QVector<String> StringVar;
     QVector<bool> boolVar;
     QVector<VideoPlayer*> VideoPlayerVar;
     QVector<GraphicsView*> GraphicsViewVar;
     QVector<EasyThread*> EasyThreadVar;
     QVector<AnimationType> AnimationTypeVar;
-    QVector<QPixmap*> QPixmapVar;
+    QVector<Pixmap*> PixmapVar;
     QVector<Item*> ItemVar;
 
-    QVector<QMediaPlayer*> QMediaPlayerVar;
-    QVector<QGraphicsScene*> QGraphicsSceneVar;
+    QVector<MusicPlayer*> MusicPlayerVar;
+    QVector<GraphicsScene*> GraphicsSceneVar;
     QVector<QScriptValue> QScriptValueVar;
     QVector<Qt::Key> QtKeyVar;
 };

@@ -29,6 +29,17 @@ void Widget::Initialization()
     //注册类型
     qRegisterMetaType<ParametersStru*>("ParametersStru*");
     qRegisterMetaType<LFEvent*>("LFEvent*");
+    qRegisterMetaType<Item*>("Item*");
+    qRegisterMetaType<String>("String");
+    qRegisterMetaType<VideoPlayer*>("VideoPlayer*");
+    qRegisterMetaType<GraphicsView*>("GraphicsView*");
+    qRegisterMetaType<EasyThread*>("EasyThread*");
+    qRegisterMetaType<AnimationType>("AnimationType");
+    qRegisterMetaType<Pixmap*>("Pixmap*");
+    qRegisterMetaType<MusicPlayer*>("MusicPlayer*");
+    qRegisterMetaType<GraphicsScene*>("GraphicsScene*");
+    qRegisterMetaType<Qt::Key>("QtKey");
+    qRegisterMetaType<QScriptValue>("QScriptValue");
     //计算窗口出现位置
     int widX=(GetScreenWidth()-WindowsWidth)/2;
     int widY=(GetScreenHeigh()-WindowsHeigh)/2;
