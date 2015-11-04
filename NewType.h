@@ -8,6 +8,7 @@
                     t.setSingleShot(true);\
                     connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
 #define SynchronousFinish() t.start();q.exec();}
+#define RegisterJSType(TypeName,JSName) qRegisterMetaType<TypeName>(JSName)
 
 typedef QPixmap Pixmap;
 typedef QColor RGBColor;

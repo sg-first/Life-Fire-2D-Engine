@@ -29,7 +29,8 @@ HEADERS  += widget.h \
     maincall.h \
     library.h \
     NewType.h \
-    AES.h
+    AES.h \
+    emptypar.h
 
 FORMS    += widget.ui
 QT += core gui declarative

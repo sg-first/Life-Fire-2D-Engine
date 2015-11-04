@@ -207,6 +207,12 @@ MusicPlayer* Widget::AddMusic(String name,int volume,bool cycle)
    return player;
 }
 
+void Widget::SetMusicVolume(MusicPlayer *player,int volume)
+{player->setVolume(volume);}
+
+int Widget::GetMusicVolume(MusicPlayer *player)
+{return player->volume();}
+
 void Widget::PauseMusic(MusicPlayer *player)
 {player->pause();}
 
@@ -252,7 +258,14 @@ VideoPlayer* Widget::AddVideo(String path,int Volume,int x,int y,int width,int h
    VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,scene);
    video->start();
    return video;
+
 }
+
+void Widget::SetVideoVolume(VideoPlayer *video,int volume)
+{video->mediaPlayer->setVolume(volume);}
+
+int Widget::GetVideoVolume(VideoPlayer *video)
+{return video->mediaPlayer->volume();}
 
 void Widget::PauseVideo(VideoPlayer *video)
 {video->mediaPlayer->pause();}
@@ -777,7 +790,7 @@ void Widget::ChangePixmapItem(String path,Item* item)
 void Widget::ChangePixmapItem(Pixmap* pixmap,Item* item)
 {item->PixmapItemPoniter->setPixmap(*pixmap);}
 
-void Widget::ChangeItemEvent(Item *item, String slotfun)
+void Widget::SetItemEvent(Item *item, String slotfun)
 {
     assert(item->PixmapItemPoniter!=nullptr);
     item->PixmapItemPoniter->fun=slotfun;

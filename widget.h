@@ -4,6 +4,7 @@
 #include "GlobalVar.h"
 #include "NewType.h"
 #include "AES.h"
+#include "emptypar.h"
 
 namespace Ui {class Widget;}
 
@@ -40,6 +41,8 @@ public:
     Q_INVOKABLE String GetPath(String str);
     Q_INVOKABLE void SetVisibleItem(Item* item,bool Enabled);
     Q_INVOKABLE MusicPlayer* AddMusic(String name, int volume, bool cycle=false);
+    Q_INVOKABLE void SetMusicVolume(MusicPlayer *player,int volume);
+    Q_INVOKABLE int GetMusicVolume(MusicPlayer *player);
     Q_INVOKABLE void SetBackground(String PicturePath,GraphicsScene *scene=MainScene);
     Q_INVOKABLE void SetBackground(int R, int G, int B);
     Q_INVOKABLE void SetBackground(RGBColor color);
@@ -48,6 +51,8 @@ public:
     Q_INVOKABLE void DeleteMusic(MusicPlayer *player);
     Q_INVOKABLE void StopMusic(MusicPlayer *player);
     Q_INVOKABLE VideoPlayer* AddVideo(String path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,String signfun=NULL,GraphicsScene *scene=MainScene);
+    Q_INVOKABLE void SetVideoVolume(VideoPlayer *video,int volume);
+    Q_INVOKABLE int GetVideoVolume(VideoPlayer *video);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void PlayVideo(VideoPlayer *video);
     Q_INVOKABLE void DeleteVideo(VideoPlayer *video);
@@ -111,7 +116,7 @@ public:
     Q_INVOKABLE void ChangePixmapItem(Pixmap* pixmap,Item* item);
     Q_INVOKABLE void ChangePicAnimationItem(QVector<String> allpixmap, Item* item, int time, String signfun=NULL, bool cycle=true);
     Q_INVOKABLE void ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item* item, int time, String signfun=NULL, bool cycle=true);
-    Q_INVOKABLE void ChangeItemEvent(Item *item,String slotfun);
+    Q_INVOKABLE void SetItemEvent(Item *item,String slotfun);
     Q_INVOKABLE void DeleteFile(String path);
     Q_INVOKABLE void ShearItem(Item* item,float x,float y);
     Q_INVOKABLE float GetItemShearX(Item* item);
