@@ -133,6 +133,13 @@ Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
 Item::Item(QPixmap *pixmap)
 {Item(new MyItem(*pixmap));}
 
+//JSParStru
+void JSParStru::add(QObject *pointer,QString name)
+{
+    pointerVec<<pointer;
+    nameVac<<name;
+}
+
 //独立函数
 void RunFun(QString signfun,ParametersStru *par,Qt::ConnectionType CT)
 {

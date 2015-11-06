@@ -224,4 +224,14 @@ struct InputEvent
     QString slotfun;
 };
 
+class JSParStru
+{
+public:
+    void add(QObject *pointer,QString name);
+    
+private:
+    QVector<QObject*>pointerVec;
+    QVector<QString>nameVec;
+};
+
 void RunFun(QString fun, ParametersStru *par=nullptr, Qt::ConnectionType CT=Qt::QueuedConnection);

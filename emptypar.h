@@ -3,3 +3,4 @@
 #include "NewType.h"
 
 const ParametersStru NULLpar;
+const JSParStru NULLJSpar;
