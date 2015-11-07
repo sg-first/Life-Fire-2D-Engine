@@ -148,6 +148,7 @@ bool ParametersStru::operator !=(const ParametersStru &par)
             //QScriptValueVar==par.QScriptValueVar&&
             QtKeyVar==par.QtKeyVar)
     {return false;}
+    return true;
 }
 
 Item::Item(QPixmap *pixmap)
@@ -164,6 +165,7 @@ bool JSParStru::operator !=(const JSParStru &par)
 {
     if(pointerVec==par.pointerVec&&nameVec==par.nameVec)
     {return false;}
+    return true;
 }
 
 //独立函数

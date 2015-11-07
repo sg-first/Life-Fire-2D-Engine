@@ -5,6 +5,19 @@
 LFEvent *lfevent;
 QGraphicsScene *MainScene;//声明舞台
 GraphicsView *MainView;//声明视图
+//注册类型
+RegisterVariantType(ParametersStru*)
+RegisterVariantType(LFEvent*)
+RegisterVariantType(Item*)
+RegisterVariantType(String)
+RegisterVariantType(VideoPlayer*)
+RegisterVariantType(GraphicsView*)
+RegisterVariantType(EasyThread*)
+RegisterVariantType(AnimationType)
+RegisterVariantType(Pixmap*)
+RegisterVariantType(MusicPlayer*)
+RegisterVariantType(GraphicsScene*)
+RegisterVariantType(Qt::Key)
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -27,19 +40,19 @@ void Widget::Initialization()
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
     //注册类型
-    qRegisterMetaType<ParametersStru*>("ParametersStru*");
-    qRegisterMetaType<LFEvent*>("LFEvent*");
-    qRegisterMetaType<Item*>("Item*");
-    qRegisterMetaType<String>("String");
-    qRegisterMetaType<VideoPlayer*>("VideoPlayer*");
-    qRegisterMetaType<GraphicsView*>("GraphicsView*");
-    qRegisterMetaType<EasyThread*>("EasyThread*");
-    qRegisterMetaType<AnimationType>("AnimationType");
-    qRegisterMetaType<Pixmap*>("Pixmap*");
-    qRegisterMetaType<MusicPlayer*>("MusicPlayer*");
-    qRegisterMetaType<GraphicsScene*>("GraphicsScene*");
-    qRegisterMetaType<Qt::Key>("QtKey");
-    qRegisterMetaType<QScriptValue>("QScriptValue");
+    RegisterJSType(ParametersStru*,"ParametersStru*");
+    RegisterJSType(LFEvent*,"LFEvent*");
+    RegisterJSType(Item*,"Item*");
+    RegisterJSType(String,"String");
+    RegisterJSType(VideoPlayer*,"VideoPlayer*");
+    RegisterJSType(GraphicsView*,"GraphicsView*");
+    RegisterJSType(EasyThread*,"EasyThread*");
+    RegisterJSType(AnimationType,"AnimationType");
+    RegisterJSType(Pixmap*,"Pixmap*");
+    RegisterJSType(MusicPlayer*,"MusicPlayer*");
+    RegisterJSType(GraphicsScene*,"GraphicsScene*");
+    RegisterJSType(Qt::Key,"QtKey");
+    RegisterJSType(QVariant,"QVariant");//这个我感觉有点别扭……
     //计算窗口出现位置
     int widX=(GetScreenWidth()-WindowsWidth)/2;
     int widY=(GetScreenHeigh()-WindowsHeigh)/2;
