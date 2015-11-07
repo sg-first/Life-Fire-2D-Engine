@@ -206,11 +206,13 @@ public:
     QVector<AnimationType> AnimationTypeVar;
     QVector<Pixmap*> PixmapVar;
     QVector<Item*> ItemVar;
-
     QVector<MusicPlayer*> MusicPlayerVar;
     QVector<GraphicsScene*> GraphicsSceneVar;
-    QVector<QScriptValue> QScriptValueVar;
+
+    //QVector<QScriptValue> QScriptValueVar;
     QVector<Qt::Key> QtKeyVar;
+
+    bool operator !=(const ParametersStru &par);
 };
 
 struct InputEvent
@@ -228,10 +230,10 @@ class JSParStru
 {
 public:
     void add(QObject *pointer,QString name);
-    
-private:
     QVector<QObject*>pointerVec;
     QVector<QString>nameVec;
+
+    bool operator !=(const JSParStru &par);
 };
 
 void RunFun(QString fun, ParametersStru *par=nullptr, Qt::ConnectionType CT=Qt::QueuedConnection);

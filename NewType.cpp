@@ -118,7 +118,7 @@ void EasyThread::run()
     RunFun(this->fun,this->par,Qt::DirectConnection);//同步执行
 }
 
-//item
+//Item
 Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
 {
     this->PixmapItemPoniter=pixmapitem;
@@ -130,6 +130,26 @@ Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
         this->scPointer[a]=nullptr;
 }
 
+//ParametersStru
+bool ParametersStru::operator !=(const ParametersStru &par)
+{
+    if(intVar==par.intVar&&
+            floatVar==par.floatVar&&
+            StringVar==par.StringVar&&
+            boolVar==par.boolVar&&
+            VideoPlayerVar==par.VideoPlayerVar&&
+            GraphicsViewVar==par.GraphicsViewVar&&
+            EasyThreadVar==par.EasyThreadVar&&
+            AnimationTypeVar==par.AnimationTypeVar&&
+            PixmapVar==par.PixmapVar&&
+            ItemVar==par.ItemVar&&
+            MusicPlayerVar==par.MusicPlayerVar&&
+            GraphicsSceneVar==par.GraphicsSceneVar&&
+            //QScriptValueVar==par.QScriptValueVar&&
+            QtKeyVar==par.QtKeyVar)
+    {return false;}
+}
+
 Item::Item(QPixmap *pixmap)
 {Item(new MyItem(*pixmap));}
 
@@ -137,7 +157,13 @@ Item::Item(QPixmap *pixmap)
 void JSParStru::add(QObject *pointer,QString name)
 {
     pointerVec<<pointer;
-    nameVac<<name;
+    nameVec<<name;
+}
+
+bool JSParStru::operator !=(const JSParStru &par)
+{
+    if(pointerVec==par.pointerVec&&nameVec==par.nameVec)
+    {return false;}
 }
 
 //独立函数

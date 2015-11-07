@@ -1,10 +1,11 @@
 //-----本文件是关于maincall类中JS操作的实现-----
 #include "maincall.h"
+#include "NewType.h"
 
 QScriptEngine* CreatEngine()
 {
     QScriptEngine *myengine=new QScriptEngine;
-    QScriptValue lib=myengine->newQObject(this);
+    QScriptValue lib=myengine->newQObject(thob);
     myengine->globalObject().setProperty("lib",lib);
     QScriptValue lfvar=myengine->newQObject(lfevent);
     myengine->globalObject().setProperty("lfvar",lfvar);
@@ -23,7 +24,7 @@ QScriptValue eval(String functionname,QScriptEngine *myengine,String code)
     return ret;
 }
 
-QScriptValue maincall::CallJSFile(String path,String functionname,ParametersStru Parame,String ParameName,String *mistake)
+QScriptValue maincall::ParCallJSFile(String path,ParametersStru Parame,String ParameName,String functionname,String *mistake)
 {
     /*QFile scripfile(path);
     scripfile.open(QIODevice::ReadOnly);
@@ -31,23 +32,20 @@ QScriptValue maincall::CallJSFile(String path,String functionname,ParametersStru
     String concert=text.readAll();
     scripfile.close();*/
     String concert=ReadTXT(path);
-    return CallJSCode(concert,functionname,Parame,ParameName,mistake);
+    return ParCallJSCode(concert,Parame,ParameName,functionname,mistake);
 }
 
-QScriptValue maincall::CallJSFile(String path,String functionname,JSParStru Parame,String *mistake)
+QScriptValue maincall::JSParCallJSFile(String path,JSParStru Parame,String functionname,String *mistake)
 {
     String concert=ReadTXT(path);
-    return CallJSCode(concert,functionname,Parame,mistake);
+    return JSParCallJSCode(concert,Parame,functionname,mistake);
 }
 
-QScriptValue maincall::CallJSCode(String code, String functionname,ParametersStru Parame,String ParameName,String *mistake)
+QScriptValue maincall::ParCallJSCode(String code,ParametersStru Parame,String ParameName,String functionname,String *mistake)
 {
     QScriptEngine* myengine=CreatEngine();
-    if(Parame!=NULLpar&&ParameName!=NULL)
-    {
-        QScriptValue para=myengine->newQObject(&Parame);
-        myengine->globalObject().setProperty(ParameName,para);
-    }
+    QScriptValue para=myengine->newQObject(&Parame);
+    myengine->globalObject().setProperty(ParameName,para);
     /*if(mistake!=nullptr&&ret.isError())
     {
         *mistake=String::number(ret.property("lineNumber").toInt32())+" line:"+ret.toString();
@@ -56,16 +54,25 @@ QScriptValue maincall::CallJSCode(String code, String functionname,ParametersStr
     return eval(functionname,myengine,code);
 }
 
-QScriptValue maincall::CallJSCode(String code, String functionname,JSParStru Parame,String *mistake)
+QScriptValue maincall::JSParCallJSCode(String code,JSParStru Parame,String functionname,String *mistake)
 {
     QScriptEngine* myengine=CreatEngine();
-    if(Parame!=NULLJSpar)
+    for(int i=0;i<Parame.pointerVec.length();i++)
     {
-        for(int i=0;i<pointerVec.length();i++)
-        {
-            QScriptValue para=myengine->newQObject(pointerVec[i]);
-            myengine.globalObject().setProperty(nameVec[i],para);
-        }
+        QScriptValue para=myengine->newQObject(Parame.pointerVec[i]);
+        myengine->globalObject().setProperty(Parame.nameVec[i],para);
     }
     return eval(functionname,myengine,code);
+}
+
+QScriptValue maincall::CallJSCode(String code, String functionname)
+{
+    QScriptEngine* myengine=CreatEngine();
+    return eval(functionname,myengine,code);
+}
+
+QScriptValue maincall::CallJSFile(String path, String functionname)
+{
+    String concert=ReadTXT(path);
+    return CallJSCode(concert,functionname);
 }

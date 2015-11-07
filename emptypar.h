@@ -2,5 +2,5 @@
 #pragma once
 #include "NewType.h"
 
-const ParametersStru NULLpar;
-const JSParStru NULLJSpar;
+const ParametersStru NULLParametersStru;
+const JSParStru NULLJSParStru;
