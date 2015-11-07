@@ -5,19 +5,6 @@
 LFEvent *lfevent;
 QGraphicsScene *MainScene;//声明舞台
 GraphicsView *MainView;//声明视图
-//注册类型
-RegisterVariantType(ParametersStru*)
-RegisterVariantType(LFEvent*)
-RegisterVariantType(Item*)
-RegisterVariantType(String)
-RegisterVariantType(VideoPlayer*)
-RegisterVariantType(GraphicsView*)
-RegisterVariantType(EasyThread*)
-RegisterVariantType(AnimationType)
-RegisterVariantType(Pixmap*)
-RegisterVariantType(MusicPlayer*)
-RegisterVariantType(GraphicsScene*)
-RegisterVariantType(Qt::Key)
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -52,7 +39,7 @@ void Widget::Initialization()
     RegisterJSType(MusicPlayer*,"MusicPlayer*");
     RegisterJSType(GraphicsScene*,"GraphicsScene*");
     RegisterJSType(Qt::Key,"QtKey");
-    RegisterJSType(QVariant,"QVariant");//这个我感觉有点别扭……
+    RegisterJSType(Variant,"Variant");//这个我感觉有点别扭……
     //计算窗口出现位置
     int widX=(GetScreenWidth()-WindowsWidth)/2;
     int widY=(GetScreenHeigh()-WindowsHeigh)/2;

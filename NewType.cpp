@@ -145,7 +145,7 @@ bool ParametersStru::operator !=(const ParametersStru &par)
             ItemVar==par.ItemVar&&
             MusicPlayerVar==par.MusicPlayerVar&&
             GraphicsSceneVar==par.GraphicsSceneVar&&
-            //QScriptValueVar==par.QScriptValueVar&&
+            VariantVar==par.VariantVar&&
             QtKeyVar==par.QtKeyVar)
     {return false;}
     return true;

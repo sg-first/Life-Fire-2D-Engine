@@ -11,7 +11,7 @@
 #define RegisterJSType(TypeName,JSName) qRegisterMetaType<TypeName>(JSName)
 
 //类型容器相关
-#define RegisterVariantType(TypeName) Q_DECLARE_METATYPE(TypeName)
+//#define RegisterVariantType(TypeName) Q_DECLARE_METATYPE(TypeName) 这个似乎不用了，注册JS类型也会注册这个
 #define ToVariant(Variant,Var) Variant.setValue(Var)
 #define FromVariant(Variant,Type) Variant.value<Type>()
 
@@ -20,6 +20,7 @@ typedef QColor RGBColor;
 typedef QString String;
 typedef QMediaPlayer MusicPlayer;
 typedef QGraphicsScene GraphicsScene;
+typedef QVariant Variant;
 
 class ParametersStru;
 class Widget;
@@ -214,7 +215,7 @@ public:
     QVector<MusicPlayer*> MusicPlayerVar;
     QVector<GraphicsScene*> GraphicsSceneVar;
 
-    QVector<QVariant> QScriptValueVar;
+    QVector<Variant> VariantVar;
     QVector<Qt::Key> QtKeyVar;
 
     bool operator !=(const ParametersStru &par);
