@@ -30,8 +30,8 @@ HEADERS  += widget.h \
     library.h \
     NewType.h \
     AES.h \
-    emptypar.h \
-    js.h
+    js.h \
+    macro.h
 
 FORMS    += widget.ui
 QT += core gui declarative

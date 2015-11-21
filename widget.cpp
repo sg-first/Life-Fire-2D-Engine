@@ -27,7 +27,7 @@ void Widget::Initialization()
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
     //注册类型
-    RegisterJSType(ParametersStru*,"ParametersStru*");
+    RegisterJSType(ParametersStru,"ParametersStru");
     RegisterJSType(LFEvent*,"LFEvent*");
     RegisterJSType(Item*,"Item*");
     RegisterJSType(String,"String");

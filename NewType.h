@@ -2,30 +2,24 @@
 #pragma once
 #include "head.h"
 #include "NewType.h"
-
-#define SynchronousStart(fun) {QTimer t;\
-                    QEventLoop q;\
-                    t.setSingleShot(true);\
-                    connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
-#define SynchronousFinish() t.start();q.exec();}
-#define RegisterJSType(TypeName,JSName) qRegisterMetaType<TypeName>(JSName)
-
-//类型容器相关
-//#define RegisterVariantType(TypeName) Q_DECLARE_METATYPE(TypeName) 这个似乎不用了，注册JS类型也会注册这个
-#define ToVariant(Variant,Var) Variant.setValue(Var)
-#define FromVariant(Variant,Type) Variant.value<Type>()
+#include "macro.h"
 
 typedef QPixmap Pixmap;
 typedef QColor RGBColor;
 typedef QString String;
-typedef QMediaPlayer MusicPlayer;
 typedef QGraphicsScene GraphicsScene;
 typedef QVariant Variant;
 
-class ParametersStru;
 class Widget;
 class Item;
 class GraphicsView;
+class VideoPlayer;
+class EasyThread;
+class ParametersStru;
+class JSParStru;
+class MusicPlayer;
+
+enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
 
 struct SCCurrentModulus
 {
@@ -33,6 +27,48 @@ struct SCCurrentModulus
     float CurrentModulus2;
     float CurrentModulus3;
 };
+
+
+class ParametersStru : public QObject
+{
+    Q_OBJECT
+public:
+    ParametersStru(const ParametersStru&);
+    ParametersStru(){}
+
+    QVector<int> intVar;
+    QVector<float> floatVar;
+    QVector<String> StringVar;
+    QVector<bool> boolVar;
+    QVector<VideoPlayer*> VideoPlayerVar;
+    QVector<GraphicsView*> GraphicsViewVar;
+    QVector<EasyThread*> EasyThreadVar;
+    QVector<AnimationType> AnimationTypeVar;
+    QVector<Pixmap*> PixmapVar;
+    QVector<Item*> ItemVar;
+    QVector<MusicPlayer*> MusicPlayerVar;
+    QVector<GraphicsScene*> GraphicsSceneVar;
+
+    QVector<Variant> VariantVar;
+    QVector<Qt::Key> QtKeyVar;
+
+    bool operator !=(const ParametersStru &par);
+    ParametersStru& operator =(const ParametersStru &par);
+};
+const ParametersStru _NULLParametersStru;
+
+
+class JSParStru
+{
+public:
+    void add(QObject *pointer,QString name);
+    QVector<QObject*>pointerVec;
+    QVector<QString>nameVec;
+
+    bool operator !=(const JSParStru &par);
+};
+const JSParStru _NULLJSParStru;
+
 
 typedef SCCurrentModulus(*SCFun)(int);//SC系数获取函数使用的函数指针
 
@@ -61,7 +97,7 @@ public:
     GraphicsView *gv;
     QVector<QPixmap> pixmap;
     QString signfun;
-    ParametersStru *par=nullptr;
+    ParametersStru par;
     int over;//结束标志
     void start(int choose);
     bool cycle;//连续播图是否循环播放
@@ -95,22 +131,34 @@ private slots:
 };
 
 
-class MyItem : public QGraphicsPixmapItem//图元类
+class MyItem : public QGraphicsPixmapItem//真正的图元类
 {
 public:
     MyItem(QGraphicsItem *parent = 0):QGraphicsPixmapItem::QGraphicsPixmapItem(parent){}
     MyItem(const QPixmap &pixmap, QGraphicsItem *parent = 0)
         :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent){}
-    QPixmap up;
-    QString fun;
-    QPixmap down;
+    void SetButton(Pixmap up, Pixmap down, String Music, int volume);
+    void SetEvent(String PressFun, ParametersStru PressPar, String ReleaseFun, ParametersStru ReleasePar);
     Widget *s;
-    ParametersStru *par=nullptr;
 
 protected:
+    //Button
+    bool isbutton=false;
+    Pixmap up;
+    Pixmap down;
+    String Music;
+    int volume;
+    //slotfun
+    String PressFun;
+    ParametersStru PressPar;
+    String ReleaseFun;
+    ParametersStru ReleasePar;
+    //Event
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     //允许在此添加更多类型的事件，或许你需要添加一些公有成员变量来记录其所对应的槽函数
+
+    bool InRegion();
 };
 
 
@@ -118,7 +166,7 @@ class VideoPlayer : public QWidget //视频类
 {
     Q_OBJECT
 public:
-    VideoPlayer(QString Path,int Volume, int x, int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent = 0);
+    VideoPlayer(QString Path,int Volume, int x, int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene);
     ~VideoPlayer();
     void start();
     QMediaPlayer *mediaPlayer;
@@ -128,6 +176,19 @@ private:
     QGraphicsVideoItem *videoItem;
     bool cycle;
     QString Path;
+
+private slots:
+    void playover(QMediaPlayer::State state);
+};
+
+class MusicPlayer : public QMediaPlayer//音乐类
+{
+    Q_OBJECT
+public:
+    void singleplay(String name,int volume);
+    void multipleplay(String name,int volume);
+    QMediaPlaylist *cyclelist=nullptr;
+    ~MusicPlayer();
 
 private slots:
     void playover(QMediaPlayer::State state);
@@ -168,22 +229,20 @@ protected:
 class EasyThread : public QThread//线程类
 {
 public:
-    EasyThread(QString fun,ParametersStru *par=nullptr):
+    EasyThread(QString fun,ParametersStru par):
         fun(fun),par(par){}
     void run();
     QString fun;
-    ParametersStru *par;
+    ParametersStru par;
 };
 
 
-enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
-
-
-class Item
+class Item//图元信息记录类
 {
 public:
     Item(MyItem* pixmapitem=nullptr,QGraphicsItem *graphicsitem=nullptr);
     Item(QPixmap *pixmap);
+    ~Item();
 
     QGraphicsItem *ItemPointer;
     MyItem *PixmapItemPoniter;
@@ -194,33 +253,6 @@ public:
     SC* scPointer[8];
 };
 
-
-class ParametersStru : public QObject
-{
-    Q_OBJECT
-public:
-    ParametersStru(const ParametersStru&){}
-    ParametersStru(){}
-
-    QVector<int> intVar;
-    QVector<float> floatVar;
-    QVector<String> StringVar;
-    QVector<bool> boolVar;
-    QVector<VideoPlayer*> VideoPlayerVar;
-    QVector<GraphicsView*> GraphicsViewVar;
-    QVector<EasyThread*> EasyThreadVar;
-    QVector<AnimationType> AnimationTypeVar;
-    QVector<Pixmap*> PixmapVar;
-    QVector<Item*> ItemVar;
-    QVector<MusicPlayer*> MusicPlayerVar;
-    QVector<GraphicsScene*> GraphicsSceneVar;
-
-    QVector<Variant> VariantVar;
-    QVector<Qt::Key> QtKeyVar;
-
-    bool operator !=(const ParametersStru &par);
-};
-
 struct InputEvent
 {
     Qt::Key key;
@@ -228,18 +260,10 @@ struct InputEvent
     float MouseY;
     float fMouseX;
     float fMouseY;
-    ParametersStru *par;
-    QString slotfun;
+    ParametersStru PressPar;
+    String PressFun;
+    ParametersStru ReleasePar;
+    String ReleaseFun;
 };
 
-class JSParStru
-{
-public:
-    void add(QObject *pointer,QString name);
-    QVector<QObject*>pointerVec;
-    QVector<QString>nameVec;
-
-    bool operator !=(const JSParStru &par);
-};
-
-void RunFun(QString fun, ParametersStru *par=nullptr, Qt::ConnectionType CT=Qt::QueuedConnection);
+void RunFun(QString fun, ParametersStru par=NULL_ParametersStru, Qt::ConnectionType CT=Qt::QueuedConnection);

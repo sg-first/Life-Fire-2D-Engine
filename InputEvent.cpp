@@ -3,11 +3,11 @@
 
 void Widget::keyPressEvent(QKeyEvent *e)//键盘事件响应
 {
-    for(int i=0;i<AllEvent.length();i++)
+    for(auto i:AllEvent)
     {
-        if(AllEvent[i]->key==e->key())
+        if(i.key==e->key())
         {
-            RunFun(AllEvent[i]->slotfun,AllEvent[i]->par);
+            RunFun(i.PressFun,i.PressPar);
             return;
         }
     }
@@ -15,12 +15,30 @@ void Widget::keyPressEvent(QKeyEvent *e)//键盘事件响应
 
 void Widget::mousePressEvent(QMouseEvent *e)//鼠标事件响应
 {
-    for(int i=0;i<AllEvent.length();i++)
+    for(auto i:AllEvent)
     {
-        if(AllEvent[i]->MouseX<=e->x()&&
-           AllEvent[i]->MouseY<=e->y()&&
-           AllEvent[i]->fMouseY>=e->y()&&
-           AllEvent[i]->fMouseX>=e->x())
-        {RunFun(AllEvent[i]->slotfun,AllEvent[i]->par);}
+        if(i.MouseX<=e->x()&&i.MouseY<=e->y()&&i.fMouseY>=e->y()&&i.fMouseX>=e->x())
+        {RunFun(i.PressFun,i.PressPar);}
+    }
+}
+
+void Widget::keyReleaseEvent(QKeyEvent *e)
+{
+    for(auto i:AllEvent)
+    {
+        if(i.key==e->key())
+        {
+            RunFun(i.ReleaseFun,i.ReleasePar);
+            return;
+        }
+    }
+}
+
+void Widget::mouseReleaseEvent(QMouseEvent *e)
+{
+    for(auto i:AllEvent)
+    {
+        if(i.MouseX<=e->x()&&i.MouseY<=e->y()&&i.fMouseY>=e->y()&&i.fMouseX>=e->x())
+        {RunFun(i.ReleaseFun,i.ReleasePar);}
     }
 }

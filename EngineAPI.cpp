@@ -13,19 +13,12 @@ float Widget::GetPixmapWidth(Pixmap *pixmap)
 float Widget::GetPixmapHeight(Pixmap *pixmap)
 {return pixmap->height();}
 
-Item* Widget::AddPixmapItem(String PicPath,float X,float Y,String slotfun,String down,ParametersStru *par,GraphicsScene *scene)
+Item* Widget::AddPixmapItem(String PicPath,float X,float Y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
     Pixmap mainpix(PicPath);
     MyItem *item=new MyItem(mainpix);
-    item->fun=slotfun;
     item->s=this;
-    item->par=par;
-    if(down==NULL)
-    {item->down=mainpix;}
-    else
-    {item->down=Pixmap(down);}
-    item->up=mainpix;
-
+    item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
     item->setPos(X,Y);
     Item *ritem=new Item(item);
@@ -33,18 +26,44 @@ Item* Widget::AddPixmapItem(String PicPath,float X,float Y,String slotfun,String
     return ritem;
 }
 
-Item* Widget::AddPixmapItem(Pixmap *pixmap,float X,float Y,String slotfun,Pixmap *down,ParametersStru *par,GraphicsScene *scene)
+Item* Widget::AddPixmapItem(Pixmap *pixmap,float X,float Y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
     MyItem *item=new MyItem(*pixmap);
-    item->fun=slotfun;
     item->s=this;
-    item->par=par;
-    if(down==NULL)
-    {item->down=*pixmap;}
-    else
-    {item->down=*down;}
-    item->up=*pixmap;
+    item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
+    scene->addItem(item);
+    item->setPos(X,Y);
+    Item *ritem=new Item(item);
+    AllItem<<ritem;
+    return ritem;
+}
 
+Item* Widget::AddButtonItem(String PicPath, float X, float Y, String ReleaseSlotfun, String PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
+{
+    Pixmap mainpix(PicPath);
+    MyItem *item=new MyItem(mainpix);
+    item->s=this;
+    if(PressPic!=NULL_String)
+    {item->SetButton(mainpix,Pixmap(PressPic),PressMusic,volume);}
+    else
+    {item->SetButton(mainpix,mainpix,PressMusic,volume);}
+    item->SetEvent(NULL_String,NULL_ParametersStru,ReleaseSlotfun,ReleasePar);
+    scene->addItem(item);
+    item->setPos(X,Y);
+    Item *ritem=new Item(item);
+    AllItem<<ritem;
+    return ritem;
+}
+
+Item* Widget::AddButtonItem(Pixmap *pixmap, float X, float Y, String ReleaseSlotfun, Pixmap *PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
+{
+    MyItem *item=new MyItem(*pixmap);
+    item->s=this;
+    if(PressPic!=nullptr)
+    {item->SetButton(*pixmap,*PressPic,PressMusic,volume);}
+    else
+    {item->SetButton(*pixmap,*pixmap,PressMusic,volume);}
+    item->SetEvent(NULL_String,NULL_ParametersStru,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
     item->setPos(X,Y);
     Item *ritem=new Item(item);
@@ -131,27 +150,15 @@ void Widget::SetRGBColorItem(Item* item,float R,float G,float B)
 
 void Widget::ClearScene(GraphicsScene *scene)
 {
-   for(int i=0;i<AllItem.length();i++)
-   {
-       if(AllItem[i]->Blur!=nullptr)
-       {delete AllItem[i]->Blur;}
-       if(AllItem[i]->Color!=nullptr)
-       {delete AllItem[i]->Color;}
-       //由于场景中的图元会在调用clear方法时候自动删除，所以不用在这里删了
-   }
-   scene->clear();
+   for(auto i:AllItem)
+   {delete i;}
+   scene->clear();//这句目测没用
    AllItem.clear();
 }
 
 void Widget::DeleteItem(Item* item)
 {
    EndAllAnimation(item);
-
-   if(item->PixmapItemPoniter==nullptr)
-   {delete item->ItemPointer;}
-   else
-   {delete item->PixmapItemPoniter;}
-
    AllItem.removeAt(AllItem.indexOf(item));
    delete item;
 }
@@ -181,29 +188,9 @@ MusicPlayer* Widget::AddMusic(String name,int volume,bool cycle)
 {
    MusicPlayer *player=new MusicPlayer;
    if(!cycle)
-   {
-       player->setMedia(QUrl::fromLocalFile(name));
-       player->setVolume(volume);
-       player->play();
-   }
+   {player->singleplay(name,volume);}
    else
-   {
-       // 创建一直播放的背景音乐
-       QUrl backgroundMusicUrl = QUrl::fromLocalFile(name);
-       if (QFile::exists(backgroundMusicUrl.toLocalFile()))
-       {
-          player=new MusicPlayer;
-          player->setVolume(volume);
-          QMediaPlaylist *backgroundMusicList = new QMediaPlaylist();
-          QMediaContent media(backgroundMusicUrl);
-          backgroundMusicList->addMedia(media);
-          backgroundMusicList->setCurrentIndex(0);
-          // 设置背景音乐循环播放
-          backgroundMusicList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
-          player->setPlaylist(backgroundMusicList);
-        }
-        player->play();
-   }
+   {player->multipleplay(name,volume);}
    return player;
 }
 
@@ -228,19 +215,19 @@ void Widget::DeleteMusic(MusicPlayer *player)
 void Widget::StopMusic(MusicPlayer *player)
 {player->stop();}
 
-EasyThread* Widget::StartThread(String slotfun,ParametersStru *par,bool track)
+EasyThread* Widget::StartThread(String slotfun,ParametersStru par,bool track)
 {
-   if(track)
-   {
-     EasyThread *thread=new EasyThread(slotfun,par);
-     thread->start();
-     return thread;
-   }
-   else
-   {
-    RunFun(slotfun,par);
-    return nullptr;
-   }
+    if(track)
+    {
+        EasyThread *thread=new EasyThread(slotfun,par);
+        thread->start();
+        return thread;
+    }
+    else
+    {
+        RunFun(slotfun,par);
+        return nullptr;
+    }
 }
 
 void Widget::StopThread(EasyThread *thread)
@@ -541,8 +528,8 @@ Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time
     if(!cycle)
     {sc->signfun=signfun;}
 
-    for(int i=0;i<allpixmap.size();i++)
-    {sc->pixmap.push_back(*allpixmap[i]);}
+    for(auto i:allpixmap)
+    {sc->pixmap.push_back(*i);}
     sc->start(Picture);
     sc->num=ritem;
     return ritem;
@@ -582,8 +569,8 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int 
     if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
     {sc->signfun=signfun;}
 
-    for(int i=0;i<allpixmap.size();i++)//遍历容器中的所有图片
-    {sc->pixmap.push_back(*allpixmap[i]);}//将所有图片压入SC类中储存图片的成员中
+    for(auto i:allpixmap)//遍历容器中的所有图片
+    {sc->pixmap.push_back(*i);}//将所有图片压入SC类中储存图片的成员中
     sc->start(Picture);
     sc->num=item;
 }
@@ -790,10 +777,10 @@ void Widget::ChangePixmapItem(String path,Item* item)
 void Widget::ChangePixmapItem(Pixmap* pixmap,Item* item)
 {item->PixmapItemPoniter->setPixmap(*pixmap);}
 
-void Widget::SetItemEvent(Item *item, String slotfun)
+void Widget::SetItemEvent(Item *item,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar)
 {
     assert(item->PixmapItemPoniter!=nullptr);
-    item->PixmapItemPoniter->fun=slotfun;
+    item->PixmapItemPoniter->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
 }
 
 void Widget::DeleteFile(String path)
@@ -815,18 +802,20 @@ float Widget::GetItemShearX(Item* item)
 float Widget::GetItemShearY(Item* item)
 {return item->ShearY;}
 
-void Widget::AddKeyEvent(Qt::Key key, String slotfun,ParametersStru *par)
+void Widget::AddKeyEvent(Qt::Key key,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar)
 {
-    for(int i=0;i<AllEvent.length();i++)
+    for(auto i:AllEvent)
     {
-        if(AllEvent[i]->key==key)
+        if(i.key==key)
         {
-            AllEvent[i]->par=par;
-            AllEvent[i]->slotfun=slotfun;
+            i.PressFun=PressSlotfun;
+            i.PressPar=PressPar;
+            i.ReleaseFun=ReleaseSlotfun;
+            i.ReleasePar=ReleasePar;
             return;
         }
     }
-    InputEvent *event=new InputEvent{key,-1,-1,-1,-1,par,slotfun};
+    InputEvent event{key,-1,-1,-1,-1,PressPar,PressSlotfun,ReleasePar,ReleaseSlotfun,};
     AllEvent<<event;
 }
 
@@ -834,24 +823,36 @@ void Widget::DeleteKeyEvent(Qt::Key key)
 {
     for(int i=0;i<AllEvent.length();i++)
     {
-        if(AllEvent[i]->key==key)
+        if(AllEvent[i].key==key)
         {
-            delete AllEvent[i];
             AllEvent.removeAt(i);
             return;
         }
     }
 }
 
-void Widget::AddMouseEvent(float MouseX, float MouseY,float fMouseX,float fMouseY,QString slotfun, ParametersStru *par)
+void Widget::AddMouseEvent(float MouseX,float MouseY,float fMouseX,float fMouseY,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar)
 {
-    InputEvent *event=new InputEvent;
-    event->MouseX=MouseX;
-    event->MouseY=MouseY;
-    event->par=par;
-    event->fMouseX=fMouseX;
-    event->fMouseY=fMouseY;
-    event->slotfun=slotfun;
+    for(auto i:AllEvent)
+    {
+        if(i.MouseX==MouseX&&i.MouseY==MouseY&&i.fMouseX==fMouseX&&i.fMouseY==fMouseY)
+        {
+            i.PressFun=PressSlotfun;
+            i.PressPar=PressPar;
+            i.ReleaseFun=ReleaseSlotfun;
+            i.ReleasePar=ReleasePar;
+            return;
+        }
+    }
+    InputEvent event;
+    event.MouseX=MouseX;
+    event.MouseY=MouseY;
+    event.fMouseX=fMouseX;
+    event.fMouseY=fMouseY;
+    event.PressFun=PressSlotfun;
+    event.PressPar=PressPar;
+    event.ReleaseFun=ReleaseSlotfun;
+    event.ReleasePar=ReleasePar;
     AllEvent<<event;
 }
 
@@ -859,23 +860,16 @@ void Widget::DeleteMouseEvent(float MouseX, float MouseY,float fMouseX,float fMo
 {
     for(int i=0;i<AllEvent.length();i++)
     {
-        if(AllEvent[i]->MouseX==MouseX&&
-           AllEvent[i]->MouseY==MouseY&&
-           AllEvent[i]->fMouseX==fMouseX&&
-           AllEvent[i]->fMouseY==fMouseY)
+        if(AllEvent[i].MouseX==MouseX&&AllEvent[i].MouseY==MouseY&&AllEvent[i].fMouseX==fMouseX&&AllEvent[i].fMouseY==fMouseY)
         {
-            delete AllEvent[i];
             AllEvent.removeAt(i);
+            return;
         }
     }
 }
 
 void Widget::DeleteAllEvent()
-{
-    for(int i=0;i<AllEvent.length();i++)
-    {delete AllEvent[i];}
-    AllEvent.clear();
-}
+{AllEvent.clear();}
 
 void Widget::WaitSign(String signfun)
 {
@@ -909,3 +903,22 @@ void Widget::VerticalFlip(Item *item)
 Pixmap* Widget::VerticalFlip(Pixmap *pixmap)
 {return mirrorAndChange(pixmap,false);}
 
+QTimer* Widget::StartMultipleTimer(String slotfun,int time)
+{
+    QTimer *timer = new QTimer(this);
+    QByteArray ba = slotfun.toLatin1();
+    const char *ch=ba.data();
+    QObject::connect(timer,SIGNAL(timeout()),this,ch);
+    timer->start(time);
+    return timer;
+}
+
+void Widget::StartSingleTimer(String slotfun,int time)
+{
+    QByteArray ba = slotfun.toLatin1();
+    const char *ch=ba.data();
+    QTimer::singleShot(time,this,ch);
+}
+
+void Widget::DeleteTimer(QTimer* timer)
+{delete timer;}

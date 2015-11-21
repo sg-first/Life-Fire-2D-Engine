@@ -2,21 +2,25 @@
 #include "widget.h"
 
 //MyItem
-void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void MyItem::SetButton(Pixmap up, Pixmap down, String Music,int volume)
 {
-    if(fun==NULL || event->button()!=Qt::LeftButton)//检测图元是否是按钮、按下的是否是左键
-    {return;}
-    this->setPixmap(down);
+    this->isbutton=true;
+    this->up=up;
+    this->down=down;
+    this->Music=Music;
+    this->volume=volume;
 }
 
-void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void MyItem::SetEvent(String PressFun,ParametersStru PressPar,String ReleaseFun,ParametersStru ReleasePar)
 {
-    this->setPixmap(up);
+    this->PressFun=PressFun;
+    this->PressPar=PressPar;
+    this->ReleaseFun=ReleaseFun;
+    this->ReleasePar=ReleasePar;
+}
 
-    if(fun==NULL)
-    {return;}
-
-    //算坐标大业
+bool MyItem::InRegion()
+{
     int x=this->x();
     int width=this->pixmap().width();
     int y=this->y();
@@ -38,19 +42,41 @@ void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     {ymin=0;}
     if(y+height>WindowsHeigh)
     {ymax=WindowsHeigh;}
-    //大业完成
+
 
     if(xmax<s->mapFromGlobal(QCursor::pos()).x() || xmin>s->mapFromGlobal(QCursor::pos()).x())
-    {return;}
+    {return false;}
     if(ymax<s->mapFromGlobal(QCursor::pos()).y() || ymin>s->mapFromGlobal(QCursor::pos()).y())
-    {return;}
+    {return false;}
+    return true;
+}
 
-     RunFun(fun,par);
+void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(event->button()!=Qt::LeftButton)//检测按下的是否是左键（这里可能会在移动端出现问题）
+    {return;}
+    this->setPixmap(down);
+
+    if(isbutton)//如果是按钮就放音乐
+    {
+        MusicPlayer *player=new MusicPlayer;
+        player->singleplay(Music,volume);
+    }
+
+    if(PressFun!=NULL_String)//如果有事件，就执行
+    {RunFun(PressFun,PressPar);}
+}
+
+void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    this->setPixmap(up);
+    if(ReleaseFun!=NULL_String&&InRegion())
+    {RunFun(ReleaseFun,ReleasePar);}
 }
 
 //VideoPlayer
-VideoPlayer::VideoPlayer(QString Path,int Volume,int x,int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene,QWidget *parent)
-    : QWidget(parent)
+VideoPlayer::VideoPlayer(QString Path, int Volume, int x, int y, int width, int heigh, bool cycle, QString signfun, QGraphicsScene *scene)
+    : QWidget(0)
 {
     mediaPlayer=new QMediaPlayer(0,QMediaPlayer::VideoSurface);
     mediaPlayer->setVolume(Volume);
@@ -77,7 +103,7 @@ void VideoPlayer::playover(QMediaPlayer::State state)
     {return;}
     if(!cycle)
     {
-        if(signfun!=NULL)
+        if(signfun!=NULL_String)
         {RunFun(signfun);}
         delete this;
     }
@@ -90,6 +116,42 @@ VideoPlayer::~VideoPlayer()
     delete mediaPlayer;
     delete videoItem;
 }
+
+//MusicPlayer
+void MusicPlayer::singleplay(String name, int volume)
+{
+    this->setMedia(QUrl::fromLocalFile(name));
+    this->setVolume(volume);
+    this->play();
+    QObject::connect(this,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(playover(QMediaPlayer::State)));
+}
+
+void MusicPlayer::multipleplay(String name,int volume)
+{
+    QUrl backgroundMusicUrl = QUrl::fromLocalFile(name);
+    if (QFile::exists(backgroundMusicUrl.toLocalFile()))
+    {
+       this->setVolume(volume);
+       cyclelist = new QMediaPlaylist();
+       QMediaContent media(backgroundMusicUrl);
+       cyclelist->addMedia(media);
+       cyclelist->setCurrentIndex(0);
+       // 设置背景音乐循环播放
+       cyclelist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+       this->setPlaylist(cyclelist);
+     }
+     this->play();
+}
+
+void MusicPlayer::playover(QMediaPlayer::State state)
+{
+    if(state!=QMediaPlayer::StoppedState)
+    {return;}
+    delete this;
+}
+
+MusicPlayer::~MusicPlayer()
+{delete cyclelist;}
 
 //GraphicsView
 void GraphicsView::Scale(float sx,float sy)
@@ -130,6 +192,14 @@ Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
         this->scPointer[a]=nullptr;
 }
 
+Item::~Item()
+{
+    delete ItemPointer;
+    delete PixmapItemPoniter;
+    delete Blur;
+    delete Color;
+}
+
 //ParametersStru
 bool ParametersStru::operator !=(const ParametersStru &par)
 {
@@ -151,6 +221,43 @@ bool ParametersStru::operator !=(const ParametersStru &par)
     return true;
 }
 
+ParametersStru& ParametersStru::operator =(const ParametersStru &par)
+{
+    intVar=par.intVar;
+    floatVar=par.floatVar;
+    StringVar=par.StringVar;
+    boolVar=par.boolVar;
+    VideoPlayerVar=par.VideoPlayerVar;
+    GraphicsViewVar=par.GraphicsViewVar;
+    EasyThreadVar=par.EasyThreadVar;
+    AnimationTypeVar=par.AnimationTypeVar;
+    PixmapVar=par.PixmapVar;
+    ItemVar=par.ItemVar;
+    MusicPlayerVar=par.MusicPlayerVar;
+    GraphicsSceneVar=par.GraphicsSceneVar;
+    VariantVar=par.VariantVar;
+    QtKeyVar=par.QtKeyVar;
+    return *this;
+}
+
+ParametersStru::ParametersStru(const ParametersStru &par):QObject(0)
+{
+    intVar=par.intVar;
+    floatVar=par.floatVar;
+    StringVar=par.StringVar;
+    boolVar=par.boolVar;
+    VideoPlayerVar=par.VideoPlayerVar;
+    GraphicsViewVar=par.GraphicsViewVar;
+    EasyThreadVar=par.EasyThreadVar;
+    AnimationTypeVar=par.AnimationTypeVar;
+    PixmapVar=par.PixmapVar;
+    ItemVar=par.ItemVar;
+    MusicPlayerVar=par.MusicPlayerVar;
+    GraphicsSceneVar=par.GraphicsSceneVar;
+    VariantVar=par.VariantVar;
+    QtKeyVar=par.QtKeyVar;
+}
+
 Item::Item(QPixmap *pixmap)
 {Item(new MyItem(*pixmap));}
 
@@ -169,13 +276,13 @@ bool JSParStru::operator !=(const JSParStru &par)
 }
 
 //独立函数
-void RunFun(QString signfun,ParametersStru *par,Qt::ConnectionType CT)
+void RunFun(QString signfun,ParametersStru par,Qt::ConnectionType CT)
 {
     //默认异步执行
     QByteArray ba = signfun.toLatin1();
     const char *function = ba.data();
-    if(par!=nullptr)
-    {QMetaObject::invokeMethod(thob,function,CT,Q_ARG(ParametersStru*,par));}
+    if(par!=NULL_ParametersStru)
+    {QMetaObject::invokeMethod(thob,function,CT,Q_ARG(ParametersStru,par));}
     else
     {QMetaObject::invokeMethod(thob,function,CT);}
 }

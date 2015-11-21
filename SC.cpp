@@ -16,7 +16,7 @@ void SC::changepixmap()
         else//若不循环，发信号退出一切
         {
             this->over=1;
-            if(signfun!=NULL)
+            if(signfun!=NULL_String)
             {
               QByteArray ba = signfun.toLatin1();
               const char *function = ba.data();
@@ -240,7 +240,7 @@ void SC::SlowChange()
     }
     if(over)
     {
-       if(signfun!=NULL)
+       if(signfun!=NULL_String)
        {
          QByteArray ba = signfun.toLatin1();
          const char *function = ba.data();

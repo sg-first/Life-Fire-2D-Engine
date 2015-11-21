@@ -15,7 +15,7 @@ QScriptEngine* CreatEngine()
 QVariant eval(String functionname,QScriptEngine *myengine,String code,String *mistake)
 {
     QScriptValue ret=myengine->evaluate(code);
-    if(functionname!=NULL)
+    if(functionname!=NULL_String)
     {
         ret=myengine->globalObject().property(functionname);//准备调用JS函数
         ret.call(QScriptValue());//调用JS函数
