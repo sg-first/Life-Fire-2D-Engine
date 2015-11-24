@@ -194,8 +194,10 @@ Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
 
 Item::~Item()
 {
-    delete ItemPointer;
-    delete PixmapItemPoniter;
+    if(PixmapItemPoniter==nullptr)
+    {delete PixmapItemPoniter;}
+    else
+    {delete ItemPointer;}
     delete Blur;
     delete Color;
 }
