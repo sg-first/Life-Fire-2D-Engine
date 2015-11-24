@@ -194,7 +194,7 @@ Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
 
 Item::~Item()
 {
-    if(PixmapItemPoniter==nullptr)
+    if(PixmapItemPoniter!=nullptr)
     {delete PixmapItemPoniter;}
     else
     {delete ItemPointer;}
