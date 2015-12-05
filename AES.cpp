@@ -360,17 +360,17 @@ int AES::getUCharLen(const unsigned char *uch)
 
 int AES::ucharToHex(const unsigned char *uch, char *hex)
 {
+  if(uch == NULL || hex == NULL)
+    return -1;
+
+  if(getUCharLen(uch) == 0)
+    return -2;
+
   int high,low;
   int tmp = 0;
-  if(uch == NULL || hex == NULL){
-    return -1;
-  }
 
-  if(getUCharLen(uch) == 0){
-    return -2;
-  }
-
-  while(*uch){
+  while(*uch)
+  {
     tmp = (int)*uch;
     high = tmp >> 4;
     low = tmp & 15;
@@ -385,17 +385,17 @@ int AES::ucharToHex(const unsigned char *uch, char *hex)
 
 int AES::hexToUChar(const char *hex, unsigned char *uch)
 {
+  if(hex == NULL || uch == NULL)
+    return -1;
+
+  if(strlen(hex) %2 == 1)
+    return -2;
+
   int high,low;
   int tmp = 0;
-  if(hex == NULL || uch == NULL){
-    return -1;
-  }
 
-  if(strlen(hex) %2 == 1){
-    return -2;
-  }
-
-  while(*hex){
+  while(*hex)
+  {
     high = ascillToValue(*hex);
     if(high < 0){
       *uch = '\0';
@@ -418,13 +418,15 @@ int AES::hexToUChar(const char *hex, unsigned char *uch)
 
 int AES::strToUChar(const char *ch, unsigned char *uch)
 {
-  int tmp = 0;
   if(ch == NULL || uch == NULL)
     return -1;
   if(strlen(ch) == 0)
     return -2;
 
-  while(*ch){
+  int tmp = 0;
+
+  while(*ch)
+  {
     tmp = (int)*ch;
     *uch++ = tmp;
     ch++;
@@ -436,75 +438,19 @@ int AES::strToUChar(const char *ch, unsigned char *uch)
 
 int AES::ucharToStr(const unsigned char *uch, char *ch)
 {
-  int tmp = 0;
   if(uch == NULL || ch == NULL)
     return -1;
 
-  while(*uch){
+  int tmp = 0;
+
+  while(*uch)
+  {
     tmp = (int)*uch;
     *ch++ = (char)tmp;
     uch++;
   }
   *ch = '\0';
 
-  return 0;
-}
-
-
-int AES::strToHex(const char *ch, char *hex)
-{
-  int high,low;
-  int tmp = 0;
-  if(ch == NULL || hex == NULL){
-    return -1;
-  }
-
-  if(strlen(ch) == 0){
-    return -2;
-  }
-
-  while(*ch){
-    tmp = (int)*ch;
-    high = tmp >> 4;
-    low = tmp & 15;
-    *hex++ = valueToHexCh(high); //先写高字节
-    *hex++ = valueToHexCh(low); //其次写低字节
-    ch++;
-  }
-  *hex = '\0';
-  return 0;
-}
-
-
-int AES::hexToStr(const char *hex, char *ch)
-{
-  int high,low;
-  int tmp = 0;
-  if(hex == NULL || ch == NULL){
-    return -1;
-  }
-
-  if(strlen(hex) %2 == 1){
-    return -2;
-  }
-
-  while(*hex){
-    high = ascillToValue(*hex);
-    if(high < 0){
-      *ch = '\0';
-      return -3;
-    }
-    hex++; //指针移动到下一个字符上
-    low = ascillToValue(*hex);
-    if(low < 0){
-      *ch = '\0';
-      return -3;
-    }
-    tmp = (high << 4) + low;
-    *ch++ = (char)tmp;
-    hex++;
-  }
-  *ch = '\0';
   return 0;
 }
 

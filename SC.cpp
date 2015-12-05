@@ -201,10 +201,10 @@ void SC::SlowChange()
         {
             temp+=2;
             tf=new QTransform;
-            float shearX;
-            float shearY;
             if(!isfunction)
             {
+                float shearX;
+                float shearY;
                 shearX=CurrentModulus+=temp1;
                 shearY=CurrentModulus2+=temp2;
                 tf->shear(shearX,shearY);

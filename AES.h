@@ -33,8 +33,6 @@ private:
   void InvShiftRows(unsigned char state[][4]);
   void InvMixColumns(unsigned char state[][4]);
 
-  int strToHex(const char *ch, char *hex);
-  int hexToStr(const char *hex, char *ch);
   int ascillToValue(const char ch);
   char valueToHexCh(const int value);
   int getUCharLen(const unsigned char *uch);
