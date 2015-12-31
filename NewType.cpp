@@ -55,12 +55,12 @@ void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button()!=Qt::LeftButton)//检测按下的是否是左键（这里可能会在移动端出现问题）
     {return;}
-    this->setPixmap(down);
 
-    if(isbutton)//如果是按钮就放音乐
+    if(isbutton)//如果是按钮就放音乐并且切换图元
     {
         MusicPlayer *player=new MusicPlayer;
         player->singleplay(Music,volume);
+        this->setPixmap(down);
     }
 
     if(PressFun!=NULL_String)//如果有事件，就执行
@@ -69,7 +69,9 @@ void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    this->setPixmap(up);
+    if(isbutton)//是按钮切回原图元
+    {this->setPixmap(up);}
+
     if(ReleaseFun!=NULL_String&&InRegion())
     {RunFun(ReleaseFun,ReleasePar);}
 }
@@ -194,10 +196,10 @@ Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
 
 Item::~Item()
 {
-    if(PixmapItemPoniter!=nullptr)
-    {delete PixmapItemPoniter;}
-    else
+    if(PixmapItemPoniter==nullptr)
     {delete ItemPointer;}
+    else
+    {delete PixmapItemPoniter;}
     delete Blur;
     delete Color;
 }
