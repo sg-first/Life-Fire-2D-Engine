@@ -207,7 +207,7 @@ public:
     float viewY;
 
 protected:
-    void wheelEvent(QWheelEvent *e)
+    void wheelEvent(QWheelEvent*)
     {
         //不对滚轮事件做任何处理，防止滚动view（如果忽略还会向下层机制传递消息）
     }
