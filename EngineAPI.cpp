@@ -151,9 +151,8 @@ void Widget::SetRGBColorItem(Item* item,float R,float G,float B)
 void Widget::ClearScene(GraphicsScene *scene)
 {
    for(auto i:AllItem)
-   {delete i;}
+   {DeleteItem(i);}
    scene->clear();//这句目测没用
-   AllItem.clear();
 }
 
 void Widget::DeleteItem(Item* item)
@@ -490,7 +489,7 @@ void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, int times, String
 Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,String signfun,bool cycle,GraphicsScene *scene)
 {
    assert(!address.isEmpty());//断言，确认传入的图片容器不为空
-   MyItem *temp=new MyItem(address[0]);//将第一张图片变为图元
+   MyItem *temp=new MyItem(address.at(0));//将第一张图片变为图元
    scene->addItem(temp);//将第一张图片显示在场景中
    temp->setPos(x,y);//设置其位置
    Item *item=new Item(temp);
@@ -514,7 +513,7 @@ Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,Strin
 Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time, String signfun, bool cycle, GraphicsScene *scene)
 {
     assert(!allpixmap.isEmpty());
-    MyItem *item=new MyItem(*allpixmap[0]);
+    MyItem *item=new MyItem(*allpixmap.at(0));
     Item *ritem=new Item(item);
     scene->addItem(item);
     item->setPos(x,y);
@@ -540,7 +539,7 @@ void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,int time
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
     MyItem *temp=item->PixmapItemPoniter;
-    temp->setPixmap(Pixmap(allpixmap[0]));//变更当前图片为图集的第一帧
+    temp->setPixmap(Pixmap(allpixmap.at(0)));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time);//创建SC实例
     item->scPointer[Picture]=sc;
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
@@ -560,7 +559,7 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int 
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
     MyItem *temp=item->PixmapItemPoniter;
-    temp->setPixmap(*allpixmap[0]);//变更当前图片为图集的第一帧
+    temp->setPixmap(*allpixmap.at(0));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time);//创建SC实例
     item->scPointer[Picture]=sc;
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
@@ -823,7 +822,7 @@ void Widget::DeleteKeyEvent(Qt::Key key)
 {
     for(int i=0;i<AllEvent.length();i++)
     {
-        if(AllEvent[i].key==key)
+        if(AllEvent.at(i).key==key)
         {
             AllEvent.removeAt(i);
             return;
@@ -860,7 +859,7 @@ void Widget::DeleteMouseEvent(float MouseX, float MouseY,float fMouseX,float fMo
 {
     for(int i=0;i<AllEvent.length();i++)
     {
-        if(AllEvent[i].MouseX==MouseX&&AllEvent[i].MouseY==MouseY&&AllEvent[i].fMouseX==fMouseX&&AllEvent[i].fMouseY==fMouseY)
+        if(AllEvent.at(i).MouseX==MouseX&&AllEvent.at(i).MouseY==MouseY&&AllEvent.at(i).fMouseX==fMouseX&&AllEvent.at(i).fMouseY==fMouseY)
         {
             AllEvent.removeAt(i);
             return;
