@@ -9,7 +9,7 @@
 #define SynchronousStart(fun) {QTimer t;\
                     QEventLoop q;\
                     t.setSingleShot(true);\
-                    connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
+                    QOjbect::connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
 #define SynchronousFinish() t.start();q.exec();}
 #define RegisterJSType(TypeName,JSName) qRegisterMetaType<TypeName>(JSName)
 
