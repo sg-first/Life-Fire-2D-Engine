@@ -33,7 +33,7 @@ public:
     Q_INVOKABLE void RotationItem(Item* item, float set);
     Q_INVOKABLE void ScaleItem(Item* item, float set);
     Q_INVOKABLE void MoveItem(Item* item, float X, float Y);
-    Q_INVOKABLE void BlurRadiusItem(Item* item, float set);
+    Q_INVOKABLE void BlurRadiusItem(Item* item, float);
     Q_INVOKABLE void DropShadowItem(Item* item, float shadowX,float shadowY);
     Q_INVOKABLE void SetOpacityItem(Item* item, float set);
     Q_INVOKABLE void SetRGBColorItem(Item* item, float R, float G, float B);

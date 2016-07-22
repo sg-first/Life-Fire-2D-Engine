@@ -34,7 +34,7 @@ HEADERS  += widget.h \
     macro.h
 
 FORMS    += widget.ui
-QT += core gui declarative
+QT += core gui
 
 OTHER_FILES +=
 
