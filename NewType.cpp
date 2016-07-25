@@ -19,7 +19,7 @@ void MyItem::SetEvent(String PressFun,ParametersStru PressPar,String ReleaseFun,
     this->ReleasePar=ReleasePar;
 }
 
-bool MyItem::InRegion()
+bool MyItem::IsRegion()
 {
     int x=this->x();
     int width=this->pixmap().width();
@@ -65,6 +65,8 @@ void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if(PressFun!=NULL_String)//如果有事件，就执行
     {RunFun(PressFun,PressPar);}
+
+    event->ignore(); //什么都没有，忽略
 }
 
 void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -72,8 +74,10 @@ void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(isbutton)//是按钮切回原图元
     {this->setPixmap(up);}
 
-    if(ReleaseFun!=NULL_String&&InRegion())
+    if(ReleaseFun!=NULL_String&&IsRegion())
     {RunFun(ReleaseFun,ReleasePar);}
+
+    event->ignore(); //什么都没有，忽略
 }
 
 //VideoPlayer

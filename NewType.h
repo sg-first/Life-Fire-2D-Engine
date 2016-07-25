@@ -158,7 +158,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     //允许在此添加更多类型的事件，或许你需要添加一些公有成员变量来记录其所对应的槽函数
 
-    bool InRegion();
+    bool IsRegion();
 };
 
 
@@ -207,7 +207,7 @@ public:
     float viewY;
 
 protected:
-    void wheelEvent(QWheelEvent*)
+    void wheelEvent(QWheelEvent *e)
     {
         //不对滚轮事件做任何处理，防止滚动view（如果忽略还会向下层机制传递消息）
     }
@@ -215,12 +215,13 @@ protected:
     {
         switch(e->key())
         {
+            //防止未定义按键滚动view
             case Qt::Key_Left:{}
             case Qt::Key_Right:{}
             case Qt::Key_Down:{}
             case Qt::Key_Up:{}
             default:
-            {e->ignore();}//忽略键盘消息，防止未定义按键滚动view
+            {e->ignore();}
         }
     }
 };
