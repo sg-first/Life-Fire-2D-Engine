@@ -154,8 +154,8 @@ protected:
     String ReleaseFun;
     ParametersStru ReleasePar;
     //Event
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *e);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
     //允许在此添加更多类型的事件，或许你需要添加一些公有成员变量来记录其所对应的槽函数
 
     bool IsRegion();
@@ -209,6 +209,7 @@ public:
 protected:
     void wheelEvent(QWheelEvent *e)
     {
+        e->ignore();
         //不对滚轮事件做任何处理，防止滚动view（如果忽略还会向下层机制传递消息）
     }
     void keyPressEvent(QKeyEvent *e)

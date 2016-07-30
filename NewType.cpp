@@ -51,10 +51,22 @@ bool MyItem::IsRegion()
     return true;
 }
 
-void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void Widget::PassMousePressEvent(QPointF point)
 {
-    if(event->button()!=Qt::LeftButton)//检测按下的是否是左键（这里可能会在移动端出现问题）
-    {return;}
+    QMouseEvent e(QEvent::Type::MouseButtonPress,point,Qt::MouseButton::LeftButton,nullptr,nullptr);
+    this->mousePressEvent(&e);
+}
+
+void Widget::PassMouseReleaseEvent(QPointF point)
+{
+    QMouseEvent e(QEvent::Type::MouseButtonRelease,point,Qt::MouseButton::LeftButton,nullptr,nullptr);
+    this->mouseReleaseEvent(&e);
+}
+
+void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
+{
+    /*if(e->button()!=Qt::LeftButton)//检测按下的是否是左键（这里可能会在移动端出现问题）
+    {return;}*/
 
     if(isbutton)//如果是按钮就放音乐并且切换图元
     {
@@ -66,10 +78,10 @@ void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if(PressFun!=NULL_String)//如果有事件，就执行
     {RunFun(PressFun,PressPar);}
 
-    event->ignore(); //什么都没有，忽略
+    s->PassMousePressEvent(e->pos());
 }
 
-void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     if(isbutton)//是按钮切回原图元
     {this->setPixmap(up);}
@@ -77,7 +89,7 @@ void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(ReleaseFun!=NULL_String&&IsRegion())
     {RunFun(ReleaseFun,ReleasePar);}
 
-    event->ignore(); //什么都没有，忽略
+    s->PassMouseReleaseEvent(e->pos());
 }
 
 //VideoPlayer
