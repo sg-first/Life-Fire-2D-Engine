@@ -31,7 +31,8 @@ HEADERS  += widget.h \
     NewType.h \
     AES.h \
     js.h \
-    macro.h
+    macro.h \
+    configure.h
 
 FORMS    += widget.ui
 QT += core gui

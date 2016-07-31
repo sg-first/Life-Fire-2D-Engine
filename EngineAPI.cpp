@@ -1,5 +1,6 @@
 //-----本文件是引擎行为层给用户提供的接口的实现-----
 #include "widget.h"
+#include "configure.h"
 
 Pixmap* Widget::NewPixmap(String PicPath)
 {return new Pixmap(PicPath);}
@@ -157,9 +158,12 @@ void Widget::ClearScene(GraphicsScene *scene)
 
 void Widget::DeleteItem(Item* item)
 {
-   EndAllAnimation(item);
-   AllItem.removeAt(AllItem.indexOf(item));
-   delete item;
+    EndAllAnimation(item);
+    #ifdef SafetyPriority
+        SafeSleep(2);//等待目前进行这帧完成
+    #endif
+    AllItem.removeAt(AllItem.indexOf(item));
+    delete item;
 }
 
 String Widget::GetPath(String str)
