@@ -145,7 +145,6 @@ protected:
     void keyReleaseEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
 
-
 private:
     Ui::Widget *ui;
     //引擎行为函数

@@ -27,6 +27,6 @@ static const int MaximunHeigh=10000;//舞台最大高
 //-引擎自带的全局变量
 extern LFEvent *lfevent;
 extern QObject *thob;
-extern QGraphicsScene *MainScene;//声明舞台
+extern GraphicsScene *MainScene;//声明舞台
 extern GraphicsView *MainView;//声明视图
 //-用户自行添加的全局变量

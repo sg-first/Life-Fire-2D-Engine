@@ -1,7 +1,6 @@
 //-----本文件所声明用于引擎的其它类型-----
 #pragma once
 #include "head.h"
-#include "NewType.h"
 #include "macro.h"
 
 typedef QPixmap Pixmap;
@@ -205,6 +204,7 @@ public:
     void SetCenter(QGraphicsItem *item);
     float viewX;
     float viewY;
+    Widget *s;
 
 protected:
     void wheelEvent(QWheelEvent *e)
@@ -225,6 +225,7 @@ protected:
             {e->ignore();}
         }
     }
+    void mouseReleaseEvent(QMouseEvent *e);
 };
 
 

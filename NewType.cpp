@@ -63,11 +63,11 @@ void Widget::PassMouseReleaseEvent(QPointF point)
     this->mouseReleaseEvent(&e);
 }
 
+void GraphicsView::mouseReleaseEvent(QMouseEvent *e)
+{s->PassMouseReleaseEvent(e->pos());}
+
 void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    /*if(e->button()!=Qt::LeftButton)//检测按下的是否是左键（这里可能会在移动端出现问题）
-    {return;}*/
-
     if(isbutton)//如果是按钮就放音乐并且切换图元
     {
         MusicPlayer *player=new MusicPlayer;
@@ -298,6 +298,8 @@ bool JSParStru::operator !=(const JSParStru &par)
 //独立函数
 void RunFun(QString signfun,ParametersStru par,Qt::ConnectionType CT)
 {
+    if(signfun==NULL_String)
+    {return;}
     //默认异步执行
     QByteArray ba = signfun.toLatin1();
     const char *function = ba.data();
