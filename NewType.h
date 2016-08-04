@@ -8,6 +8,7 @@ typedef QColor RGBColor;
 typedef QString String;
 typedef QGraphicsScene GraphicsScene;
 typedef QVariant Variant;
+typedef QTimer Timer;
 
 class Widget;
 class Item;
@@ -225,7 +226,8 @@ protected:
             {e->ignore();}
         }
     }
-    void mouseReleaseEvent(QMouseEvent *e);
+    //void mouseReleaseEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
 };
 
 

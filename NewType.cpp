@@ -63,8 +63,17 @@ void Widget::PassMouseReleaseEvent(QPointF point)
     this->mouseReleaseEvent(&e);
 }
 
-void GraphicsView::mouseReleaseEvent(QMouseEvent *e)
-{s->PassMouseReleaseEvent(e->pos());}
+void Widget::PassMouseReleaseEvent(QMouseEvent *e)
+{this->mouseReleaseEvent(e);}
+
+void Widget::PassMouseMoveEvent(QMouseEvent *e)
+{this->mouseMoveEvent(e);}
+
+/*void GraphicsView::mouseReleaseEvent(QMouseEvent *e)
+{s->PassMouseReleaseEvent(e);}*/
+
+void GraphicsView::mouseMoveEvent(QMouseEvent *e)
+{s->PassMouseMoveEvent(e);}
 
 void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
@@ -298,8 +307,6 @@ bool JSParStru::operator !=(const JSParStru &par)
 //独立函数
 void RunFun(QString signfun,ParametersStru par,Qt::ConnectionType CT)
 {
-    if(signfun==NULL_String)
-    {return;}
     //默认异步执行
     QByteArray ba = signfun.toLatin1();
     const char *function = ba.data();
