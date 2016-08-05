@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     EngineAPI.cpp \
     EngineBeh.cpp \
     SC.cpp \
-    InputEvent.cpp
+    InputEvent.cpp \
+    gesture.cpp
 
 HEADERS  += widget.h \
     head.h \
@@ -32,7 +33,8 @@ HEADERS  += widget.h \
     AES.h \
     js.h \
     macro.h \
-    configure.h
+    configure.h \
+    gesture.h
 
 FORMS    += widget.ui
 QT += core gui

@@ -181,13 +181,13 @@ MusicPlayer::~MusicPlayer()
 {delete cyclelist;}
 
 //GraphicsView
-void GraphicsView::Scale(float sx,float sy)
-{scale(sx,sy);}
+void GraphicsView::Scale(int sX, int sY)
+{scale(sX,sY);}
 
 void GraphicsView::Rotate(float set)
 {rotate(set);}
 
-void GraphicsView::SetCenter(float x, float y)
+void GraphicsView::SetCenter(int x, int y)
 {
     this->centerOn(x,y);
     this->viewX=x;

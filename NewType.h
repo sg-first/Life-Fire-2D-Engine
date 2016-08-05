@@ -199,12 +199,12 @@ class GraphicsView : public QGraphicsView//视图类
 {
 public:
     GraphicsView(QWidget *parent):QGraphicsView(parent){}
-    void Scale(float sx, float sy);
+    void Scale(int sX, int sY);
     void Rotate(float set);
-    void SetCenter(float x,float y);
+    void SetCenter(int x,int y);
     void SetCenter(QGraphicsItem *item);
-    float viewX;
-    float viewY;
+    int viewX;
+    int viewY;
     Widget *s;
 
 protected:
@@ -261,10 +261,10 @@ public:
 struct InputEvent
 {
     Qt::Key key;
-    float MouseX;
-    float MouseY;
-    float fMouseX;
-    float fMouseY;
+    int MouseX;
+    int MouseY;
+    int fMouseX;
+    int fMouseY;
     ParametersStru PressPar;
     String PressFun;
     ParametersStru ReleasePar;

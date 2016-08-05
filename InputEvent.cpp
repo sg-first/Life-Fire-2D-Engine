@@ -42,3 +42,8 @@ void Widget::mouseReleaseEvent(QMouseEvent *e)
         {RunFun(i.ReleaseFun,i.ReleasePar);}
     }
 }
+
+void Widget::mouseMoveEvent(QMouseEvent *e)
+{
+
+}
