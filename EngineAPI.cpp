@@ -938,8 +938,14 @@ void Widget::StartSingleTimer(String slotfun,int time)
 Gesture* Widget::LoadGesture(QList<Pos> posSeq, int tolerance, String event)
 {return new Gesture(posSeq,tolerance,event,false);}
 
+Gesture* Widget::LoadGesture(LocusFunc locus, int tolerance, ProgressStand standard, int maxProgress, String event)
+{return new Gesture(locus,standard,maxProgress,tolerance,event,false);}
+
 void Widget::AddGesture(int mouseX,int mouseY,int fmouseX,int fmouseY,QList<Pos> posSeq,int tolerance,String event)
 {this->AddGesture(mouseX,mouseY,fmouseX,fmouseY,new Gesture(posSeq,tolerance,event,true));}
+
+void Widget::AddGesture(int mouseX, int mouseY, int fmouseX, int fmouseY, LocusFunc locus, int tolerance, ProgressStand standard, int maxProgress, String event)
+{this->AddGesture(mouseX,mouseY,fmouseX,fmouseY,new Gesture(locus,standard,maxProgress,tolerance,event,true));}
 
 void Widget::AddGesture(int mouseX, int mouseY, int fmouseX, int fmouseY, Gesture *gesture)
 {
@@ -952,6 +958,7 @@ void Widget::AddGesture(int mouseX, int mouseY, int fmouseX, int fmouseY, Gestur
         }
     }
     GestureArea *ga=new GestureArea(mouseX,mouseY,fmouseX,fmouseY);
+    ga->allGesture<<gesture;
     this->AllGestureArea<<ga;
     ga->allGesture<<gesture;
 }
@@ -970,7 +977,7 @@ void Widget::RemoveGestureArea(int mouseX, int mouseY, int fmouseX, int fmouseY)
         if(this->AllGestureArea[i]->mouseX==mouseX&&
             this->AllGestureArea[i]->mouseY==mouseY&&
             this->AllGestureArea[i]->fmouseX==fmouseX&&
-            this->AllGestureArea[i]->fmouseX==fmouseX)
+            this->AllGestureArea[i]->fmouseX==fmouseY)
         {
             delete this->AllGestureArea[i];
             this->AllGestureArea.removeAt(i);

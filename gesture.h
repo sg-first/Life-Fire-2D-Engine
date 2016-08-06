@@ -4,30 +4,32 @@
 
 typedef QPoint Pos;
 typedef float(*LocusFunc)(int);
-enum ProgressStand{XPos,YPos}; //如果使用函数表示手势，手势进程判定标准
+enum ProgressStand{XPos,YPos}; //如果使用函数表示手势，指定手势进程判定标准
 
 class Gesture
 {
 private:
-    //通用
-    bool ownership;
-    int tolerance;
-    String event;
     //序列
     QList<Pos> posSeq;
-    int progress=0;
+    int progress=-1;
     //方程
     LocusFunc locus=nullptr;
     ProgressStand standard;
     int maxProgress;
+    //通用
+    int tolerance;
+    String event;
+    bool ownership;
+    //运行时
+    Pos firstPos;
 
     void matchSuccess();
     void callEvent(int progress);
 
 public:
     Gesture(QList<Pos> posSeq,int tolerance,String event,bool ownership):posSeq(posSeq),tolerance(tolerance),event(event),ownership(ownership){}
-    Gesture(LocusFunc locus,int tolerance,ProgressStand standard,int maxProgress,String event,bool ownership):
-        locus(locus),tolerance(tolerance),standard(standard),maxProgress(maxProgress),event(event),ownership(ownership){}
+    Gesture(LocusFunc locus,ProgressStand standard,int maxProgress,int tolerance,String event,bool ownership):
+        locus(locus),standard(standard),maxProgress(maxProgress),tolerance(tolerance),event(event),ownership(ownership){}
     bool match(Pos pos);
     bool isOwn();
     void setEvent(String event);

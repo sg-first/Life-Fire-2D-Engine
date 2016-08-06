@@ -139,7 +139,9 @@ public:
     Q_INVOKABLE void StartSingleTimer(String slotfun,int time);
     Q_INVOKABLE void DeleteTimer(Timer* timer){delete timer;}
     Q_INVOKABLE Gesture* LoadGesture(QList<Pos> posSeq,int tolerance,String event);
+    Q_INVOKABLE Gesture* LoadGesture(LocusFunc locus,int tolerance,ProgressStand standard,int maxProgress,String event);
     Q_INVOKABLE void AddGesture(int mouseX,int mouseY,int fmouseX,int fmouseY,QList<Pos> posSeq,int tolerance,String event);
+    Q_INVOKABLE void AddGesture(int mouseX,int mouseY,int fmouseX,int fmouseY,LocusFunc locus,int tolerance,ProgressStand standard,int maxProgress,String event);
     Q_INVOKABLE void AddGesture(int mouseX,int mouseY,int fmouseX,int fmouseY,Gesture* gesture);
     Q_INVOKABLE void RemoveGesture(Gesture* gesture);
     Q_INVOKABLE void RemoveGestureArea(int mouseX,int mouseY,int fmouseX,int fmouseY);

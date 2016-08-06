@@ -15,11 +15,11 @@ void Gesture::callEvent(int progress)
     RunFun(this->event,par);
 }
 
-void Gesture::matchSuccess()
+void Gesture::matchSuccess() //点序列模式匹配成功
 {
     this->callEvent(progress);
-    if(progress==this->posSeq.length()-1)
-    {progress=0;}
+    if(progress==this->posSeq.length()-1) //看看是否全部匹配完成
+    {progress=-1;}
     else
     {progress++;}
     return;
@@ -27,6 +27,16 @@ void Gesture::matchSuccess()
 
 bool Gesture::match(Pos pos)
 {
+    if(progress==-1) //看看是不是第一个点
+    {
+        this->firstPos=pos;
+        progress++;
+        //第一个点就算直接能匹配
+        return true;
+    }
+    else
+    {pos=Pos(pos.x()-firstPos.x(),pos.y()-firstPos.y());} //不是第一个点的话，给转换成相对坐标
+
     if(isLocusFunc)
     {
         if(this->standard==XPos) //以X作为进程判定标准，则X是准的
@@ -67,7 +77,7 @@ bool Gesture::match(Pos pos)
 
     }
     //两个都不在范围内，匹配失败
-    progress=0;
+    progress=-1;
     return false;
 }
 

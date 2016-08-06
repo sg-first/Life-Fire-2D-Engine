@@ -3,7 +3,7 @@
 
 void Widget::keyPressEvent(QKeyEvent *e)//键盘事件响应
 {
-    for(auto i:AllEvent)
+    for(InputEvent i:AllEvent)
     {
         if(i.key==e->key())
         {
@@ -15,7 +15,7 @@ void Widget::keyPressEvent(QKeyEvent *e)//键盘事件响应
 
 void Widget::mousePressEvent(QMouseEvent *e)//鼠标事件响应
 {
-    for(auto i:AllEvent)
+    for(InputEvent i:AllEvent)
     {
         if(i.MouseX<=e->x()&&i.MouseY<=e->y()&&i.fMouseY>=e->y()&&i.fMouseX>=e->x())
         {RunFun(i.PressFun,i.PressPar);}
@@ -24,7 +24,7 @@ void Widget::mousePressEvent(QMouseEvent *e)//鼠标事件响应
 
 void Widget::keyReleaseEvent(QKeyEvent *e)
 {
-    for(auto i:AllEvent)
+    for(InputEvent i:AllEvent)
     {
         if(i.key==e->key())
         {
@@ -36,7 +36,7 @@ void Widget::keyReleaseEvent(QKeyEvent *e)
 
 void Widget::mouseReleaseEvent(QMouseEvent *e)
 {
-    for(auto i:AllEvent)
+    for(InputEvent i:AllEvent)
     {
         if(i.MouseX<=e->x()&&i.MouseY<=e->y()&&i.fMouseY>=e->y()&&i.fMouseX>=e->x())
         {RunFun(i.ReleaseFun,i.ReleasePar);}
@@ -45,5 +45,9 @@ void Widget::mouseReleaseEvent(QMouseEvent *e)
 
 void Widget::mouseMoveEvent(QMouseEvent *e)
 {
-
+    for(GestureArea* gesarea:AllGestureArea)
+    {
+        for(Gesture* ges:gesarea->allGesture)
+        {ges->match(e->pos());}
+    }
 }
