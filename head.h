@@ -40,6 +40,7 @@
 #include <QEventLoop>
 #include <QGraphicsSceneMouseEvent>
 #include <QWheelEvent>
+#include <functional>
 //脚本解释
 #include <QtScript/QScriptEngine>
 #include <QtScript/QScriptValue>

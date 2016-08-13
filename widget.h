@@ -60,7 +60,7 @@ public:
     Q_INVOKABLE void RemoveVideo(VideoPlayer *video);
     Q_INVOKABLE void StopVideo(VideoPlayer *video);
     Q_INVOKABLE EasyThread* StartThread(String slotfun, ParametersStru par=NULL_ParametersStru, bool track=true);
-    Q_INVOKABLE void StopThread(EasyThread *thread);
+    Q_INVOKABLE void RemoveThread(EasyThread *thread);
     Q_INVOKABLE bool ItemColliding(Item* item1, Item* item2);
     Q_INVOKABLE void AnimationRotationItem(Item* item, float set,int times,String signfun=NULL_String);
     Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,int times,String signfun=NULL_String);
@@ -71,7 +71,7 @@ public:
     Q_INVOKABLE void AnimationSetOpacityItem(Item* item, float set,int times,String signfun=NULL_String);
     Q_INVOKABLE void AnimationSetOpacityItem(Item* item,SCFun scfun,int times,String signfun=NULL_String);
     Q_INVOKABLE void AnimationMoveItem(Item* item,int x,int y,int time,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationMoveItem(Item* item,SCFun scfun,int time,String signfu=NULL_String);
+    Q_INVOKABLE void AnimationMoveItem(Item* item,SCFun scfun,int time,String signfun=NULL_String);
     Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,int x,int y,int time,String signfun=NULL_String);
     Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,SCFun scfun,int time,String signfun=NULL_String);
     Q_INVOKABLE void AnimationShearItem(Item* item, float fx, float fy, int time, String signfun=NULL_String);
@@ -147,9 +147,8 @@ public:
     Q_INVOKABLE void RemoveGestureArea(int mouseX,int mouseY,int fmouseX,int fmouseY);
     Q_INVOKABLE void RemoveAllGestureArea();
 
-    void PassMousePressEvent(QPointF point);
-    void PassMouseReleaseEvent(QPointF point);
-    void PassMouseReleaseEvent(QMouseEvent *e);
+    void PassMousePressEvent(Pos point);
+    void PassMouseReleaseEvent(Pos point);
     void PassMouseMoveEvent(QMouseEvent *e);
 
 protected:

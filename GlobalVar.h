@@ -22,8 +22,8 @@ signals:
 static const QString title="Life-Fire Engine";//窗口标题
 static const int WindowsWidth=800;//窗口宽
 static const int WindowsHeigh=600;//窗口高
-static const int MaximumWidth=10000;//舞台最大宽
-static const int MaximunHeigh=10000;//舞台最大高
+static const int MaximumWidth=1000;//舞台最大宽
+static const int MaximunHeigh=1000;//舞台最大高
 //-引擎自带的全局变量
 extern LFEvent *lfevent;
 extern QObject *thob;

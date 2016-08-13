@@ -20,9 +20,9 @@ SOURCES += main.cpp\
     AES.cpp \
     EngineAPI.cpp \
     EngineBeh.cpp \
-    SC.cpp \
     InputEvent.cpp \
-    gesture.cpp
+    gesture.cpp \
+    animation.cpp
 
 HEADERS  += widget.h \
     head.h \

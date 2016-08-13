@@ -3,13 +3,6 @@
 #include "head.h"
 #include "macro.h"
 
-typedef QPixmap Pixmap;
-typedef QColor RGBColor;
-typedef QString String;
-typedef QGraphicsScene GraphicsScene;
-typedef QVariant Variant;
-typedef QTimer Timer;
-
 class Widget;
 class Item;
 class GraphicsView;
@@ -19,15 +12,17 @@ class ParametersStru;
 class JSParStru;
 class MusicPlayer;
 
+typedef QPixmap Pixmap;
+typedef QColor RGBColor;
+typedef QString String;
+typedef QGraphicsScene GraphicsScene;
+typedef QVariant Variant;
+typedef QTimer Timer;
+typedef std::function<void(ParametersStru)> ParSlot;
+typedef std::function<void()> VoidSlot;
+typedef Qt::ConnectionType ExecutionMode;
+
 enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
-
-struct SCCurrentModulus
-{
-    float CurrentModulus;
-    float CurrentModulus2;
-    float CurrentModulus3;
-};
-
 
 class ParametersStru : public QObject
 {
@@ -56,6 +51,16 @@ public:
     ParametersStru& operator =(const ParametersStru &par);
 };
 const ParametersStru _NULLParametersStru;
+
+
+
+
+struct SCCurrentModulus
+{
+    float CurrentModulus;
+    float CurrentModulus2;
+    float CurrentModulus3;
+};
 
 
 class JSParStru
@@ -98,7 +103,7 @@ public:
     QVector<QPixmap> pixmap;
     QString signfun;
     ParametersStru par;
-    int over;//结束标志
+    bool over;//结束标志
     void start(int choose);
     bool cycle;//连续播图是否循环播放
     Item* num;//动画的图元指针
@@ -178,7 +183,7 @@ private:
     QString Path;
 
 private slots:
-    void playover(QMediaPlayer::State state);
+    void playFinished(QMediaPlayer::State state);
 };
 
 class MusicPlayer : public QMediaPlayer//音乐类
@@ -191,7 +196,7 @@ public:
     ~MusicPlayer();
 
 private slots:
-    void playover(QMediaPlayer::State state);
+    void playFinished(QMediaPlayer::State state);
 };
 
 

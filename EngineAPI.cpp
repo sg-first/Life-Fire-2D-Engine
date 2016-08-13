@@ -233,8 +233,12 @@ EasyThread* Widget::StartThread(String slotfun,ParametersStru par,bool track)
     }
 }
 
-void Widget::StopThread(EasyThread *thread)
-{thread->terminate();}
+void Widget::RemoveThread(EasyThread *thread)
+{
+    thread->terminate();
+    thread->wait();
+    delete thread;
+}
 
 bool Widget::ItemColliding(Item* item1,Item* item2)
 {return isColliding(item1->ItemPointer,item2->ItemPointer);}
