@@ -288,9 +288,6 @@ ParametersStru::ParametersStru(const ParametersStru &par):QObject(0)
     QtKeyVar=par.QtKeyVar;
 }
 
-Item::Item(QPixmap *pixmap)
-{Item(new MyItem(*pixmap));}
-
 //JSParStru
 void JSParStru::add(QObject *pointer,QString name)
 {

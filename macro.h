@@ -10,7 +10,7 @@
 #define SynchronousStart(fun) {QTimer t;\
                     QEventLoop q;\
                     t.setSingleShot(true);\
-                    QOjbect::connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
+                    QObject::connect(lfevent,SIGNAL( fun ()),&q,SLOT(quit()));
 #define SynchronousFinish() t.start();q.exec();}
 //类型容器相关
 #define RegisterJSType(TypeName,JSName) qRegisterMetaType<TypeName>(JSName)

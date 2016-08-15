@@ -17,8 +17,7 @@ int Widget::GetPixmapHeight(Pixmap *pixmap)
 Item* Widget::AddPixmapItem(String PicPath,int x,int y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
     Pixmap mainpix(PicPath);
-    MyItem *item=new MyItem(mainpix);
-    item->s=this;
+    MyItem *item=new MyItem(mainpix,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
     item->setPos(x,y);
@@ -29,8 +28,7 @@ Item* Widget::AddPixmapItem(String PicPath,int x,int y,String PressSlotfun,Param
 
 Item* Widget::AddPixmapItem(Pixmap *pixmap,int x,int y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
-    MyItem *item=new MyItem(*pixmap);
-    item->s=this;
+    MyItem *item=new MyItem(*pixmap,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
     item->setPos(x,y);
@@ -42,8 +40,7 @@ Item* Widget::AddPixmapItem(Pixmap *pixmap,int x,int y,String PressSlotfun,Param
 Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, String PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
 {
     Pixmap mainpix(PicPath);
-    MyItem *item=new MyItem(mainpix);
-    item->s=this;
+    MyItem *item=new MyItem(mainpix,this);
     if(PressPic!=NULL_String)
     {item->SetButton(mainpix,Pixmap(PressPic),PressMusic,volume);}
     else
@@ -58,8 +55,7 @@ Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, St
 
 Item* Widget::AddButtonItem(Pixmap *pixmap,int x,int y,String ReleaseSlotfun, Pixmap *PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
 {
-    MyItem *item=new MyItem(*pixmap);
-    item->s=this;
+    MyItem *item=new MyItem(*pixmap,this);
     if(PressPic!=nullptr)
     {item->SetButton(*pixmap,*PressPic,PressMusic,volume);}
     else
@@ -647,11 +643,10 @@ int Widget::GetViewY(GraphicsView *gview)
 
 GraphicsView* Widget::AddView(int x, int y, int width, int height)
 {
-   GraphicsView *view=new GraphicsView(this);
+   GraphicsView *view=new GraphicsView(this,this);
    view->setGeometry(x,y,width,height);
    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//禁用竖直滚动条
    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//禁用水平滚动条
-   view->s=this;
    view->show();
    return view;
 }

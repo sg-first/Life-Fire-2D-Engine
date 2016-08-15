@@ -12,14 +12,15 @@ class ParametersStru;
 class JSParStru;
 class MusicPlayer;
 
+typedef QThread Thread;
 typedef QPixmap Pixmap;
 typedef QColor RGBColor;
 typedef QString String;
 typedef QGraphicsScene GraphicsScene;
 typedef QVariant Variant;
 typedef QTimer Timer;
-typedef std::function<void(ParametersStru)> ParSlot;
-typedef std::function<void()> VoidSlot;
+typedef std::function<void(ParametersStru,Thread*)> ParSlot;
+typedef std::function<void(Thread*)> VoidSlot;
 typedef Qt::ConnectionType ExecutionMode;
 
 enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
@@ -97,7 +98,6 @@ public:
     QGraphicsItem* gr;
     QGraphicsBlurEffect *Effect;
     QGraphicsColorizeEffect *co;
-    QTransform *tf;
     QGraphicsPixmapItem *pi;
     GraphicsView *gv;
     QVector<QPixmap> pixmap;
@@ -139,14 +139,13 @@ private slots:
 class MyItem : public QGraphicsPixmapItem//真正的图元类
 {
 public:
-    MyItem(QGraphicsItem *parent = 0):QGraphicsPixmapItem::QGraphicsPixmapItem(parent){}
-    MyItem(const QPixmap &pixmap, QGraphicsItem *parent = 0)
-        :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent){}
+    MyItem(const QPixmap &pixmap,Widget *s=nullptr, QGraphicsItem *parent=nullptr)
+        :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent),s(s){}
     void SetButton(Pixmap up, Pixmap down, String Music, int volume);
     void SetEvent(String PressFun, ParametersStru PressPar, String ReleaseFun, ParametersStru ReleasePar);
-    Widget *s;
 
 protected:
+    Widget *s;
     //Button
     bool isbutton=false;
     Pixmap up;
@@ -175,12 +174,12 @@ public:
     ~VideoPlayer();
     void start();
     QMediaPlayer *mediaPlayer;
-    QString signfun;
 
 private:
     QGraphicsVideoItem *videoItem;
     bool cycle;
     QString Path;
+    QString signfun;
 
 private slots:
     void playFinished(QMediaPlayer::State state);
@@ -203,14 +202,13 @@ private slots:
 class GraphicsView : public QGraphicsView//视图类
 {
 public:
-    GraphicsView(QWidget *parent):QGraphicsView(parent){}
+    GraphicsView(QWidget *parent,Widget *s):QGraphicsView(parent),s(s){}
     void Scale(int sX, int sY);
     void Rotate(float set);
     void SetCenter(int x,int y);
     void SetCenter(QGraphicsItem *item);
     int viewX;
     int viewY;
-    Widget *s;
 
 protected:
     void wheelEvent(QWheelEvent *e)
@@ -233,6 +231,9 @@ protected:
     }
     //void mouseReleaseEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
+
+private:
+    Widget *s;
 };
 
 
@@ -251,7 +252,6 @@ class Item//图元信息记录类
 {
 public:
     Item(MyItem* pixmapitem=nullptr,QGraphicsItem *graphicsitem=nullptr);
-    Item(QPixmap *pixmap);
     ~Item();
 
     QGraphicsItem *ItemPointer;

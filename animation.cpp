@@ -200,26 +200,25 @@ void SC::SlowChange()
         case 7:
         {
             temp+=2;
-            tf=new QTransform;
+            QTransform tf;
             if(!isfunction)
             {
                 float shearX;
                 float shearY;
                 shearX=CurrentModulus+=temp1;
                 shearY=CurrentModulus2+=temp2;
-                tf->shear(shearX,shearY);
+                tf.shear(shearX,shearY);
                 num->ShearX=shearX;
                 num->ShearY=shearY;
             }
             else
             {
                 SCCurrentModulus scc=scfun(temp);
-                tf->shear(scc.CurrentModulus,scc.CurrentModulus2);
+                tf.shear(scc.CurrentModulus,scc.CurrentModulus2);
                 num->ShearX=scc.CurrentModulus;
                 num->ShearY=scc.CurrentModulus2;
             }
-            gr->setTransform(*tf);
-            delete tf;
+            gr->setTransform(tf);
             isend();
             break;
         }
