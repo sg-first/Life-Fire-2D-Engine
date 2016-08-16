@@ -27,7 +27,7 @@ public:
     Q_INVOKABLE Item* AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, String PressPic=NULL_String, String PressMusic=NULL_String,int volume=100, ParametersStru ReleasePar=NULL_ParametersStru, GraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddButtonItem(Pixmap *pixmap,int x,int y,String ReleaseSlotfun, Pixmap *PressPic=nullptr, String PressMusic=NULL_String,int volume=100, ParametersStru ReleasePar=NULL_ParametersStru, GraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddTextItem(String Text,String Font,int Size,int CR,int CG,int CB,int x,int y,GraphicsScene *scene=MainScene);
-    Q_INVOKABLE Item* AddTextItem(String Text,String Font,int Size,RGBColor color,int x,int y,GraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddTextItem(String Text, String Font, int Size, RGBColor color, int x, int y, GraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddRectItem(int x,int y,int width,int height,GraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddEllipseItem(int x,int y,int width,int height,GraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddLineItem(int x,int y,int fx,int fy,GraphicsScene *scene=MainScene);
@@ -52,15 +52,15 @@ public:
     Q_INVOKABLE void PlayMusic(MusicPlayer *player);
     Q_INVOKABLE void RemoveMusic(MusicPlayer *player);
     Q_INVOKABLE void StopMusic(MusicPlayer *player);
-    Q_INVOKABLE VideoPlayer* AddVideo(String path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,String signfun=NULL_String,GraphicsScene *scene=MainScene);
+    Q_INVOKABLE VideoPlayer* AddVideo(String path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,String signfun=NULL_String,ParametersStru par=NULL_ParametersStru,GraphicsScene *scene=MainScene=MainScene);
     Q_INVOKABLE void SetVideoVolume(VideoPlayer *video,int volume);
     Q_INVOKABLE int GetVideoVolume(VideoPlayer *video);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void PlayVideo(VideoPlayer *video);
     Q_INVOKABLE void RemoveVideo(VideoPlayer *video);
     Q_INVOKABLE void StopVideo(VideoPlayer *video);
-    Q_INVOKABLE EasyThread* StartThread(String slotfun, ParametersStru par=NULL_ParametersStru, bool track=true);
-    Q_INVOKABLE void RemoveThread(EasyThread *thread);
+    Q_INVOKABLE CaluThread* StartThread(String slotfun, ParametersStru par=NULL_ParametersStru, bool track=true);
+    Q_INVOKABLE void RemoveThread(CaluThread *thread);
     Q_INVOKABLE bool ItemColliding(Item* item1, Item* item2);
     Q_INVOKABLE void AnimationRotationItem(Item* item, float set,int times,String signfun=NULL_String);
     Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,int times,String signfun=NULL_String);
@@ -146,6 +146,8 @@ public:
     Q_INVOKABLE void RemoveGesture(Gesture* gesture);
     Q_INVOKABLE void RemoveGestureArea(int mouseX,int mouseY,int fmouseX,int fmouseY);
     Q_INVOKABLE void RemoveAllGestureArea();
+    Q_INVOKABLE void AddExpansionSlot(String slotname, ParSlot slot);
+    Q_INVOKABLE void AddExpansionSlot(String slotname, VoidSlot slot);
 
     void PassMousePressEvent(Pos point);
     void PassMouseReleaseEvent(Pos point);

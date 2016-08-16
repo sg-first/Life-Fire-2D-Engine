@@ -7,20 +7,19 @@ class Widget;
 class Item;
 class GraphicsView;
 class VideoPlayer;
-class EasyThread;
+class CaluThread;
 class ParametersStru;
 class JSParStru;
 class MusicPlayer;
 
-typedef QThread Thread;
 typedef QPixmap Pixmap;
 typedef QColor RGBColor;
 typedef QString String;
 typedef QGraphicsScene GraphicsScene;
 typedef QVariant Variant;
 typedef QTimer Timer;
-typedef std::function<void(ParametersStru,Thread*)> ParSlot;
-typedef std::function<void(Thread*)> VoidSlot;
+typedef std::function<void(ParametersStru)> ParSlot;
+typedef std::function<void()> VoidSlot;
 typedef Qt::ConnectionType ExecutionMode;
 
 enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
@@ -38,7 +37,7 @@ public:
     QVector<bool> boolVar;
     QVector<VideoPlayer*> VideoPlayerVar;
     QVector<GraphicsView*> GraphicsViewVar;
-    QVector<EasyThread*> EasyThreadVar;
+    QVector<CaluThread*> CaluThreadVar;
     QVector<AnimationType> AnimationTypeVar;
     QVector<Pixmap*> PixmapVar;
     QVector<Item*> ItemVar;
@@ -54,6 +53,22 @@ public:
 const ParametersStru _NULLParametersStru;
 
 
+class ExpansionSlot
+{
+private:
+    ParSlot parslot=nullptr;
+    VoidSlot voidslot=nullptr;
+    String slotname;
+
+public:
+    ExpansionSlot(ParSlot parslot,String slotname):parslot(parslot),slotname(slotname){}
+    ExpansionSlot(VoidSlot voidslot,String slotname):voidslot(voidslot),slotname(slotname){}
+    ExpansionSlot(){} //创建空实例，用于查找不到可用的槽时返回
+
+    void call(ParametersStru par=NULL_ParametersStru);
+    String getslotname(){return this->slotname;}
+    bool isEmpty();
+};
 
 
 struct SCCurrentModulus
@@ -76,7 +91,7 @@ public:
 const JSParStru _NULLJSParStru;
 
 
-typedef SCCurrentModulus(*SCFun)(int);//SC系数获取函数使用的函数指针
+typedef std::function<SCCurrentModulus(int)> SCFun;//SC系数获取函数使用的函数指针
 
 class SC : public QObject//渐变使用的工具类
 {
@@ -170,7 +185,7 @@ class VideoPlayer : public QWidget //视频类
 {
     Q_OBJECT
 public:
-    VideoPlayer(QString Path,int Volume, int x, int y,int width,int heigh,bool cycle,QString signfun,QGraphicsScene *scene);
+    VideoPlayer(String Path,int Volume, int x, int y,int width,int heigh,bool cycle,String signfun,ParametersStru par,GraphicsScene *scene);
     ~VideoPlayer();
     void start();
     QMediaPlayer *mediaPlayer;
@@ -178,8 +193,9 @@ public:
 private:
     QGraphicsVideoItem *videoItem;
     bool cycle;
-    QString Path;
-    QString signfun;
+    String Path;
+    String signfun;
+    ParametersStru par;
 
 private slots:
     void playFinished(QMediaPlayer::State state);
@@ -237,14 +253,25 @@ private:
 };
 
 
-class EasyThread : public QThread//线程类
+class CaluThread : public QThread//线程类
 {
-public:
-    EasyThread(QString fun,ParametersStru par):
-        fun(fun),par(par){}
-    void run();
-    QString fun;
+    Q_OBJECT
+private:
+    //调用扩展槽才可能追踪
+    ExpansionSlot exfun;
+    //非扩展槽
+    String fun=NULL_String; //如果通过函数名调用，肯定不是扩展槽
     ParametersStru par;
+    //追踪
+    bool track;
+
+public:
+    CaluThread(String fun,ParametersStru par=NULL_ParametersStru):fun(fun),par(par),track(false){}
+    CaluThread(ExpansionSlot exfun,ParametersStru par=NULL_ParametersStru,bool track=false):exfun(exfun),par(par),track(track){}
+    void run();
+
+public slots:
+    void playFinished();
 };
 
 
@@ -276,4 +303,6 @@ struct InputEvent
     String ReleaseFun;
 };
 
-void RunFun(QString fun, ParametersStru par=NULL_ParametersStru, Qt::ConnectionType CT=Qt::QueuedConnection);
+//独立函数
+ExpansionSlot FindExpansionSlot(String slotfun);
+void RunFun(String slotfun, ParametersStru par=NULL_ParametersStru, ExecutionMode CT=synchronization, bool expansion=true);

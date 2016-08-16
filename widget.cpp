@@ -33,7 +33,7 @@ void Widget::Initialization()
     RegisterJSType(String,"String");
     RegisterJSType(VideoPlayer*,"VideoPlayer*");
     RegisterJSType(GraphicsView*,"GraphicsView*");
-    RegisterJSType(EasyThread*,"EasyThread*");
+    RegisterJSType(CaluThread*,"CaluThread*");
     RegisterJSType(AnimationType,"AnimationType");
     RegisterJSType(Pixmap*,"Pixmap*");
     RegisterJSType(MusicPlayer*,"MusicPlayer*");

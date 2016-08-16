@@ -76,10 +76,10 @@ Item* Widget::AddTextItem(String Text, String Font, int Size, RGBColor color, in
     QGraphicsTextItem *text=new QGraphicsTextItem(Text);
     text->setFont(QFont(Font,Size));
     text->setDefaultTextColor(color);
-    scene->addItem(text);
     text->setPos(x,y);
     Item *item=new Item(nullptr,text);
     AllItem<<item;
+    scene->addItem(text);
     return item;
 }
 
@@ -214,38 +214,47 @@ void Widget::RemoveMusic(MusicPlayer *player)
 void Widget::StopMusic(MusicPlayer *player)
 {player->stop();}
 
-EasyThread* Widget::StartThread(String slotfun,ParametersStru par,bool track)
+CaluThread* Widget::StartThread(String slotfun,ParametersStru par,bool track)
 {
-    if(track)
+    ExpansionSlot slot=FindExpansionSlot(slotfun);
+    if(slot.isEmpty())
     {
-        EasyThread *thread=new EasyThread(slotfun,par);
-        thread->start();
-        return thread;
-    }
-    else
-    {
+        //非扩展情况
+        if(track)
+        {
+            CaluThread *thread=new CaluThread(slotfun,par);
+            thread->start();
+            return thread;
+        }
         RunFun(slotfun,par);
         return nullptr;
     }
+    //扩展情况
+    //即使是非追踪，调用扩展槽还是需要CaluThread，区别只是是否自动回收
+    CaluThread *thread=new CaluThread(slot,par,track);
+    thread->start();
+    if(track)
+    {return thread;}
+    return nullptr;
 }
 
-void Widget::RemoveThread(EasyThread *thread)
+void Widget::RemoveThread(CaluThread *thread)
 {
-    thread->terminate();
+    thread->quit();
     thread->wait();
-    delete thread;
+    thread->playFinished();
 }
 
 bool Widget::ItemColliding(Item* item1,Item* item2)
 {return isColliding(item1->ItemPointer,item2->ItemPointer);}
 
-VideoPlayer* Widget::AddVideo(String path,int Volume,int x,int y,int width,int heigh,bool cycle,String signfun,GraphicsScene *scene)
+VideoPlayer* Widget::AddVideo(String path,int Volume,int x,int y,int width,int heigh,bool cycle,String signfun,ParametersStru par,GraphicsScene *scene)
 {
    if(x==-1)
    {x=MainView->viewX-(WindowsWidth/2);}
    if(y==-1)
    {y=MainView->viewY-(WindowsHeigh/2);}
-   VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,scene);
+   VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,par,scene);
    video->start();
    return video;
 
@@ -991,3 +1000,9 @@ void Widget::RemoveAllGestureArea()
     {delete i;}
     this->AllGestureArea.clear();
 }
+
+void Widget::AddExpansionSlot(String slotname, ParSlot slot)
+{AllExpansionSlot<<ExpansionSlot(slot,slotname);}
+
+void Widget::AddExpansionSlot(String slotname, VoidSlot slot)
+{AllExpansionSlot<<ExpansionSlot(slot,slotname);}
