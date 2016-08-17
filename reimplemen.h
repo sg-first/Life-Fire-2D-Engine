@@ -2,6 +2,7 @@
 #pragma once
 #include "basics.h"
 #include "gesture.h"
+#include "configure.h"
 
 class Widget;
 class SC;
@@ -147,3 +148,14 @@ struct InputEvent
     ParametersStru ReleasePar;
     String ReleaseFun;
 };
+
+
+#ifdef AutoIsColliding
+struct Collision
+{
+    Item *item1;
+    Item *item2;
+    String slot;
+    ParametersStru par;
+};
+#endif

@@ -7,7 +7,6 @@ class GraphicsView;
 class VideoPlayer;
 class CaluThread;
 class ParametersStru;
-class JSParStru;
 class MusicPlayer;
 
 typedef QPixmap Pixmap;

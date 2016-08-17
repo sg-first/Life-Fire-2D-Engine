@@ -4,6 +4,7 @@
 #include "reimplemen.h"
 #include "AES.h"
 #include "animation.h"
+#include "configure.h"
 
 namespace Ui {class Widget;}
 
@@ -16,6 +17,7 @@ public:
     ~Widget();
 
     QList<Item*> AllItem;
+
     //引擎行为（实现于enginebeh）
     Q_INVOKABLE Pixmap* LoadPixmap(String PicPath);
     Q_INVOKABLE RGBColor LoadRGBColor(int R,int G,int B);
@@ -147,10 +149,19 @@ public:
     Q_INVOKABLE void RemoveAllGestureArea();
     Q_INVOKABLE void AddExpansionSlot(String slotname, ParSlot slot);
     Q_INVOKABLE void AddExpansionSlot(String slotname, VoidSlot slot);
+    #ifdef AutoIsColliding
+    Q_INVOKABLE void AddAutoCollision(Item *item1,Item *item2,String slotfun,ParametersStru par=NULL_ParametersStru);
+    Q_INVOKABLE void RemoveAutoCollision(Item *item1,Item *item2);
+    Q_INVOKABLE void RemoveAllAutoCollision();
+    #endif
+
 
     void PassMousePressEvent(Pos point);
     void PassMouseReleaseEvent(Pos point);
     void PassMouseMoveEvent(QMouseEvent *e);
+    #ifdef AutoIsColliding
+    void itemMoveEvent();
+    #endif
 
 protected:
     void keyPressEvent(QKeyEvent *e);
@@ -165,9 +176,12 @@ private:
     void Initialization();
     bool isColliding(QGraphicsItem* RItem1,QGraphicsItem* RItem2);
     Pixmap* mirrorAndChange(Pixmap *pixmap, bool mirrorMode);
-    //关于输入事件
+    //关于事件
     QList<InputEvent> AllEvent;
     QList<GestureArea*> AllGestureArea;
+    #ifdef AutoIsColliding
+    QList<Collision> AllAutoCollision;
+    #endif
     //关于IO优化
     QFile *PreQFile=nullptr;
     String PreQFileName;

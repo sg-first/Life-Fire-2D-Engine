@@ -132,7 +132,12 @@ void Widget::BlurRadiusItem(Item* item, float set)
 }*/
 
 void Widget::MoveItem(Item* item, int x, int y)
-{item->ItemPointer->setPos(x,y);}
+{
+    item->ItemPointer->setPos(x,y);
+    #ifdef AutoIsColliding
+    itemMoveEvent();
+    #endif
+}
 
 void Widget::SetOpacityItem(Item* item, float set)
 {item->ItemPointer->setOpacity(set);}
@@ -147,7 +152,7 @@ void Widget::SetRGBColorItem(Item* item,int R,int G,int B)
 
 void Widget::ClearScene(GraphicsScene *scene)
 {
-   for(auto i:AllItem)
+   for(Item* i:AllItem)
    {RemoveItem(i);}
    scene->clear();//这句目测没用
 }
@@ -468,7 +473,7 @@ Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time
     sc->pi=item;
     sc->cycle=cycle;
 
-    for(auto i:allpixmap)
+    for(Pixmap* i:allpixmap)
     {sc->pixmap.push_back(*i);}
     sc->start(Picture);
     return ritem;
@@ -501,7 +506,7 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int 
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
     sc->cycle=cycle;//定义是否循环连续播图
 
-    for(auto i:allpixmap)//遍历容器中的所有图片
+    for(Pixmap* i:allpixmap)//遍历容器中的所有图片
     {sc->pixmap.push_back(*i);}//将所有图片压入SC类中储存图片的成员中
     sc->start(Picture);
 }
@@ -875,11 +880,11 @@ void Widget::AddGesture(int mouseX, int mouseY, int fmouseX, int fmouseY, LocusF
 
 void Widget::AddGesture(int mouseX, int mouseY, int fmouseX, int fmouseY, Gesture *gesture)
 {
-    for(GestureArea* i:this->AllGestureArea)
+    for(GestureArea* i:AllGestureArea)
     {
         if(i->mouseX==mouseX&&i->mouseY==mouseY&&i->fmouseX==fmouseX&&i->fmouseX==fmouseX)
         {
-            i->allGesture<<gesture;
+            i->allGesture<<gesture; //一个区域拥有很多手势
             return;
         }
     }
@@ -891,22 +896,23 @@ void Widget::AddGesture(int mouseX, int mouseY, int fmouseX, int fmouseY, Gestur
 
 void Widget::RemoveGesture(Gesture *gesture)
 {
-    for(GestureArea* i:this->AllGestureArea)
+    //注意，这个函数对比地址删除。仅在保存创建的手势指针时才管用，再实例化一个一样的手势删除没用
+    for(GestureArea* i:AllGestureArea)
     {i->allGesture.removeAll(gesture);}
     delete gesture;
 }
 
 void Widget::RemoveGestureArea(int mouseX, int mouseY, int fmouseX, int fmouseY)
 {
-    for(int i=0;i<this->AllGestureArea.length();i++)
+    for(int i=0;i<AllGestureArea.length();i++)
     {
-        if(this->AllGestureArea[i]->mouseX==mouseX&&
-            this->AllGestureArea[i]->mouseY==mouseY&&
-            this->AllGestureArea[i]->fmouseX==fmouseX&&
-            this->AllGestureArea[i]->fmouseX==fmouseY)
+        if(AllGestureArea[i]->mouseX==mouseX&&
+            AllGestureArea[i]->mouseY==mouseY&&
+            AllGestureArea[i]->fmouseX==fmouseX&&
+            AllGestureArea[i]->fmouseX==fmouseY)
         {
-            delete this->AllGestureArea[i];
-            this->AllGestureArea.removeAt(i);
+            delete AllGestureArea[i];
+            AllGestureArea.removeAt(i);
             return;
         }
     }
@@ -914,7 +920,7 @@ void Widget::RemoveGestureArea(int mouseX, int mouseY, int fmouseX, int fmouseY)
 
 void Widget::RemoveAllGestureArea()
 {
-    for(GestureArea* i:this->AllGestureArea)
+    for(GestureArea* i:AllGestureArea)
     {delete i;}
     this->AllGestureArea.clear();
 }
@@ -924,3 +930,34 @@ void Widget::AddExpansionSlot(String slotname, ParSlot slot)
 
 void Widget::AddExpansionSlot(String slotname, VoidSlot slot)
 {AllExpansionSlot<<new ExpansionSlot(slot,slotname);}
+
+#ifdef AutoIsColliding
+void Widget::AddAutoCollision(Item *item1, Item *item2, String slotfun, ParametersStru par)
+{
+    for(Collision &co:AllAutoCollision)
+    {
+        if(co.item1==item1&&co.item2==item2)
+        {
+            co.slot=slotfun;
+            co.par=par;
+            return;
+        }
+    }
+    AllAutoCollision<<Collision{item1,item2,slotfun,par};
+}
+
+void Widget::RemoveAutoCollision(Item *item1, Item *item2)
+{
+    for(int i=0;i<AllAutoCollision.length();i++)
+    {
+        if(AllAutoCollision[i].item1==item1&&AllAutoCollision[i].item2==item2)
+        {
+            AllAutoCollision.removeAt(i);
+            return;
+        }
+    }
+}
+
+void Widget::RemoveAllAutoCollision()
+{AllAutoCollision.clear();}
+#endif

@@ -156,6 +156,9 @@ void SC::SlowChange()
                 SCCurrentModulus scc=scfun(temp);
                 item->ItemPointer->setPos(scc.CurrentModulus,scc.CurrentModulus2);
             }
+            #ifdef AutoIsColliding
+            s->itemMoveEvent();
+            #endif
             isend();
             break;
         }
