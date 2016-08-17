@@ -1,6 +1,6 @@
 //-----本文件为手势类-----
 #pragma once
-#include "NewType.h"
+#include "basics.h"
 
 typedef QPoint Pos;
 typedef float(*LocusFunc)(int);

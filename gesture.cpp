@@ -1,3 +1,4 @@
+//-----本文件为手势类的实现部分-----
 #include "gesture.h"
 
 #define isLocusFunc this->locus!=nullptr

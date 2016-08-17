@@ -1,5 +1,4 @@
 //-----本文件无需修改-----
-#include "widget.h"
 #include "maincall.h"
 #include <QApplication>
 

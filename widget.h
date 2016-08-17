@@ -1,10 +1,9 @@
 //-----本文件十分重要，它是窗口类、引擎API以及其它自定义类（类型）的声明区域-----
 #pragma once
-#include "head.h"
-#include "GlobalVar.h"
-#include "NewType.h"
+#include "globalVar.h"
+#include "reimplemen.h"
 #include "AES.h"
-#include "gesture.h"
+#include "animation.h"
 
 namespace Ui {class Widget;}
 

@@ -1,6 +1,6 @@
 //-----本文件为AES加密算法的实现部分-----
 #include "AES.h"
-#include "string"
+#include <string>
 
 //AES类实现
 AES::AES(unsigned char* key)

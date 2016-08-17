@@ -14,7 +14,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         widget.cpp \
-    NewType.cpp \
     maincall.cpp \
     js.cpp \
     AES.cpp \
@@ -22,19 +21,23 @@ SOURCES += main.cpp\
     EngineBeh.cpp \
     InputEvent.cpp \
     gesture.cpp \
-    animation.cpp
+    animation.cpp \
+    basics.cpp \
+    reimplemen.cpp
 
 HEADERS  += widget.h \
     head.h \
-    GlobalVar.h \
     maincall.h \
     library.h \
-    NewType.h \
     AES.h \
     js.h \
     macro.h \
     configure.h \
-    gesture.h
+    gesture.h \
+    basics.h \
+    globalVar.h \
+    reimplemen.h \
+    animation.h
 
 FORMS    += widget.ui
 QT += core gui

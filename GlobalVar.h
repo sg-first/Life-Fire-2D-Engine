@@ -1,7 +1,6 @@
 //-----本文件作为一些全局变量的储存，它们会被描述游戏中的各种信息-----
 #pragma once
-#include "head.h"
-#include "NewType.h"
+#include "basics.h"
 
 //-引擎所使用的信号变量类
 class LFEvent : public QObject

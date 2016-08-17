@@ -1,6 +1,5 @@
 //-----本文件是关于maincall类中JS操作的实现-----
 #include "maincall.h"
-#include "NewType.h"
 
 QScriptEngine* CreatEngine()
 {

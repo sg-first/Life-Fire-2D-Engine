@@ -1,6 +1,21 @@
 //-----本文件是键盘事件的响应-----
 #include "widget.h"
 
+void Widget::PassMousePressEvent(Pos point)
+{
+    QMouseEvent e(QEvent::Type::MouseButtonPress,point,Qt::MouseButton::LeftButton,nullptr,nullptr);
+    this->mousePressEvent(&e);
+}
+
+void Widget::PassMouseReleaseEvent(Pos point)
+{
+    QMouseEvent e(QEvent::Type::MouseButtonRelease,point,Qt::MouseButton::LeftButton,nullptr,nullptr);
+    this->mouseReleaseEvent(&e);
+}
+
+void Widget::PassMouseMoveEvent(QMouseEvent *e)
+{this->mouseMoveEvent(e);}
+
 void Widget::keyPressEvent(QKeyEvent *e)//键盘事件响应
 {
     for(InputEvent i:AllEvent)
