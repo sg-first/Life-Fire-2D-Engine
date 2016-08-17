@@ -1,7 +1,7 @@
 //-----本文件是对于NewType.h中定义的新类型的成员函数的实现部分-----
 #include "widget.h"
 
-QList<ExpansionSlot> AllExpansionSlot;
+QList<ExpansionSlot*> AllExpansionSlot;
 
 //MyItem
 void MyItem::SetButton(Pixmap up, Pixmap down, String Music,int volume)
@@ -224,7 +224,7 @@ void CaluThread::run()
         //扩展事件
         if(!this->track) //检查是否是非追踪调用
         {QObject::connect(this,SIGNAL(finished()),this,SLOT(playFinished()));} //线程函数执行完毕立刻销毁
-        this->exfun.call(par);
+        this->exfun->call(par);
     }
     return;
 }
@@ -337,22 +337,15 @@ void ExpansionSlot::call(ParametersStru par)
     this->voidslot();
 }
 
-bool ExpansionSlot::isEmpty()
-{
-    if(this->parslot==nullptr&&this->slotname==nullptr)
-    {return true;}
-    return false;
-}
-
 //独立函数
-ExpansionSlot FindExpansionSlot(String slotfun)
+ExpansionSlot* FindExpansionSlot(String slotfun)
 {
-    for(ExpansionSlot slot:AllExpansionSlot)
+    for(ExpansionSlot *slot:AllExpansionSlot)
     {
-        if(slot.getslotname()==slotfun) //确定找到
+        if(slot->getslotname()==slotfun) //确定找到
         {return slot;}
     }
-    return ExpansionSlot();
+    return nullptr;
 }
 
 void RunFun(String slotfun, ParametersStru par, ExecutionMode CT, bool expansion)
@@ -360,8 +353,8 @@ void RunFun(String slotfun, ParametersStru par, ExecutionMode CT, bool expansion
     if(expansion) //注意，不存在同名的槽，所以能找到就直接返回
     {
         //扩展调用
-        ExpansionSlot slot=FindExpansionSlot(slotfun);
-        if(!slot.isEmpty())
+        ExpansionSlot *slot=FindExpansionSlot(slotfun);
+        if(slot!=nullptr)
         {
             if(CT==asynchronous) //如果是异步
             {
@@ -370,7 +363,7 @@ void RunFun(String slotfun, ParametersStru par, ExecutionMode CT, bool expansion
                 thread->start();
             }
             else
-            {slot.call(par);} //同步直接执行就好了
+            {slot->call(par);} //同步直接执行就好了
             return;
         }
     }

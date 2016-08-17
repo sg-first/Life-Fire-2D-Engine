@@ -18,9 +18,9 @@ void SC::changepixmap()
             this->over=1;
             if(signfun!=NULL_String)
             {
-              QByteArray ba = signfun.toLatin1();
-              const char *function = ba.data();
-              QMetaObject::invokeMethod(lfevent,function);
+                QByteArray ba = signfun.toLatin1();
+                const char *function = ba.data();
+                QMetaObject::invokeMethod(lfevent,function);
             }
             return;
         }
@@ -112,8 +112,11 @@ void SC::start(int choose)
 
 void SC::isend()
 {
-    if(temp==times || temp==times+1 || temp==times-1)
-        over=1;
+    if(times!=-1)
+    {
+        if(temp==times || temp==times+1 || temp==times-1) //temp实际上是记录目前时间的
+        {over=1;}
+    }
 }
 
 void SC::SlowChange()
@@ -122,103 +125,88 @@ void SC::SlowChange()
     {
         switch(choose)
         {
-        case 0:
+        case Rotation:
         {
             temp+=2;
+
             if(!isfunction)
-            {gr->setRotation(CurrentModulus+=temp1);}
+            {item->ItemPointer->setRotation(CurrentModulus+=temp1);}
             else
-            {gr->setRotation(scfun(temp).CurrentModulus);}
-            gr->rotation();
+            {item->ItemPointer->setRotation(scfun(temp).CurrentModulus);}
             isend();
             break;
         }
-        case 1:
+        case Scale:
         {
             temp+=2;
             if(!isfunction)
-            {gr->setScale(CurrentModulus+=temp1);}
+            {item->ItemPointer->setScale(CurrentModulus+=temp1);}
             else
-            {gr->setScale(scfun(temp).CurrentModulus);}
-            gr->scale();
+            {item->ItemPointer->setScale(scfun(temp).CurrentModulus);}
             isend();
             break;
         }
-        case 2:
+        case Move:
         {
             temp+=2;
             if(!isfunction)
-            {gr->moveBy(temp1,temp2);}
+            {item->ItemPointer->moveBy(temp1,temp2);}
             else
             {
                 SCCurrentModulus scc=scfun(temp);
-                gr->setPos(scc.CurrentModulus,scc.CurrentModulus2);
+                item->ItemPointer->setPos(scc.CurrentModulus,scc.CurrentModulus2);
             }
             isend();
             break;
         }
-        case 3:
+        case BlurRadius:
         {
             temp+=3;
             if(!isfunction)
-            {Effect->setBlurRadius(CurrentModulus+=temp1);}
+            {s->BlurRadiusItem(item,CurrentModulus+=temp1);}
             else
-            {Effect->setBlurRadius(scfun(temp).CurrentModulus);}
-            gr->setGraphicsEffect(Effect);
+            {s->BlurRadiusItem(item,scfun(temp).CurrentModulus);}
             isend();
             break;
         }
-        case 4:
+        case Opacity:
         {
             temp+=2;
             if(!isfunction)
-            {gr->setOpacity(CurrentModulus+=temp1);}
+            {item->ItemPointer->setOpacity(CurrentModulus+=temp1);}
             else
-            {gr->setOpacity(scfun(temp).CurrentModulus);}
+            {item->ItemPointer->setOpacity(scfun(temp).CurrentModulus);}
             isend();
             break;
         }
-        case 5:
+        case Color:
         {
             temp+=2;
             if(!isfunction)
-            {co->setColor(QColor(CurrentModulus+=temp1,CurrentModulus2+=temp2,CurrentModulus3+=temp3));}
+            {s->SetRGBColorItem(item,CurrentModulus+=temp1,CurrentModulus2+=temp2,CurrentModulus3+=temp3);}
             else
             {
                 SCCurrentModulus scc=scfun(temp);
-                co->setColor(QColor(scc.CurrentModulus,scc.CurrentModulus2,scc.CurrentModulus3));
+                s->SetRGBColorItem(item,scc.CurrentModulus,scc.CurrentModulus2,scc.CurrentModulus3);
             }
-            gr->setGraphicsEffect(co);
             isend();
             break;
         }
-        case 6:
+        case Picture:
         {
             changepixmap();
             break;
         }
-        case 7:
+        case Shear:
         {
             temp+=2;
-            QTransform tf;
             if(!isfunction)
-            {
-                float shearX;
-                float shearY;
-                shearX=CurrentModulus+=temp1;
-                shearY=CurrentModulus2+=temp2;
-                tf.shear(shearX,shearY);
-                num->ShearX=shearX;
-                num->ShearY=shearY;
-            }
+            {s->ShearItem(item,CurrentModulus+=temp1,CurrentModulus2+=temp2);}
             else
             {
                 SCCurrentModulus scc=scfun(temp);
-                tf.shear(scc.CurrentModulus,scc.CurrentModulus2);
-                num->ShearX=scc.CurrentModulus;
-                num->ShearY=scc.CurrentModulus2;
+                s->ShearItem(item,scc.CurrentModulus,scc.CurrentModulus2);
             }
-            gr->setTransform(tf);
             isend();
             break;
         }
@@ -239,15 +227,15 @@ void SC::SlowChange()
     }
     if(over)
     {
-       if(signfun!=NULL_String)
-       {
-         QByteArray ba = signfun.toLatin1();
-         const char *function = ba.data();
-         QMetaObject::invokeMethod(lfevent,function);
-       }
-       if(choose!=20)
-       {num->scPointer[choose]=nullptr;}
-       delete timer;
-       delete this;
+        if(signfun!=NULL_String)
+        {
+            QByteArray ba = signfun.toLatin1();
+            const char *function = ba.data();
+            QMetaObject::invokeMethod(lfevent,function);
+        }
+        if(choose!=20)
+        {item->scPointer[choose]=nullptr;}
+        delete timer;
+        delete this;
     }
 }

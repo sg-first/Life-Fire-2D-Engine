@@ -124,12 +124,12 @@ void Widget::BlurRadiusItem(Item* item, float set)
    item->ItemPointer->setGraphicsEffect(item->Blur);
 }
 
-void Widget::DropShadowItem(Item* item, float shadowX,float shadowY)//还没写完
+/*void Widget::DropShadowItem(Item* item, float shadowX,float shadowY)//还没写完
 {
     QGraphicsDropShadowEffect *e2 = new QGraphicsDropShadowEffect(this);
     e2->setOffset(shadowX,shadowY);
     item->ItemPointer->setGraphicsEffect(e2);
-}
+}*/
 
 void Widget::MoveItem(Item* item, int x, int y)
 {item->ItemPointer->setPos(x,y);}
@@ -216,8 +216,8 @@ void Widget::StopMusic(MusicPlayer *player)
 
 CaluThread* Widget::StartThread(String slotfun,ParametersStru par,bool track)
 {
-    ExpansionSlot slot=FindExpansionSlot(slotfun);
-    if(slot.isEmpty())
+    ExpansionSlot *slot=FindExpansionSlot(slotfun);
+    if(slot==nullptr)
     {
         //非扩展情况
         if(track)
@@ -281,181 +281,124 @@ void Widget::RemoveVideo(VideoPlayer *video)
 void Widget::StopVideo(VideoPlayer *video)
 {video->mediaPlayer->stop();}
 
-void Widget::AnimationRotationItem(Item* item, float set,int times,String signfun)
+void Widget::AnimationRotationItem(Item* item, float set,int time,String signfun)
 {
    EndAnimation(item,Rotation);
-   QGraphicsItem* gr=item->ItemPointer;
-   float CurrentModulus=gr->rotation();
-   SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[Rotation]=s;
-   s->gr=gr;
-   s->signfun=signfun;
-   s->num=item;
-   s->start(Rotation);
+   SC *sc=new SC(GetItemRotation(item),set,time,item,signfun,this);
+   item->scPointer[Rotation]=sc;
+   sc->start(Rotation);
 }
 
-void Widget::AnimationRotationItem(Item *item, SCFun scfun, int times, String signfun)
+void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Rotation);
-    SC *s=new SC(0,0,times);
-    item->scPointer[Rotation]=s;
-    s->gr=item->ItemPointer;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->num=item;
-    s->start(Rotation);
+    SC *sc=new SC(0,0,time,item,signfun,this);
+    item->scPointer[Rotation]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(Rotation);
 }
 
-void Widget::AnimationScaleItem(Item* item, float set,int times,String signfun)
+void Widget::AnimationScaleItem(Item* item, float set,int time,String signfun)
 {
    EndAnimation(item,Scale);
-   QGraphicsItem* gr=item->ItemPointer;
-   float CurrentModulus=gr->scale();
-   SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[Scale]=s;
-   s->gr=item->ItemPointer;
-   s->signfun=signfun;
-   s->num=item;
-   s->start(Scale);
+   SC *sc=new SC(GetItemScale(item),set,time,item,signfun,this);
+   item->scPointer[Scale]=sc;
+   sc->start(Scale);
 }
 
-void Widget::AnimationScaleItem(Item *item, SCFun scfun, int times, String signfun)
+void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Scale);
-    SC *s=new SC(0,0,times);
-    item->scPointer[Scale]=s;
-    s->gr=item->ItemPointer;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->num=item;
-    s->start(Scale);
+    SC *sc=new SC(0,0,time,item,signfun,this);
+    item->scPointer[Scale]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(Scale);
 }
 
-void Widget::AnimationBlurRadiusItem(Item* item, float set, int times,String signfun)
+void Widget::AnimationBlurRadiusItem(Item* item, float set, int time,String signfun)
 {
    EndAnimation(item,BlurRadius);
-   float CurrentModulus;//当前系数
-   if(item->Blur==nullptr)
-   {
-       CurrentModulus=0;
-       item->Blur=new QGraphicsBlurEffect(this);
-   }
-   else
-   {CurrentModulus=item->Blur->blurRadius();}
-   SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[BlurRadius]=s;
-   s->gr=item->ItemPointer;
-   s->Effect=item->Blur;
-   s->signfun=signfun;
-   s->num=item;
-   s->start(BlurRadius);
+   SC *sc=new SC(GetItemBlur(item),set,time,item,signfun,this);
+   item->scPointer[BlurRadius]=sc;
+   sc->start(BlurRadius);
 }
 
-void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int times, String signfun)
+void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,BlurRadius);
     if(item->Blur==nullptr)
     {item->Blur=new QGraphicsBlurEffect(this);}
-    SC *s=new SC(0,0,times);
-    item->scPointer[BlurRadius]=s;
-    s->gr=item->ItemPointer;
-    s->Effect=item->Blur;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->num=item;
-    s->start(BlurRadius);
+    SC *sc=new SC(0,0,time,item,signfun,this);
+    item->scPointer[BlurRadius]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(BlurRadius);
 }
 
-void Widget::AnimationSetOpacityItem(Item* item, float set, int times,String signfun)
+void Widget::AnimationSetOpacityItem(Item* item, float set, int time,String signfun)
 {
    EndAnimation(item,Opacity);
-   QGraphicsItem* gr=item->ItemPointer;
-   float CurrentModulus=gr->opacity();
-   SC *s=new SC(CurrentModulus,set,times);
-   item->scPointer[Opacity]=s;
-   s->gr=gr;
-   s->signfun=signfun;
-   s->num=item;
-   s->start(Opacity);
+   SC *sc=new SC(GetItemOpacity(item),set,time,item,signfun,this);
+   item->scPointer[Opacity]=sc;
+   sc->start(Opacity);
 }
 
-void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int times, String signfun)
+void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Opacity);
-    SC *s=new SC(0,0,times);
-    item->scPointer[Opacity]=s;
-    s->gr=item->ItemPointer;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->num=item;
-    s->start(Opacity);
+    SC *sc=new SC(0,0,time,item,signfun,this);
+    item->scPointer[Opacity]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(Opacity);
 }
 
 void Widget::AnimationMoveItem(Item* item,int x,int y,int time,String signfun)
 {
    EndAnimation(item,Move);
-   QGraphicsItem* gr=item->ItemPointer;
-   SC *s=new SC(gr->x(),gr->y(),x,y,time);
-   item->scPointer[Move]=s;
-   s->gr=gr;
-   s->signfun=signfun;
-   s->num=item;
-   s->start(Move);
+   SC *sc=new SC(GetItemX(item),GetItemY(item),x,y,time,item,signfun,this);
+   item->scPointer[Move]=sc;
+   sc->start(Move);
 }
 
 void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Move);
-    SC *s=new SC(0,0,0,0,time);
-    item->scPointer[Move]=s;
-    s->gr=item->ItemPointer;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->num=item;
-    s->start(Move);
+    SC *sc=new SC(0,0,0,0,time,item,signfun,this);
+    item->scPointer[Move]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(Move);
 }
 
 void Widget::AnimationSetViewCenter(GraphicsView *view, int x, int y, int time, String signfun)
 {
-    SC *s=new SC(view->viewX,view->viewY,x,y,time);
-    s->gv=view;
-    s->signfun=signfun;
-    s->start(20);
+    SC *sc=new SC(view->viewX,view->viewY,x,y,time,view,signfun,this);
+    sc->start(20);
 }
 
 void Widget::AnimationSetViewCenter(GraphicsView *view, SCFun scfun, int time, String signfun)
 {
-    SC *s=new SC(0,0,0,0,time);
-    s->gv=view;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->start(20);
+    SC *sc=new SC(0,0,0,0,time,view,signfun,this);
+    sc->UesSCFun(scfun);
+    sc->start(20);
 }
 
 void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, String signfun)
 {
    EndAnimation(item,Shear);
-   SC *s=new SC(item->ShearX,item->ShearY,fx,fy,time);
-   item->scPointer[Shear]=s;
-   s->gr=item->ItemPointer;
-   s->signfun=signfun;
-   s->num=item;
-   s->start(Shear);
+   SC *sc=new SC(item->ShearX,item->ShearY,fx,fy,time,item,signfun,this);
+   item->scPointer[Shear]=sc;
+   sc->start(Shear);
 }
 
 void Widget::AnimationShearItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Shear);
-    SC *s=new SC(0,0,0,0,time);
-    item->scPointer[Shear]=s;
-    s->gr=item->ItemPointer;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->num=item;
-    s->start(Shear);
+    SC *sc=new SC(0,0,0,0,time,item,signfun,this);
+    item->scPointer[Shear]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(Shear);
 }
 
-void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, int times,String signfun)
+void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, int time,String signfun)
 {
    EndAnimation(item,Color);
    //当前系数
@@ -477,26 +420,18 @@ void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, int times
         CurrentModulus2=color.green();
         CurrentModulus3=color.blue();
    }
-   SC *s=new SC(CurrentModulus,CurrentModulus2,CurrentModulus3,R,G,B,times);
-   item->scPointer[Color]=s;
-   s->gr=item->ItemPointer;
-   s->co=item->Color;
-   s->signfun=signfun;
-   s->num=item;
-   s->start(Color);
+   SC *sc=new SC(CurrentModulus,CurrentModulus2,CurrentModulus3,R,G,B,time,item,signfun,this);
+   item->scPointer[Color]=sc;
+   sc->start(Color);
 }
 
-void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, int times, String signfun)
+void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, int time, String signfun)
 {
     EndAnimation(item,Color);
-    SC *s=new SC(0,0,0,0,0,0,times);
-    item->scPointer[Color]=s;
-    s->gr=item->ItemPointer;
-    s->co=item->Color;
-    s->signfun=signfun;
-    s->UesSCFun(scfun);
-    s->num=item;
-    s->start(Color);
+    SC *sc=new SC(0,0,0,0,0,0,time,item,signfun,this);
+    item->scPointer[Color]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(Color);
 }
 
 Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,String signfun,bool cycle,GraphicsScene *scene)
@@ -508,18 +443,14 @@ Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,Strin
    Item *item=new Item(temp);
    AllItem<<item;
 
-   SC *sc=new SC(0,0,time);//创建SC实例
+   SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例，这里直接套用双系数的构造函数
    item->scPointer[Picture]=sc;
    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
    sc->cycle=cycle;//定义是否循环连续播图
 
-   if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
-   {sc->signfun=signfun;}
-
    for(QVector<String>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
    {sc->pixmap.push_back(Pixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
    sc->start(Picture);
-   sc->num=item;
    return item;
 }
 
@@ -532,18 +463,14 @@ Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time
     item->setPos(x,y);
     AllItem<<ritem;
 
-    SC *sc=new SC(0,0,time);
+    SC *sc=new SC(0,0,time,ritem,signfun,this);
     ritem->scPointer[Picture]=sc;
     sc->pi=item;
     sc->cycle=cycle;
 
-    if(!cycle)
-    {sc->signfun=signfun;}
-
     for(auto i:allpixmap)
     {sc->pixmap.push_back(*i);}
     sc->start(Picture);
-    sc->num=ritem;
     return ritem;
 }
 
@@ -553,18 +480,14 @@ void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,int time
     EndAnimation(item,Picture);
     MyItem *temp=item->PixmapItemPoniter;
     temp->setPixmap(Pixmap(allpixmap.at(0)));//变更当前图片为图集的第一帧
-    SC *sc=new SC(0,0,time);//创建SC实例
+    SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例
     item->scPointer[Picture]=sc;
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
     sc->cycle=cycle;//定义是否循环连续播图
 
-    if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
-    {sc->signfun=signfun;}
-
     for(QVector<String>::iterator iter=allpixmap.begin();iter!=allpixmap.end();++iter)//遍历容器中的所有图片
     {sc->pixmap.push_back(Pixmap(*iter));}//将所有图片压入SC类中储存图片的成员中
     sc->start(Picture);
-    sc->num=item;
 }
 
 void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int time, String signfun, bool cycle)
@@ -573,18 +496,14 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int 
     EndAnimation(item,Picture);
     MyItem *temp=item->PixmapItemPoniter;
     temp->setPixmap(*allpixmap.at(0));//变更当前图片为图集的第一帧
-    SC *sc=new SC(0,0,time);//创建SC实例
+    SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例
     item->scPointer[Picture]=sc;
     sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
     sc->cycle=cycle;//定义是否循环连续播图
 
-    if(!cycle)//若不循环（默认是循环，true），搬移一下播放完成要发出的信号
-    {sc->signfun=signfun;}
-
     for(auto i:allpixmap)//遍历容器中的所有图片
     {sc->pixmap.push_back(*i);}//将所有图片压入SC类中储存图片的成员中
     sc->start(Picture);
-    sc->num=item;
 }
 
 int Widget::GetItemX(Item* item)
@@ -800,12 +719,11 @@ void Widget::RemoveFile(String path)
 
 void Widget::ShearItem(Item* item,float X,float Y)
 {
-   QTransform *tranform=new QTransform;
-   tranform->shear(X,Y);
-   item->ItemPointer->setTransform(*tranform);
+   QTransform tranform;
+   tranform.shear(X,Y);
+   item->ItemPointer->setTransform(tranform);
    item->ShearX=X;
    item->ShearY=Y;
-   delete tranform;
 }
 
 float Widget::GetItemShearX(Item* item)
@@ -1002,7 +920,7 @@ void Widget::RemoveAllGestureArea()
 }
 
 void Widget::AddExpansionSlot(String slotname, ParSlot slot)
-{AllExpansionSlot<<ExpansionSlot(slot,slotname);}
+{AllExpansionSlot<<new ExpansionSlot(slot,slotname);}
 
 void Widget::AddExpansionSlot(String slotname, VoidSlot slot)
-{AllExpansionSlot<<ExpansionSlot(slot,slotname);}
+{AllExpansionSlot<<new ExpansionSlot(slot,slotname);}
