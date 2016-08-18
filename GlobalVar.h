@@ -1,6 +1,7 @@
 //-----本文件作为一些全局变量的储存，它们会被描述游戏中的各种信息-----
 #pragma once
 #include "basics.h"
+#include "configure.h"
 
 //-引擎所使用的信号变量类
 class LFEvent : public QObject
@@ -17,7 +18,7 @@ signals:
 
 };
 
-//-引擎自带的全局常量
+//-引擎自带的全局常量，可以在这里调节一些基础设定
 static const QString title="Life-Fire Engine";//窗口标题
 static const int WindowsWidth=800;//窗口宽
 static const int WindowsHeigh=600;//窗口高
@@ -30,4 +31,8 @@ extern GraphicsScene *MainScene;//声明舞台
 extern GraphicsView *MainView;//声明视图
 extern QList<ExpansionSlot*> AllExpansionSlot;//所有扩展槽
 extern JSVM *MainJSVM;
+#ifdef SelfAdaption
+extern float adaptiveRatioX;
+extern float adaptiveRatioY;
+#endif
 //-用户自行添加的全局变量

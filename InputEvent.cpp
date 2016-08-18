@@ -33,7 +33,7 @@ void Widget::mousePressEvent(QMouseEvent *e)//鼠标事件响应
 {
     for(InputEvent &i:AllEvent)
     {
-        if(i.MouseX<=e->x()&&i.MouseY<=e->y()&&i.fMouseY>=e->y()&&i.fMouseX>=e->x())
+        if(i.mouseX<=e->x()&&i.mouseY<=e->y()&&i.fmouseY>=e->y()&&i.fmouseX>=e->x())
         {RunFun(i.PressFun,i.PressPar);}
     }
 }
@@ -54,7 +54,7 @@ void Widget::mouseReleaseEvent(QMouseEvent *e)
 {
     for(InputEvent &i:AllEvent)
     {
-        if(i.MouseX<=e->x()&&i.MouseY<=e->y()&&i.fMouseY>=e->y()&&i.fMouseX>=e->x())
+        if(i.mouseX<=e->x()&&i.mouseY<=e->y()&&i.fmouseY>=e->y()&&i.fmouseX>=e->x())
         {RunFun(i.ReleaseFun,i.ReleasePar);}
     }
 }

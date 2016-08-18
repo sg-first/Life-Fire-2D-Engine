@@ -104,7 +104,7 @@ public:
     Q_INVOKABLE int GetScreenHeigh();
     Q_INVOKABLE GraphicsScene* AddScene(int width,int height);
     Q_INVOKABLE void DeleteScene(GraphicsScene* scene){delete scene;}
-    Q_INVOKABLE void SetScene(GraphicsView *view=MainView, GraphicsScene *scene=MainScene, int viewX=-1, int viewY=-1);
+    Q_INVOKABLE void SetScene(GraphicsView *view=MainView, GraphicsScene *scene=MainScene, int viewX=0, int viewY=0);
     Q_INVOKABLE void SafeSleep(int time);
     Q_INVOKABLE void SetItemLayer(Item* item, int Layer);
     //collidingItems(QGraphicsItem *item)，返回一个与item碰撞的item的表，可以留着做物理引擎用
@@ -128,8 +128,8 @@ public:
     Q_INVOKABLE float GetItemShearY(Item* item);
     Q_INVOKABLE void AddKeyEvent(Qt::Key key, String PressSlotfun=NULL_String, ParametersStru PressPar=NULL_ParametersStru, String ReleaseSlotfun=NULL_String, ParametersStru ReleasePar=NULL_ParametersStru);
     Q_INVOKABLE void RemoveKeyEvent(Qt::Key key);
-    Q_INVOKABLE void AddMouseEvent(int MouseX, int MouseY, int fMouseX, int fMouseY, String PressSlotfun=NULL_String, ParametersStru PressPar=NULL_ParametersStru, String ReleaseSlotfun=NULL_String, ParametersStru ReleasePar=NULL_ParametersStru);
-    Q_INVOKABLE void RemoveMouseEvent(int MouseX, int MouseY,int fMouseX,int fMouseY);
+    Q_INVOKABLE void AddMouseEvent(int mouseX, int mouseY, int fmouseX, int fmouseY, String PressSlotfun=NULL_String, ParametersStru PressPar=NULL_ParametersStru, String ReleaseSlotfun=NULL_String, ParametersStru ReleasePar=NULL_ParametersStru);
+    Q_INVOKABLE void RemoveMouseEvent(int mouseX, int mouseY,int fmouseX,int fmouseY);
     Q_INVOKABLE void RemoveAllEvent();
     Q_INVOKABLE void WaitSign(String signfun);
     Q_INVOKABLE void HorizontallyFlip(Item *item);

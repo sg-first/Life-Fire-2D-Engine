@@ -170,6 +170,13 @@ MusicPlayer::~MusicPlayer()
 {delete cyclelist;}
 
 //GraphicsView
+GraphicsView::GraphicsView(QWidget *parent, Widget *s, int x, int y, int width, int height):QGraphicsView(parent),s(s)
+{
+    this->setGeometry(x,y,width,height);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //禁用竖直滚动条
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //禁用水平滚动条
+}
+
 void GraphicsView::Scale(int sX, int sY)
 {scale(sX,sY);}
 

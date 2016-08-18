@@ -1,11 +1,17 @@
 //-----本文件用于窗口的初始化-----
 #include "widget.h"
 #include "ui_widget.h"
+#include "configure.h"
 
 LFEvent *lfevent;
 QGraphicsScene *MainScene;
 GraphicsView *MainView;
 JSVM *MainJSVM;
+
+#ifdef SelfAdaption
+float adaptiveRatioX;
+float adaptiveRatioY;
+#endif
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -42,12 +48,21 @@ void Widget::Initialization()
     RegisterJSType(Qt::Key,"QtKey");
     RegisterJSType(Variant,"Variant");//这个我感觉有点别扭……
     RegisterJSType(JSVM*,"JSVM*");
+
+    #ifdef SelfAdaption
+    //计算自适应比
+    int scWidth=GetScreenWidth();
+    int scHeigh=GetScreenHeigh();
+    adaptiveRatioX=float(scWidth)/float(WindowsWidth);
+    adaptiveRatioY=float(scHeigh)/float(WindowsHeigh);
+    setGeometry(0,0,scWidth,scHeigh); //设置窗口参数
+    #else
     //计算窗口出现位置
     int widX=(GetScreenWidth()-WindowsWidth)/2;
     int widY=(GetScreenHeigh()-WindowsHeigh)/2;
-    //设置窗口参数
-    setGeometry(widX,widY,WindowsWidth,WindowsHeigh);
-    setFixedSize(WindowsWidth,WindowsHeigh);
+    setGeometry(widX,widY,WindowsWidth,WindowsHeigh); //设置窗口参数
+    #endif
+    setFixedSize(scWidth,scHeigh);
     setWindowTitle(title);
     MainScene=AddScene(MaximumWidth,MaximunHeigh);//初始化舞台
     //定义视图并显示

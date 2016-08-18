@@ -86,7 +86,7 @@ private slots:
 class GraphicsView : public QGraphicsView//视图类
 {
 public:
-    GraphicsView(QWidget *parent,Widget *s):QGraphicsView(parent),s(s){}
+    GraphicsView(QWidget *parent,Widget *s,int x,int y,int width,int height);
     void Scale(int sX, int sY);
     void Rotate(float set);
     void SetCenter(int x,int y);
@@ -95,6 +95,7 @@ public:
     int viewY;
 
 protected:
+    Widget *s;
     void wheelEvent(QWheelEvent *e)
     {
         e->ignore();
@@ -115,9 +116,6 @@ protected:
     }
     //void mouseReleaseEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
-
-private:
-    Widget *s;
 };
 
 
@@ -139,10 +137,10 @@ public:
 struct InputEvent
 {
     Qt::Key key;
-    int MouseX;
-    int MouseY;
-    int fMouseX;
-    int fMouseY;
+    int mouseX;
+    int mouseY;
+    int fmouseX;
+    int fmouseY;
     ParametersStru PressPar;
     String PressFun;
     ParametersStru ReleasePar;
