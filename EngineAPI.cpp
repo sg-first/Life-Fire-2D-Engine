@@ -8,6 +8,15 @@ void adaptive(int &x,int &y)
     x*=adaptiveRatioX;
     y*=adaptiveRatioY;
 }
+void adaptive(float &x,float &y)
+{
+    x*=adaptiveRatioX;
+    y*=adaptiveRatioY;
+}
+#endif
+#ifdef AdaptionScale
+void adaptive(float set)
+{set*=adaptiveRatioX;}
 #endif
 
 Pixmap* Widget::LoadPixmap(String PicPath)
@@ -31,6 +40,9 @@ Item* Widget::AddPixmapItem(String PicPath,int x,int y,String PressSlotfun,Param
     MyItem *item=new MyItem(mainpix,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
+    #ifdef AdaptionScale
+    item->setScale(adaptiveRatioX);
+    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -45,6 +57,9 @@ Item* Widget::AddPixmapItem(Pixmap *pixmap,int x,int y,String PressSlotfun,Param
     MyItem *item=new MyItem(*pixmap,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
+    #ifdef AdaptionScale
+    item->setScale(adaptiveRatioX);
+    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -64,6 +79,9 @@ Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, St
     {item->SetButton(mainpix,mainpix,PressMusic,volume);}
     item->SetEvent(NULL_String,NULL_ParametersStru,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
+    #ifdef AdaptionScale
+    item->setScale(adaptiveRatioX);
+    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -82,6 +100,9 @@ Item* Widget::AddButtonItem(Pixmap *pixmap,int x,int y,String ReleaseSlotfun, Pi
     {item->SetButton(*pixmap,*pixmap,PressMusic,volume);}
     item->SetEvent(NULL_String,NULL_ParametersStru,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
+    #ifdef AdaptionScale
+    item->setScale(adaptiveRatioX);
+    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -95,6 +116,9 @@ Item* Widget::AddTextItem(String Text, String Font, int Size, RGBColor color, in
 {
     #ifdef SelfAdaption
     adaptive(x,y);
+    #endif
+    #ifdef AdaptionScale
+    adaptive(Size);
     #endif
     QGraphicsTextItem *text=new QGraphicsTextItem(Text);
     text->setFont(QFont(Font,Size));
@@ -146,7 +170,12 @@ Item* Widget::AddLineItem(int x,int y,int fx,int fy,GraphicsScene *scene)
 }
 
 void Widget::RotationItem(Item* item, float set)
-{item->ItemPointer->setRotation(set);}
+{
+    #ifdef AdaptionScale
+    adaptive(set);
+    #endif
+    item->ItemPointer->setRotation(set);
+}
 
 void Widget::ScaleItem(Item* item, float set)
 {item->ItemPointer->setScale(set);}
@@ -346,10 +375,13 @@ void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time, String sig
 
 void Widget::AnimationScaleItem(Item* item, float set,int time,String signfun)
 {
-   EndAnimation(item,Scale);
-   SC *sc=new SC(GetItemScale(item),set,time,item,signfun,this);
-   item->scPointer[Scale]=sc;
-   sc->start(Scale);
+    EndAnimation(item,Scale);
+    #ifdef AdaptionScale
+    adaptive(set);
+    #endif
+    SC *sc=new SC(item->ItemPointer->scale(),set,time,item,signfun,this);
+    item->scPointer[Scale]=sc;
+    sc->start(Scale);
 }
 
 void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time, String signfun)
@@ -403,7 +435,7 @@ void Widget::AnimationMoveItem(Item* item,int x,int y,int time,String signfun)
     adaptive(x,y);
     #endif
     EndAnimation(item,Move);
-    SC *sc=new SC(GetItemX(item),GetItemY(item),x,y,time,item,signfun,this);
+    SC *sc=new SC(item->ItemPointer->x(),item->ItemPointer->y(),x,y,time,item,signfun,this);
     item->scPointer[Move]=sc;
     sc->start(Move);
 }
@@ -495,13 +527,15 @@ Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,Strin
 
     MyItem *temp=new MyItem(address.at(0));//将第一张图片变为图元
     scene->addItem(temp);//将第一张图片显示在场景中
+    #ifdef AdaptionScale
+    temp->setScale(adaptiveRatioX);
+    #endif
     temp->setPos(x,y);
     Item *item=new Item(temp);
     AllItem<<item;
 
     SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例，这里直接套用双系数的构造函数
     item->scPointer[Picture]=sc;
-    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
     sc->cycle=cycle;//定义是否循环连续播图
 
     for(QVector<String>::iterator iter=address.begin();iter!=address.end();++iter)//遍历容器中的所有图片
@@ -520,12 +554,14 @@ Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time
     MyItem *item=new MyItem(*allpixmap.at(0));
     Item *ritem=new Item(item);
     scene->addItem(item);
+    #ifdef AdaptionScale
+    item->setScale(adaptiveRatioX);
+    #endif
     item->setPos(x,y);
     AllItem<<ritem;
 
     SC *sc=new SC(0,0,time,ritem,signfun,this);
     ritem->scPointer[Picture]=sc;
-    sc->pi=item;
     sc->cycle=cycle;
 
     for(Pixmap* i:allpixmap)
@@ -542,7 +578,6 @@ void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,int time
     temp->setPixmap(Pixmap(allpixmap.at(0)));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例
     item->scPointer[Picture]=sc;
-    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
     sc->cycle=cycle;//定义是否循环连续播图
 
     for(QVector<String>::iterator iter=allpixmap.begin();iter!=allpixmap.end();++iter)//遍历容器中的所有图片
@@ -558,7 +593,6 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int 
     temp->setPixmap(*allpixmap.at(0));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例
     item->scPointer[Picture]=sc;
-    sc->pi=temp;//将SC操作的图元成员写为第一张图片的图元
     sc->cycle=cycle;//定义是否循环连续播图
 
     for(Pixmap* i:allpixmap)//遍历容器中的所有图片
@@ -566,11 +600,24 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int 
     sc->start(Picture);
 }
 
+//注意，开启自适应后这两个函数返回的是假坐标，即用户指定的
 int Widget::GetItemX(Item* item)
-{return item->ItemPointer->x();}
+{
+    #ifdef SelfAdaption
+    return (item->ItemPointer->x())/adaptiveRatioX;
+    #else
+    return item->ItemPointer->x();
+    #endif
+}
 
 int Widget::GetItemY(Item* item)
-{return item->ItemPointer->y();}
+{
+    #ifdef SelfAdaption
+    return (item->ItemPointer->y())/adaptiveRatioY;
+    #else
+    return item->ItemPointer->y();
+    #endif
+}
 
 int Widget::GetItemR(Item* item)
 {return (item->Color==nullptr)?-1:item->Color->color().red();}
@@ -591,7 +638,13 @@ float Widget::GetItemRotation(Item* item)
 {return item->ItemPointer->rotation();}
 
 float Widget::GetItemScale(Item* item)
-{return item->ItemPointer->scale();}
+{
+    #ifdef AdaptionScale
+    return (item->ItemPointer->scale())/adaptiveRatioX;
+    #else
+    return item->ItemPointer->scale();
+    #endif
+}
 
 void Widget::EndAnimation(Item* item,AnimationType choose)
 {
@@ -695,7 +748,12 @@ void Widget::SetItemOrder(Item* Belowitem, Item* Aboveitem)
 {Belowitem->ItemPointer->stackBefore(Aboveitem->ItemPointer);}
 
 void Widget::ScaleView(float sX, float sY, GraphicsView *view)
-{view->Scale(sX,sY);}
+{
+    #ifdef SelfAdaption
+    adaptive(sX,sY);
+    #endif
+    view->Scale(sX,sY);
+}
 
 void Widget::RotateView(float set, GraphicsView *view)
 {view->Rotate(set);}

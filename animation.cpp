@@ -26,7 +26,7 @@ void SC::changepixmap()
         }
     }
     //若未播完，正常换图
-    pi->setPixmap(*iter);
+    item->PixmapItemPoniter->setPixmap(*iter);
     ++iter;
 }
 
@@ -142,7 +142,13 @@ void SC::SlowChange()
             if(!isfunction)
             {item->ItemPointer->setScale(CurrentModulus+=temp1);}
             else
-            {item->ItemPointer->setScale(scfun(temp).CurrentModulus);}
+            {
+                #ifdef AdaptionScale
+                item->ItemPointer->setScale((scfun(temp).CurrentModulus)*adaptiveRatioX);
+                #else
+                item->ItemPointer->setScale(scfun(temp).CurrentModulus);
+                #endif
+            }
             isend();
             break;
         }

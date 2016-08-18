@@ -33,7 +33,6 @@ public:
          times(times),item(item),signfun(signfun),s(s){}
     void UesSCFun(SCFun scfun);
 
-    QGraphicsPixmapItem *pi;
     QVector<QPixmap> pixmap;
     ParametersStru par;
     bool over;//结束标志

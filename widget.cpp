@@ -55,17 +55,17 @@ void Widget::Initialization()
     int scHeigh=GetScreenHeigh();
     adaptiveRatioX=float(scWidth)/float(WindowsWidth);
     adaptiveRatioY=float(scHeigh)/float(WindowsHeigh);
-    setGeometry(0,0,scWidth,scHeigh); //设置窗口参数
+    setGeometry(0,0,scWidth,scHeigh);
+    setFixedSize(GetScreenWidth(),GetScreenHeigh());
     #else
     //计算窗口出现位置
     int widX=(GetScreenWidth()-WindowsWidth)/2;
     int widY=(GetScreenHeigh()-WindowsHeigh)/2;
-    setGeometry(widX,widY,WindowsWidth,WindowsHeigh); //设置窗口参数
+    setGeometry(widX,widY,WindowsWidth,WindowsHeigh);
+    setFixedSize(WindowsWidth,WindowsHeigh);
     #endif
-    setFixedSize(scWidth,scHeigh);
     setWindowTitle(title);
-    MainScene=AddScene(MaximumWidth,MaximunHeigh);//初始化舞台
-    //定义视图并显示
+    MainScene=AddScene(MaximumWidth,MaximunHeigh);
     MainView=AddView(0,0,WindowsWidth,WindowsHeigh);
     SetScene();
 }
