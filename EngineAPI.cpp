@@ -14,10 +14,6 @@ void adaptive(float &x,float &y)
     y*=adaptiveRatioY;
 }
 #endif
-#ifdef AdaptionScale
-void adaptive(float set)
-{set*=adaptiveRatioX;}
-#endif
 
 Pixmap* Widget::LoadPixmap(String PicPath)
 {return new Pixmap(PicPath);}
@@ -33,16 +29,10 @@ int Widget::GetPixmapHeight(Pixmap *pixmap)
 
 Item* Widget::AddPixmapItem(String PicPath,int x,int y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     Pixmap mainpix(PicPath);
     MyItem *item=new MyItem(mainpix,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
-    #ifdef AdaptionScale
-    item->setScale(adaptiveRatioX);
-    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -51,15 +41,9 @@ Item* Widget::AddPixmapItem(String PicPath,int x,int y,String PressSlotfun,Param
 
 Item* Widget::AddPixmapItem(Pixmap *pixmap,int x,int y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     MyItem *item=new MyItem(*pixmap,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
-    #ifdef AdaptionScale
-    item->setScale(adaptiveRatioX);
-    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -68,9 +52,6 @@ Item* Widget::AddPixmapItem(Pixmap *pixmap,int x,int y,String PressSlotfun,Param
 
 Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, String PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     Pixmap mainpix(PicPath);
     MyItem *item=new MyItem(mainpix,this);
     if(PressPic!=NULL_String)
@@ -79,9 +60,6 @@ Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, St
     {item->SetButton(mainpix,mainpix,PressMusic,volume);}
     item->SetEvent(NULL_String,NULL_ParametersStru,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
-    #ifdef AdaptionScale
-    item->setScale(adaptiveRatioX);
-    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -90,9 +68,6 @@ Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, St
 
 Item* Widget::AddButtonItem(Pixmap *pixmap,int x,int y,String ReleaseSlotfun, Pixmap *PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     MyItem *item=new MyItem(*pixmap,this);
     if(PressPic!=nullptr)
     {item->SetButton(*pixmap,*PressPic,PressMusic,volume);}
@@ -100,9 +75,6 @@ Item* Widget::AddButtonItem(Pixmap *pixmap,int x,int y,String ReleaseSlotfun, Pi
     {item->SetButton(*pixmap,*pixmap,PressMusic,volume);}
     item->SetEvent(NULL_String,NULL_ParametersStru,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
-    #ifdef AdaptionScale
-    item->setScale(adaptiveRatioX);
-    #endif
     item->setPos(x,y);
     Item *ritem=new Item(item);
     AllItem<<ritem;
@@ -114,12 +86,6 @@ Item* Widget::AddTextItem(String Text,String Font,int Size,int CR,int CG,int CB,
 
 Item* Widget::AddTextItem(String Text, String Font, int Size, RGBColor color, int x, int y, GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
-    #ifdef AdaptionScale
-    adaptive(Size);
-    #endif
     QGraphicsTextItem *text=new QGraphicsTextItem(Text);
     text->setFont(QFont(Font,Size));
     text->setDefaultTextColor(color);
@@ -132,10 +98,6 @@ Item* Widget::AddTextItem(String Text, String Font, int Size, RGBColor color, in
 
 Item* Widget::AddRectItem(int x,int y,int width,int height,GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    adaptive(width,height);
-    #endif
     QGraphicsRectItem *rect=new QGraphicsRectItem(x,y,width,height);
     scene->addItem(rect);
     Item *item=new Item(nullptr,rect);
@@ -145,10 +107,6 @@ Item* Widget::AddRectItem(int x,int y,int width,int height,GraphicsScene *scene)
 
 Item* Widget::AddEllipseItem(int x,int y,int width,int height,GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    adaptive(width,height);
-    #endif
     QGraphicsEllipseItem *Ellipse=new QGraphicsEllipseItem(x,y,width,height);
     scene->addItem(Ellipse);
     Item *item=new Item(nullptr,Ellipse);
@@ -158,10 +116,6 @@ Item* Widget::AddEllipseItem(int x,int y,int width,int height,GraphicsScene *sce
 
 Item* Widget::AddLineItem(int x,int y,int fx,int fy,GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    adaptive(fx,fy);
-    #endif
     QGraphicsLineItem *line=new QGraphicsLineItem(x,y,fx,fy);
     scene->addItem(line);
     Item *item=new Item(nullptr,line);
@@ -170,12 +124,7 @@ Item* Widget::AddLineItem(int x,int y,int fx,int fy,GraphicsScene *scene)
 }
 
 void Widget::RotationItem(Item* item, float set)
-{
-    #ifdef AdaptionScale
-    adaptive(set);
-    #endif
-    item->ItemPointer->setRotation(set);
-}
+{item->ItemPointer->setRotation(set);}
 
 void Widget::ScaleItem(Item* item, float set)
 {item->ItemPointer->setScale(set);}
@@ -197,9 +146,6 @@ void Widget::BlurRadiusItem(Item* item, float set)
 
 void Widget::MoveItem(Item* item, int x, int y)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     item->ItemPointer->setPos(x,y);
     #ifdef AutoIsColliding
     itemMoveEvent();
@@ -322,10 +268,6 @@ bool Widget::ItemColliding(Item* item1,Item* item2)
 
 VideoPlayer* Widget::AddVideo(String path,int Volume,int x,int y,int width,int heigh,bool cycle,String signfun,ParametersStru par,GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    adaptive(width,heigh);
-    #endif
     if(x==-1)
     {x=MainView->viewX-(WindowsWidth/2);}
     if(y==-1)
@@ -376,9 +318,6 @@ void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time, String sig
 void Widget::AnimationScaleItem(Item* item, float set,int time,String signfun)
 {
     EndAnimation(item,Scale);
-    #ifdef AdaptionScale
-    adaptive(set);
-    #endif
     SC *sc=new SC(item->ItemPointer->scale(),set,time,item,signfun,this);
     item->scPointer[Scale]=sc;
     sc->start(Scale);
@@ -431,9 +370,6 @@ void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int time, String s
 
 void Widget::AnimationMoveItem(Item* item,int x,int y,int time,String signfun)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     EndAnimation(item,Move);
     SC *sc=new SC(item->ItemPointer->x(),item->ItemPointer->y(),x,y,time,item,signfun,this);
     item->scPointer[Move]=sc;
@@ -451,9 +387,6 @@ void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, String signfun
 
 void Widget::AnimationSetViewCenter(GraphicsView *view, int x, int y, int time, String signfun)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     SC *sc=new SC(view->viewX,view->viewY,x,y,time,view,signfun,this);
     sc->start(20);
 }
@@ -520,16 +453,10 @@ void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, int time, String 
 
 Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,String signfun,bool cycle,GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     assert(!address.isEmpty()); //确认传入的图片容器不为空
 
     MyItem *temp=new MyItem(address.at(0));//将第一张图片变为图元
     scene->addItem(temp);//将第一张图片显示在场景中
-    #ifdef AdaptionScale
-    temp->setScale(adaptiveRatioX);
-    #endif
     temp->setPos(x,y);
     Item *item=new Item(temp);
     AllItem<<item;
@@ -546,17 +473,11 @@ Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,Strin
 
 Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time, String signfun, bool cycle, GraphicsScene *scene)
 {
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
     assert(!allpixmap.isEmpty());
 
     MyItem *item=new MyItem(*allpixmap.at(0));
     Item *ritem=new Item(item);
     scene->addItem(item);
-    #ifdef AdaptionScale
-    item->setScale(adaptiveRatioX);
-    #endif
     item->setPos(x,y);
     AllItem<<ritem;
 
@@ -602,22 +523,10 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int 
 
 //注意，开启自适应后这两个函数返回的是假坐标，即用户指定的
 int Widget::GetItemX(Item* item)
-{
-    #ifdef SelfAdaption
-    return (item->ItemPointer->x())/adaptiveRatioX;
-    #else
-    return item->ItemPointer->x();
-    #endif
-}
+{return item->ItemPointer->x();}
 
 int Widget::GetItemY(Item* item)
-{
-    #ifdef SelfAdaption
-    return (item->ItemPointer->y())/adaptiveRatioY;
-    #else
-    return item->ItemPointer->y();
-    #endif
-}
+{return item->ItemPointer->y();}
 
 int Widget::GetItemR(Item* item)
 {return (item->Color==nullptr)?-1:item->Color->color().red();}
@@ -638,13 +547,7 @@ float Widget::GetItemRotation(Item* item)
 {return item->ItemPointer->rotation();}
 
 float Widget::GetItemScale(Item* item)
-{
-    #ifdef AdaptionScale
-    return (item->ItemPointer->scale())/adaptiveRatioX;
-    #else
-    return item->ItemPointer->scale();
-    #endif
-}
+{return item->ItemPointer->scale();}
 
 void Widget::EndAnimation(Item* item,AnimationType choose)
 {
@@ -682,10 +585,22 @@ void Widget::SetViewCenter(Item* item,GraphicsView *gview)
 {gview->SetCenter(item->ItemPointer);}
 
 int Widget::GetViewX(GraphicsView *gview)
-{return gview->viewX;}
+{
+    #ifdef SelfAdaption
+    return gview->viewX/adaptiveRatioX;
+    #else
+    return gview->viewX;
+    #endif
+}
 
 int Widget::GetViewY(GraphicsView *gview)
-{return gview->viewY;}
+{
+    #ifdef SelfAdaption
+    return gview->viewY/adaptiveRatioY;
+    #else
+    return gview->viewY;
+    #endif
+}
 
 GraphicsView* Widget::AddView(int x, int y, int width, int height)
 {
@@ -695,6 +610,9 @@ GraphicsView* Widget::AddView(int x, int y, int width, int height)
     #endif
     GraphicsView *view=new GraphicsView(this,this,x,y,width,height);
     view->show();
+    #ifdef SelfAdaption
+    view->scale(adaptiveRatioX,adaptiveRatioX);
+    #endif
     return view;
 }
 
@@ -724,6 +642,9 @@ GraphicsScene* Widget::AddScene(int width, int height)
 
 void Widget::SetScene(GraphicsView *view, GraphicsScene *scene,int viewX,int viewY)
 {
+    #ifdef SelfAdaption
+    adaptive(viewX,viewY);
+    #endif
     view->setScene(scene);
     SetViewCenter(viewX,viewY);
 }

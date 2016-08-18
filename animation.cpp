@@ -142,13 +142,7 @@ void SC::SlowChange()
             if(!isfunction)
             {item->ItemPointer->setScale(CurrentModulus+=temp1);}
             else
-            {
-                #ifdef AdaptionScale
-                item->ItemPointer->setScale((scfun(temp).CurrentModulus)*adaptiveRatioX);
-                #else
-                item->ItemPointer->setScale(scfun(temp).CurrentModulus);
-                #endif
-            }
+            {item->ItemPointer->setScale(scfun(temp).CurrentModulus);}
             isend();
             break;
         }
@@ -160,10 +154,6 @@ void SC::SlowChange()
             else
             {
                 SCCurrentModulus scc=scfun(temp);
-                #ifdef SelfAdaption
-                scc.CurrentModulus*=adaptiveRatioX;
-                scc.CurrentModulus2*=adaptiveRatioY;
-                #endif
                 item->ItemPointer->setPos(scc.CurrentModulus,scc.CurrentModulus2);
             }
             #ifdef AutoIsColliding

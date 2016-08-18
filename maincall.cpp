@@ -3,5 +3,5 @@
 
 void maincall::StartGame()//入口函数
 {
-    AddPixmapItem("D:/狙击单位.jpg",100,100);
+
 }
