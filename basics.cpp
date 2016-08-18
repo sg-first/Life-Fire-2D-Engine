@@ -68,7 +68,13 @@ void ExpansionSlot::call(ParametersStru par)
         this->parslot(par);
         return;
     }
-    this->voidslot();
+    if(this->voidslot!=nullptr)
+    {
+        this->voidslot();
+        return;
+    }
+    QScriptValue ret=MainJSVM->globalObject().property(slotname);
+    ret.call(QScriptValue());
 }
 
 //CaluThread

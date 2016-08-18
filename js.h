@@ -2,9 +2,10 @@
 #pragma once
 #include "macro.h"
 
-#define JS_FUNCTION Q_INVOKABLE QVariant ParCallJSFile(String path,ParametersStru Parame,String ParameName,String functionname=NULL_String,String *mistake=nullptr);\
-                    Q_INVOKABLE QVariant ParCallJSCode(String code,ParametersStru Parame,String ParameName,String functionname=NULL_String,String *mistake=nullptr);\
-                    Q_INVOKABLE QVariant JSParCallJSFile(String path,JSParStru Parame,String functionname=NULL_String,String *mistake=nullptr);\
-                    Q_INVOKABLE QVariant JSParCallJSCode(String code,JSParStru Parame,String functionname=NULL_String,String *mistake=nullptr);\
-                    Q_INVOKABLE QVariant CallJSCode(String code, String functionname=NULL_String,String *mistake=nullptr);\
-                    Q_INVOKABLE QVariant CallJSFile(String path, String functionname=NULL_String,String *mistake=nullptr);
+#define JS_FUNCTION Q_INVOKABLE JSVM* AddJSVM();\
+                    Q_INVOKABLE Variant JSEval(String code,String functionname=NULL_String,String *mistake=nullptr,JSVM *VM=MainJSVM);\
+                    Q_INVOKABLE void JSSendPar(ParametersStru Parame,String ParameName,JSVM *VM=MainJSVM);\
+                    Q_INVOKABLE void JSSendJSPar(JSParStru Parame,JSVM *VM=MainJSVM);\
+                    Q_INVOKABLE Variant JSEvalFile(String path,String functionname=NULL_String,String *mistake=nullptr,JSVM *VM=MainJSVM);\
+                    Q_INVOKABLE Variant JSCallFun(String functionname,String *mistake=nullptr,JSVM *VM=MainJSVM);\
+                    void InitJSSlot();

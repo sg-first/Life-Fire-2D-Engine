@@ -931,6 +931,9 @@ void Widget::AddExpansionSlot(String slotname, ParSlot slot)
 void Widget::AddExpansionSlot(String slotname, VoidSlot slot)
 {AllExpansionSlot<<new ExpansionSlot(slot,slotname);}
 
+void Widget::AddJSExpansionSlot(String JSFun)
+{AllExpansionSlot<<new ExpansionSlot(JSFun);}
+
 #ifdef AutoIsColliding
 void Widget::AddAutoCollision(Item *item1, Item *item2, String slotfun, ParametersStru par)
 {

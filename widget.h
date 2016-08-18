@@ -149,12 +149,12 @@ public:
     Q_INVOKABLE void RemoveAllGestureArea();
     Q_INVOKABLE void AddExpansionSlot(String slotname, ParSlot slot);
     Q_INVOKABLE void AddExpansionSlot(String slotname, VoidSlot slot);
+    Q_INVOKABLE void AddJSExpansionSlot(String JSFun);
     #ifdef AutoIsColliding
     Q_INVOKABLE void AddAutoCollision(Item *item1,Item *item2,String slotfun,ParametersStru par=NULL_ParametersStru);
     Q_INVOKABLE void RemoveAutoCollision(Item *item1,Item *item2);
     Q_INVOKABLE void RemoveAllAutoCollision();
     #endif
-
 
     void PassMousePressEvent(Pos point);
     void PassMouseReleaseEvent(Pos point);

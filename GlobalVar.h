@@ -29,4 +29,5 @@ extern QObject *thob;
 extern GraphicsScene *MainScene;//声明舞台
 extern GraphicsView *MainView;//声明视图
 extern QList<ExpansionSlot*> AllExpansionSlot;//所有扩展槽
+extern JSVM *MainJSVM;
 //-用户自行添加的全局变量

@@ -3,8 +3,9 @@
 #include "ui_widget.h"
 
 LFEvent *lfevent;
-QGraphicsScene *MainScene;//声明舞台
-GraphicsView *MainView;//声明视图
+QGraphicsScene *MainScene;
+GraphicsView *MainView;
+JSVM *MainJSVM;
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -40,6 +41,7 @@ void Widget::Initialization()
     RegisterJSType(GraphicsScene*,"GraphicsScene*");
     RegisterJSType(Qt::Key,"QtKey");
     RegisterJSType(Variant,"Variant");//这个我感觉有点别扭……
+    RegisterJSType(JSVM*,"JSVM*");
     //计算窗口出现位置
     int widX=(GetScreenWidth()-WindowsWidth)/2;
     int widY=(GetScreenHeigh()-WindowsHeigh)/2;

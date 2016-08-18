@@ -18,6 +18,7 @@ typedef QTimer Timer;
 typedef std::function<void(ParametersStru)> ParSlot;
 typedef std::function<void()> VoidSlot;
 typedef Qt::ConnectionType ExecutionMode;
+typedef QScriptEngine JSVM;
 
 enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
 
@@ -59,7 +60,7 @@ private:
 public:
     ExpansionSlot(ParSlot parslot,String slotname):parslot(parslot),slotname(slotname){}
     ExpansionSlot(VoidSlot voidslot,String slotname):voidslot(voidslot),slotname(slotname){}
-    ExpansionSlot(){} //创建空实例，用于查找不到可用的槽时返回
+    ExpansionSlot(String jsFun):slotname(jsFun){}
 
     void call(ParametersStru par=NULL_ParametersStru);
     String getslotname(){return this->slotname;}
