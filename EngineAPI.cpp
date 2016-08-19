@@ -123,11 +123,17 @@ Item* Widget::AddLineItem(int x,int y,int fx,int fy,GraphicsScene *scene)
     return item;
 }
 
-void Widget::RotationItem(Item* item, float set)
-{item->ItemPointer->setRotation(set);}
+void Widget::RotationItem(Item* item, float set,PosF originPos)
+{
+    item->ItemPointer->setTransformOriginPoint(originPos);
+    item->ItemPointer->setRotation(set);
+}
 
-void Widget::ScaleItem(Item* item, float set)
-{item->ItemPointer->setScale(set);}
+void Widget::ScaleItem(Item* item, float set,PosF originPos)
+{
+    item->ItemPointer->setTransformOriginPoint(originPos);
+    item->ItemPointer->setScale(set);
+}
 
 void Widget::BlurRadiusItem(Item* item, float set)
 {
@@ -298,35 +304,39 @@ void Widget::RemoveVideo(VideoPlayer *video)
 void Widget::StopVideo(VideoPlayer *video)
 {video->mediaPlayer->stop();}
 
-void Widget::AnimationRotationItem(Item* item, float set,int time,String signfun)
+void Widget::AnimationRotationItem(Item* item, float set,int time,PosF originPos,String signfun)
 {
    EndAnimation(item,Rotation);
    SC *sc=new SC(GetItemRotation(item),set,time,item,signfun,this);
+   item->ItemPointer->setTransformOriginPoint(originPos);
    item->scPointer[Rotation]=sc;
    sc->start(Rotation);
 }
 
-void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time, String signfun)
+void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time,PosF originPos,String signfun)
 {
     EndAnimation(item,Rotation);
     SC *sc=new SC(0,0,time,item,signfun,this);
+    item->ItemPointer->setTransformOriginPoint(originPos);
     item->scPointer[Rotation]=sc;
     sc->UesSCFun(scfun);
     sc->start(Rotation);
 }
 
-void Widget::AnimationScaleItem(Item* item, float set,int time,String signfun)
+void Widget::AnimationScaleItem(Item* item, float set,int time,PosF originPos,String signfun)
 {
     EndAnimation(item,Scale);
     SC *sc=new SC(item->ItemPointer->scale(),set,time,item,signfun,this);
+    item->ItemPointer->setTransformOriginPoint(originPos);
     item->scPointer[Scale]=sc;
     sc->start(Scale);
 }
 
-void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time, String signfun)
+void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time,PosF originPos,String signfun)
 {
     EndAnimation(item,Scale);
     SC *sc=new SC(0,0,time,item,signfun,this);
+    item->ItemPointer->setTransformOriginPoint(originPos);
     item->scPointer[Scale]=sc;
     sc->UesSCFun(scfun);
     sc->start(Scale);
@@ -574,33 +584,16 @@ void Widget::EndAllAnimation(Item* item)
 }
 
 void Widget::SetViewCenter(int x, int y,GraphicsView *gview)
-{
-    #ifdef SelfAdaption
-    adaptive(x,y);
-    #endif
-    gview->SetCenter(x,y);
-}
+{gview->SetCenter(x,y);}
 
 void Widget::SetViewCenter(Item* item,GraphicsView *gview)
 {gview->SetCenter(item->ItemPointer);}
 
 int Widget::GetViewX(GraphicsView *gview)
-{
-    #ifdef SelfAdaption
-    return gview->viewX/adaptiveRatioX;
-    #else
-    return gview->viewX;
-    #endif
-}
+{return gview->viewX;}
 
 int Widget::GetViewY(GraphicsView *gview)
-{
-    #ifdef SelfAdaption
-    return gview->viewY/adaptiveRatioY;
-    #else
-    return gview->viewY;
-    #endif
-}
+{return gview->viewY;}
 
 GraphicsView* Widget::AddView(int x, int y, int width, int height)
 {
@@ -633,19 +626,16 @@ int Widget::GetScreenHeigh()
 {return QApplication::desktop()->height();}
 
 GraphicsScene* Widget::AddScene(int width, int height)
-{
-    #ifdef SelfAdaption
-    adaptive(width,height);
-    #endif
-    return new GraphicsScene(0,0,width,height);
-}
+{return new GraphicsScene(0,0,width,height);}
 
-void Widget::SetScene(GraphicsView *view, GraphicsScene *scene,int viewX,int viewY)
+void Widget::SetViewScene(GraphicsView *view, GraphicsScene *scene,int viewX,int viewY)
 {
-    #ifdef SelfAdaption
-    adaptive(viewX,viewY);
-    #endif
     view->setScene(scene);
+    if(viewX==-1&&viewY==-1)
+    {
+        viewX=view->width()/adaptiveRatioX/2;
+        viewY=view->height()/adaptiveRatioY/2;
+    }
     SetViewCenter(viewX,viewY);
 }
 
@@ -1024,3 +1014,9 @@ void Widget::RemoveAutoCollision(Item *item1, Item *item2)
 void Widget::RemoveAllAutoCollision()
 {AllAutoCollision.clear();}
 #endif
+
+PosF Widget::GetItemCenter(Item *item)
+{
+    assert(item->PixmapItemPoniter!=nullptr);
+    return PosF(item->PixmapItemPoniter->pixmap().width()/2,item->PixmapItemPoniter->pixmap().height()/2);
+}

@@ -67,5 +67,5 @@ void Widget::Initialization()
     setWindowTitle(title);
     MainScene=AddScene(MaximumWidth,MaximunHeigh);
     MainView=AddView(0,0,WindowsWidth,WindowsHeigh);
-    SetScene();
+    SetViewScene();
 }

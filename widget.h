@@ -32,8 +32,8 @@ public:
     Q_INVOKABLE Item* AddRectItem(int x,int y,int width,int height,GraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddEllipseItem(int x,int y,int width,int height,GraphicsScene *scene=MainScene);
     Q_INVOKABLE Item* AddLineItem(int x,int y,int fx,int fy,GraphicsScene *scene=MainScene);
-    Q_INVOKABLE void RotationItem(Item* item, float set);
-    Q_INVOKABLE void ScaleItem(Item* item, float set);
+    Q_INVOKABLE void RotationItem(Item* item, float set,PosF originPos=defaultPosF);
+    Q_INVOKABLE void ScaleItem(Item* item, float set,PosF originPos=defaultPosF);
     Q_INVOKABLE void MoveItem(Item* item, int x, int y);
     Q_INVOKABLE void BlurRadiusItem(Item* item, float set);
     //Q_INVOKABLE void DropShadowItem(Item* item, float shadowX,float shadowY);
@@ -63,10 +63,10 @@ public:
     Q_INVOKABLE CaluThread* StartThread(String slotfun, ParametersStru par=NULL_ParametersStru, bool track=true);
     Q_INVOKABLE void RemoveThread(CaluThread *thread);
     Q_INVOKABLE bool ItemColliding(Item* item1, Item* item2);
-    Q_INVOKABLE void AnimationRotationItem(Item* item, float set,int time,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,int time=-1,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationScaleItem(Item* item, float set,int time,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationScaleItem(Item* item,SCFun scfun,int time=-1,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationRotationItem(Item* item, float set,int time,PosF originPos=defaultPosF,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,int time=-1,PosF originPos=defaultPosF,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationScaleItem(Item* item, float set,int time,PosF originPos=defaultPosF,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationScaleItem(Item* item,SCFun scfun,int time=-1,PosF originPos=defaultPosF,String signfun=NULL_String);
     Q_INVOKABLE void AnimationBlurRadiusItem(Item* item, float set,int time,String signfun=NULL_String);
     Q_INVOKABLE void AnimationBlurRadiusItem(Item* item,SCFun scfun,int time=-1,String signfun=NULL_String);
     Q_INVOKABLE void AnimationSetOpacityItem(Item* item, float set,int time,String signfun=NULL_String);
@@ -104,7 +104,7 @@ public:
     Q_INVOKABLE int GetScreenHeigh();
     Q_INVOKABLE GraphicsScene* AddScene(int width,int height);
     Q_INVOKABLE void DeleteScene(GraphicsScene* scene){delete scene;}
-    Q_INVOKABLE void SetScene(GraphicsView *view=MainView, GraphicsScene *scene=MainScene, int viewX=0, int viewY=0);
+    Q_INVOKABLE void SetViewScene(GraphicsView *view=MainView, GraphicsScene *scene=MainScene, int viewX=-1, int viewY=-1);
     Q_INVOKABLE void SafeSleep(int time);
     Q_INVOKABLE void SetItemLayer(Item* item, int Layer);
     //collidingItems(QGraphicsItem *item)，返回一个与item碰撞的item的表，可以留着做物理引擎用
@@ -155,6 +155,8 @@ public:
     Q_INVOKABLE void RemoveAutoCollision(Item *item1,Item *item2);
     Q_INVOKABLE void RemoveAllAutoCollision();
     #endif
+    Q_INVOKABLE PosF NewPosF(float x,float y){return PosF(x,y);}
+    Q_INVOKABLE PosF GetItemCenter(Item *item);
 
     void PassMousePressEvent(Pos point);
     void PassMouseReleaseEvent(Pos point);
