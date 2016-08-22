@@ -631,11 +631,13 @@ GraphicsScene* Widget::AddScene(int width, int height)
 void Widget::SetViewScene(GraphicsView *view, GraphicsScene *scene,int viewX,int viewY)
 {
     view->setScene(scene);
+    #ifdef SelfAdaption
     if(viewX==-1&&viewY==-1)
     {
         viewX=view->width()/adaptiveRatioX/2;
         viewY=view->height()/adaptiveRatioY/2;
     }
+    #endif
     SetViewCenter(viewX,viewY);
 }
 
