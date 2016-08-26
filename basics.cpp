@@ -17,8 +17,7 @@ bool ParametersStru::operator !=(const ParametersStru &par)
             ItemVar==par.ItemVar&&
             MusicPlayerVar==par.MusicPlayerVar&&
             GraphicsSceneVar==par.GraphicsSceneVar&&
-            VariantVar==par.VariantVar&&
-            QtKeyVar==par.QtKeyVar)
+            KeyVar==par.KeyVar)
     {return false;}
     return true;
 }
@@ -37,8 +36,7 @@ ParametersStru& ParametersStru::operator =(const ParametersStru &par)
     ItemVar=par.ItemVar;
     MusicPlayerVar=par.MusicPlayerVar;
     GraphicsSceneVar=par.GraphicsSceneVar;
-    VariantVar=par.VariantVar;
-    QtKeyVar=par.QtKeyVar;
+    KeyVar=par.KeyVar;
     return *this;
 }
 
@@ -56,8 +54,7 @@ ParametersStru::ParametersStru(const ParametersStru &par):QObject(0)
     ItemVar=par.ItemVar;
     MusicPlayerVar=par.MusicPlayerVar;
     GraphicsSceneVar=par.GraphicsSceneVar;
-    VariantVar=par.VariantVar;
-    QtKeyVar=par.QtKeyVar;
+    KeyVar=par.KeyVar;
 }
 
 //ExpansionSlot

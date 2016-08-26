@@ -7,8 +7,7 @@
 class Widget;
 class SC;
 
-typedef QPointF PosF;
-const PosF defaultPosF(0,0);
+const Pos defaultPos(0,0);
 
 class JSParStru
 {

@@ -19,6 +19,7 @@ typedef std::function<void(ParametersStru)> ParSlot;
 typedef std::function<void()> VoidSlot;
 typedef Qt::ConnectionType ExecutionMode;
 typedef QScriptEngine JSVM;
+typedef Qt::Key Key;
 
 enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
 
@@ -41,9 +42,8 @@ public:
     QVector<Item*> ItemVar;
     QVector<MusicPlayer*> MusicPlayerVar;
     QVector<GraphicsScene*> GraphicsSceneVar;
+    QVector<Key> KeyVar;
 
-    QVector<Variant> VariantVar;
-    QVector<Qt::Key> QtKeyVar;
 
     bool operator !=(const ParametersStru &par);
     ParametersStru& operator =(const ParametersStru &par);

@@ -123,13 +123,13 @@ Item* Widget::AddLineItem(int x,int y,int fx,int fy,GraphicsScene *scene)
     return item;
 }
 
-void Widget::RotationItem(Item* item, float set,PosF originPos)
+void Widget::RotationItem(Item* item, float set,Pos originPos)
 {
-    item->ItemPointer->setTransformOriginPoint(originPos);
+    item->ItemPointer->setTransformOriginPoint(QPointF(originPos.x(),originPos.y()));
     item->ItemPointer->setRotation(set);
 }
 
-void Widget::ScaleItem(Item* item, float set,PosF originPos)
+void Widget::ScaleItem(Item* item, float set,Pos originPos)
 {
     item->ItemPointer->setTransformOriginPoint(originPos);
     item->ItemPointer->setScale(set);
@@ -304,7 +304,7 @@ void Widget::RemoveVideo(VideoPlayer *video)
 void Widget::StopVideo(VideoPlayer *video)
 {video->mediaPlayer->stop();}
 
-void Widget::AnimationRotationItem(Item* item, float set,int time,PosF originPos,String signfun)
+void Widget::AnimationRotationItem(Item* item, float set,int time,Pos originPos,String signfun)
 {
    EndAnimation(item,Rotation);
    SC *sc=new SC(GetItemRotation(item),set,time,item,signfun,this);
@@ -313,30 +313,30 @@ void Widget::AnimationRotationItem(Item* item, float set,int time,PosF originPos
    sc->start(Rotation);
 }
 
-void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time,PosF originPos,String signfun)
+void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time,Pos originPos,String signfun)
 {
     EndAnimation(item,Rotation);
     SC *sc=new SC(0,0,time,item,signfun,this);
-    item->ItemPointer->setTransformOriginPoint(originPos);
+    item->ItemPointer->setTransformOriginPoint(QPointF(originPos.x(),originPos.y()));
     item->scPointer[Rotation]=sc;
     sc->UesSCFun(scfun);
     sc->start(Rotation);
 }
 
-void Widget::AnimationScaleItem(Item* item, float set,int time,PosF originPos,String signfun)
+void Widget::AnimationScaleItem(Item* item, float set,int time,Pos originPos,String signfun)
 {
     EndAnimation(item,Scale);
     SC *sc=new SC(item->ItemPointer->scale(),set,time,item,signfun,this);
-    item->ItemPointer->setTransformOriginPoint(originPos);
+    item->ItemPointer->setTransformOriginPoint(QPointF(originPos.x(),originPos.y()));
     item->scPointer[Scale]=sc;
     sc->start(Scale);
 }
 
-void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time,PosF originPos,String signfun)
+void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time,Pos originPos,String signfun)
 {
     EndAnimation(item,Scale);
     SC *sc=new SC(0,0,time,item,signfun,this);
-    item->ItemPointer->setTransformOriginPoint(originPos);
+    item->ItemPointer->setTransformOriginPoint(QPointF(originPos.x(),originPos.y()));
     item->scPointer[Scale]=sc;
     sc->UesSCFun(scfun);
     sc->start(Scale);
@@ -1017,8 +1017,8 @@ void Widget::RemoveAllAutoCollision()
 {AllAutoCollision.clear();}
 #endif
 
-PosF Widget::GetItemCenter(Item *item)
+Pos Widget::GetItemCenter(Item *item)
 {
     assert(item->PixmapItemPoniter!=nullptr);
-    return PosF(item->PixmapItemPoniter->pixmap().width()/2,item->PixmapItemPoniter->pixmap().height()/2);
+    return Pos(item->PixmapItemPoniter->pixmap().width()/2,item->PixmapItemPoniter->pixmap().height()/2);
 }

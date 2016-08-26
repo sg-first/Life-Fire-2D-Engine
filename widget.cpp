@@ -45,8 +45,7 @@ void Widget::Initialization()
     RegisterJSType(Pixmap*,"Pixmap*");
     RegisterJSType(MusicPlayer*,"MusicPlayer*");
     RegisterJSType(GraphicsScene*,"GraphicsScene*");
-    RegisterJSType(Qt::Key,"QtKey");
-    RegisterJSType(Variant,"Variant");//这个我感觉有点别扭……
+    RegisterJSType(Key,"Key");
     RegisterJSType(JSVM*,"JSVM*");
 
     #ifdef SelfAdaption
