@@ -33,8 +33,9 @@ void Widget::Initialization()
     //编码校正
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
-    //注册类型
+    //注册普通类型
     RegisterJSType(ParametersStru,"ParametersStru");
+    RegisterJSType(ParametersStru*,"ParametersStru*"); //被逼无奈
     RegisterJSType(LFEvent*,"LFEvent*");
     RegisterJSType(Item*,"Item*");
     RegisterJSType(String,"String");
@@ -47,7 +48,6 @@ void Widget::Initialization()
     RegisterJSType(GraphicsScene*,"GraphicsScene*");
     RegisterJSType(Key,"Key");
     RegisterJSType(JSVM*,"JSVM*");
-
     #ifdef SelfAdaption
     //计算自适应比
     int scWidth=GetScreenWidth();

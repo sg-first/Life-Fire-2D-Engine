@@ -304,7 +304,7 @@ void Widget::RemoveVideo(VideoPlayer *video)
 void Widget::StopVideo(VideoPlayer *video)
 {video->mediaPlayer->stop();}
 
-void Widget::AnimationRotationItem(Item* item, float set,int time,Pos originPos,String signfun)
+void Widget::AnimationRotationItem(Item* item, float set,long time,Pos originPos,String signfun)
 {
    EndAnimation(item,Rotation);
    SC *sc=new SC(GetItemRotation(item),set,time,item,signfun,this);
@@ -313,7 +313,7 @@ void Widget::AnimationRotationItem(Item* item, float set,int time,Pos originPos,
    sc->start(Rotation);
 }
 
-void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time,Pos originPos,String signfun)
+void Widget::AnimationRotationItem(Item *item, SCFun scfun, long time,Pos originPos,String signfun)
 {
     EndAnimation(item,Rotation);
     SC *sc=new SC(0,0,time,item,signfun,this);
@@ -323,7 +323,7 @@ void Widget::AnimationRotationItem(Item *item, SCFun scfun, int time,Pos originP
     sc->start(Rotation);
 }
 
-void Widget::AnimationScaleItem(Item* item, float set,int time,Pos originPos,String signfun)
+void Widget::AnimationScaleItem(Item* item, float set,long time,Pos originPos,String signfun)
 {
     EndAnimation(item,Scale);
     SC *sc=new SC(item->ItemPointer->scale(),set,time,item,signfun,this);
@@ -332,7 +332,7 @@ void Widget::AnimationScaleItem(Item* item, float set,int time,Pos originPos,Str
     sc->start(Scale);
 }
 
-void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time,Pos originPos,String signfun)
+void Widget::AnimationScaleItem(Item *item, SCFun scfun, long time,Pos originPos,String signfun)
 {
     EndAnimation(item,Scale);
     SC *sc=new SC(0,0,time,item,signfun,this);
@@ -342,7 +342,7 @@ void Widget::AnimationScaleItem(Item *item, SCFun scfun, int time,Pos originPos,
     sc->start(Scale);
 }
 
-void Widget::AnimationBlurRadiusItem(Item* item, float set, int time,String signfun)
+void Widget::AnimationBlurRadiusItem(Item* item, float set, long time,String signfun)
 {
    EndAnimation(item,BlurRadius);
    SC *sc=new SC(GetItemBlur(item),set,time,item,signfun,this);
@@ -350,7 +350,7 @@ void Widget::AnimationBlurRadiusItem(Item* item, float set, int time,String sign
    sc->start(BlurRadius);
 }
 
-void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int time, String signfun)
+void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, long time, String signfun)
 {
     EndAnimation(item,BlurRadius);
     if(item->Blur==nullptr)
@@ -361,7 +361,7 @@ void Widget::AnimationBlurRadiusItem(Item *item, SCFun scfun, int time, String s
     sc->start(BlurRadius);
 }
 
-void Widget::AnimationSetOpacityItem(Item* item, float set, int time,String signfun)
+void Widget::AnimationSetOpacityItem(Item* item, float set, long time,String signfun)
 {
    EndAnimation(item,Opacity);
    SC *sc=new SC(GetItemOpacity(item),set,time,item,signfun,this);
@@ -369,7 +369,7 @@ void Widget::AnimationSetOpacityItem(Item* item, float set, int time,String sign
    sc->start(Opacity);
 }
 
-void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int time, String signfun)
+void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, long time, String signfun)
 {
     EndAnimation(item,Opacity);
     SC *sc=new SC(0,0,time,item,signfun,this);
@@ -378,7 +378,7 @@ void Widget::AnimationSetOpacityItem(Item *item, SCFun scfun, int time, String s
     sc->start(Opacity);
 }
 
-void Widget::AnimationMoveItem(Item* item,int x,int y,int time,String signfun)
+void Widget::AnimationMoveItem(Item* item,int x,int y,long time,String signfun)
 {
     EndAnimation(item,Move);
     SC *sc=new SC(item->ItemPointer->x(),item->ItemPointer->y(),x,y,time,item,signfun,this);
@@ -386,7 +386,7 @@ void Widget::AnimationMoveItem(Item* item,int x,int y,int time,String signfun)
     sc->start(Move);
 }
 
-void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, String signfun)
+void Widget::AnimationMoveItem(Item *item, SCFun scfun, long time, String signfun)
 {
     EndAnimation(item,Move);
     SC *sc=new SC(0,0,0,0,time,item,signfun,this);
@@ -395,20 +395,20 @@ void Widget::AnimationMoveItem(Item *item, SCFun scfun, int time, String signfun
     sc->start(Move);
 }
 
-void Widget::AnimationSetViewCenter(GraphicsView *view, int x, int y, int time, String signfun)
+void Widget::AnimationSetViewCenter(GraphicsView *view, int x, int y, long time, String signfun)
 {
     SC *sc=new SC(view->viewX,view->viewY,x,y,time,view,signfun,this);
     sc->start(20);
 }
 
-void Widget::AnimationSetViewCenter(GraphicsView *view, SCFun scfun, int time, String signfun)
+void Widget::AnimationSetViewCenter(GraphicsView *view, SCFun scfun, long time, String signfun)
 {
     SC *sc=new SC(0,0,0,0,time,view,signfun,this);
     sc->UesSCFun(scfun);
     sc->start(20);
 }
 
-void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, String signfun)
+void Widget::AnimationShearItem(Item* item, float fx, float fy, long time, String signfun)
 {
    EndAnimation(item,Shear);
    SC *sc=new SC(item->ShearX,item->ShearY,fx,fy,time,item,signfun,this);
@@ -416,7 +416,7 @@ void Widget::AnimationShearItem(Item* item, float fx, float fy, int time, String
    sc->start(Shear);
 }
 
-void Widget::AnimationShearItem(Item *item, SCFun scfun, int time, String signfun)
+void Widget::AnimationShearItem(Item *item, SCFun scfun, long time, String signfun)
 {
     EndAnimation(item,Shear);
     SC *sc=new SC(0,0,0,0,time,item,signfun,this);
@@ -425,7 +425,7 @@ void Widget::AnimationShearItem(Item *item, SCFun scfun, int time, String signfu
     sc->start(Shear);
 }
 
-void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, int time,String signfun)
+void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, long time,String signfun)
 {
    EndAnimation(item,Color);
    //当前系数
@@ -452,7 +452,7 @@ void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, int time,
    sc->start(Color);
 }
 
-void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, int time, String signfun)
+void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, long time, String signfun)
 {
     EndAnimation(item,Color);
     SC *sc=new SC(0,0,0,0,0,0,time,item,signfun,this);
@@ -461,7 +461,7 @@ void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, int time, String 
     sc->start(Color);
 }
 
-Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,String signfun,bool cycle,GraphicsScene *scene)
+Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,long time,String signfun,bool cycle,GraphicsScene *scene)
 {
     assert(!address.isEmpty()); //确认传入的图片容器不为空
 
@@ -481,7 +481,7 @@ Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,int time,Strin
     return item;
 }
 
-Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time, String signfun, bool cycle, GraphicsScene *scene)
+Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, long time, String signfun, bool cycle, GraphicsScene *scene)
 {
     assert(!allpixmap.isEmpty());
 
@@ -501,7 +501,7 @@ Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time
     return ritem;
 }
 
-void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,int time,String signfun,bool cycle)
+void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,long time,String signfun,bool cycle)
 {
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
@@ -516,7 +516,7 @@ void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,int time
     sc->start(Picture);
 }
 
-void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, int time, String signfun, bool cycle)
+void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, long time, String signfun, bool cycle)
 {
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
@@ -641,7 +641,7 @@ void Widget::SetViewScene(GraphicsView *view, GraphicsScene *scene,int viewX,int
     SetViewCenter(viewX,viewY);
 }
 
-void Widget::SafeSleep(int time)
+void Widget::SafeSleep(long time)
 {
    QTimer T1;
    QEventLoop Q1;
@@ -893,7 +893,7 @@ void Widget::VerticalFlip(Item *item)
 Pixmap* Widget::VerticalFlip(Pixmap *pixmap)
 {return mirrorAndChange(pixmap,false);}
 
-Timer* Widget::StartMultipleTimer(String slotfun,int time)
+Timer* Widget::StartMultipleTimer(String slotfun,long time)
 {
     QTimer *timer = new QTimer(this);
     QByteArray ba = slotfun.toLatin1();
@@ -903,7 +903,7 @@ Timer* Widget::StartMultipleTimer(String slotfun,int time)
     return timer;
 }
 
-void Widget::StartSingleTimer(String slotfun,int time)
+void Widget::StartSingleTimer(String slotfun,long time)
 {
     QByteArray ba = slotfun.toLatin1();
     const char *ch=ba.data();

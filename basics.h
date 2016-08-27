@@ -44,6 +44,19 @@ public:
     QVector<GraphicsScene*> GraphicsSceneVar;
     QVector<Key> KeyVar;
 
+    Q_INVOKABLE void intVarPushBack(int i){intVar.push_back(i);}
+    Q_INVOKABLE void floatVarPushBack(float i){floatVar.push_back(i);}
+    Q_INVOKABLE void StringVarPushBack(String i){StringVar.push_back(i);}
+    Q_INVOKABLE void boolVarPushBack(bool i){boolVar.push_back(i);}
+    Q_INVOKABLE void VideoPlayerVarPushBack(VideoPlayer* i){VideoPlayerVar.push_back(i);}
+    Q_INVOKABLE void GraphicsViewVarPushBack(GraphicsView* i){GraphicsViewVar.push_back(i);}
+    Q_INVOKABLE void CaluThreadVarPushBack(CaluThread* i){CaluThreadVar.push_back(i);}
+    Q_INVOKABLE void AnimationTypeVarPushBack(AnimationType i){AnimationTypeVar.push_back(i);}
+    Q_INVOKABLE void PixmapVarPushBack(Pixmap* i){PixmapVar.push_back(i);}
+    Q_INVOKABLE void ItemVarPushBack(Item* i){ItemVar.push_back(i);}
+    Q_INVOKABLE void MusicPlayerVarPushBack(MusicPlayer* i){MusicPlayerVar.push_back(i);}
+    Q_INVOKABLE void GraphicsSceneVarPushBack(GraphicsScene* i){GraphicsSceneVar.push_back(i);}
+    Q_INVOKABLE void KeyVarPushBack(Key i){KeyVar.push_back(i);}
 
     bool operator !=(const ParametersStru &par);
     ParametersStru& operator =(const ParametersStru &par);

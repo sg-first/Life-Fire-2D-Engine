@@ -33,9 +33,9 @@ Variant maincall::JSEval(String code,String functionname,String *mistake,JSVM *V
     return ret.toVariant();
 }
 
-void maincall::JSSendPar(ParametersStru Parame,String ParameName,JSVM *VM)
+void maincall::JSSendPar(ParametersStru *Parame,String ParameName,JSVM *VM) //注意，使用指针仅因迫不得已，实际创建请不要new
 {
-    QScriptValue para=VM->newQObject(&Parame);
+    QScriptValue para=VM->newQObject(Parame);
     VM->globalObject().setProperty(ParameName,para);
 }
 

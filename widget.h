@@ -63,22 +63,22 @@ public:
     Q_INVOKABLE CaluThread* StartThread(String slotfun, ParametersStru par=NULL_ParametersStru, bool track=true);
     Q_INVOKABLE void RemoveThread(CaluThread *thread);
     Q_INVOKABLE bool ItemColliding(Item* item1, Item* item2);
-    Q_INVOKABLE void AnimationRotationItem(Item* item, float set,int time,Pos originPos=defaultPos,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,int time=-1,Pos originPos=defaultPos,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationScaleItem(Item* item, float set, int time, Pos originPos=defaultPos, String signfun=NULL_String);
-    Q_INVOKABLE void AnimationScaleItem(Item* item, SCFun scfun, int time=-1, Pos originPos=defaultPos, String signfun=NULL_String);
-    Q_INVOKABLE void AnimationBlurRadiusItem(Item* item, float set,int time,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationBlurRadiusItem(Item* item,SCFun scfun,int time=-1,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationSetOpacityItem(Item* item, float set,int time,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationSetOpacityItem(Item* item,SCFun scfun,int time=-1,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationMoveItem(Item* item,int x,int y,int time,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationMoveItem(Item* item,SCFun scfun,int time=-1,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,int x,int y,int time,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,SCFun scfun,int time=-1,String signfun=NULL_String);
-    Q_INVOKABLE void AnimationShearItem(Item* item, float fx, float fy, int time, String signfun=NULL_String);
-    Q_INVOKABLE void AnimationShearItem(Item* item,SCFun scfun,int time=-1, String signfun=NULL_String);
-    Q_INVOKABLE void AnimationSetRGBColorItem(Item* item, int R, int G, int B, int time, String signfun=NULL_String);
-    Q_INVOKABLE void AnimationSetRGBColorItem(Item* item,SCFun scfun,int time=-1,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationRotationItem(Item* item, float set,long time,Pos originPos=defaultPos,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,long time=-1,Pos originPos=defaultPos,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationScaleItem(Item* item, float set, long time, Pos originPos=defaultPos, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationScaleItem(Item* item, SCFun scfun, long time=-1, Pos originPos=defaultPos, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationBlurRadiusItem(Item* item, float set,long time,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationBlurRadiusItem(Item* item,SCFun scfun,long time=-1,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationSetOpacityItem(Item* item, float set,long time,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationSetOpacityItem(Item* item,SCFun scfun,long time=-1,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationMoveItem(Item* item,int x,int y,long time,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationMoveItem(Item* item,SCFun scfun,long time=-1,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,int x,int y,long time,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,SCFun scfun,long time=-1,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationShearItem(Item* item, float fx, float fy, long time, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationShearItem(Item* item,SCFun scfun,long time=-1, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationSetRGBColorItem(Item* item, int R, int G, int B, long time, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationSetRGBColorItem(Item* item,SCFun scfun,long time=-1,String signfun=NULL_String);
     Q_INVOKABLE int GetItemX(Item* item);
     Q_INVOKABLE int GetItemY(Item* item);
     Q_INVOKABLE int GetItemR(Item* item);
@@ -88,8 +88,8 @@ public:
     Q_INVOKABLE float GetItemOpacity(Item* item);
     Q_INVOKABLE float GetItemRotation(Item* item);
     Q_INVOKABLE float GetItemScale(Item* item);
-    Q_INVOKABLE Item* AddPicAnimation(QVector<String> address,int x,int y,int time,String signfun=NULL_String,bool cycle=true,GraphicsScene *scene=MainScene);
-    Q_INVOKABLE Item* AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, int time, String signfun=NULL_String, bool cycle=true, GraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddPicAnimation(QVector<String> address,int x,int y,long time,String signfun=NULL_String,bool cycle=true,GraphicsScene *scene=MainScene);
+    Q_INVOKABLE Item* AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, long time, String signfun=NULL_String, bool cycle=true, GraphicsScene *scene=MainScene);
     Q_INVOKABLE void EndAnimation(Item* item, AnimationType choose);
     Q_INVOKABLE bool IsAnimation(Item* item,AnimationType choose);
     Q_INVOKABLE void EndAllAnimation(Item* item);
@@ -105,7 +105,7 @@ public:
     Q_INVOKABLE GraphicsScene* AddScene(int width,int height);
     Q_INVOKABLE void DeleteScene(GraphicsScene* scene){delete scene;}
     Q_INVOKABLE void SetViewScene(GraphicsView *view=MainView, GraphicsScene *scene=MainScene, int viewX=-1, int viewY=-1);
-    Q_INVOKABLE void SafeSleep(int time);
+    Q_INVOKABLE void SafeSleep(long time);
     Q_INVOKABLE void SetItemLayer(Item* item, int Layer);
     //collidingItems(QGraphicsItem *item)，返回一个与item碰撞的item的表，可以留着做物理引擎用
     Q_INVOKABLE void SetItemOrder(Item* Belowitem, Item* Aboveitem);
@@ -119,8 +119,8 @@ public:
     Q_INVOKABLE String AESUncrypt(String str,String key);
     Q_INVOKABLE void ChangePixmapItem(String path, Item* item);
     Q_INVOKABLE void ChangePixmapItem(Pixmap* pixmap,Item* item);
-    Q_INVOKABLE void ChangePicAnimationItem(QVector<String> allpixmap, Item* item, int time, String signfun=NULL_String, bool cycle=true);
-    Q_INVOKABLE void ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item* item, int time, String signfun=NULL_String, bool cycle=true);
+    Q_INVOKABLE void ChangePicAnimationItem(QVector<String> allpixmap, Item* item, long time, String signfun=NULL_String, bool cycle=true);
+    Q_INVOKABLE void ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item* item, long time, String signfun=NULL_String, bool cycle=true);
     Q_INVOKABLE void SetItemEvent(Item *item, String PressSlotfun=NULL_String, ParametersStru PressPar=NULL_ParametersStru, String ReleaseSlotfun=NULL_String, ParametersStru ReleasePar=NULL_ParametersStru);
     Q_INVOKABLE void RemoveFile(String path);
     Q_INVOKABLE void ShearItem(Item* item,float X,float Y);
@@ -136,8 +136,8 @@ public:
     Q_INVOKABLE Pixmap* HorizontallyFlip(Pixmap *pixmap);
     Q_INVOKABLE void VerticalFlip(Item *item);
     Q_INVOKABLE Pixmap* VerticalFlip(Pixmap *pixmap);
-    Q_INVOKABLE Timer* StartMultipleTimer(String slotfun,int time);
-    Q_INVOKABLE void StartSingleTimer(String slotfun,int time);
+    Q_INVOKABLE Timer* StartMultipleTimer(String slotfun,long time);
+    Q_INVOKABLE void StartSingleTimer(String slotfun,long time);
     Q_INVOKABLE void DeleteTimer(Timer* timer){delete timer;}
     Q_INVOKABLE Gesture* LoadGesture(QList<Pos> posSeq,int tolerance,String event);
     Q_INVOKABLE Gesture* LoadGesture(LocusFunc locus,int tolerance,ProgressStand standard,int maxProgress,String event);
@@ -157,7 +157,11 @@ public:
     #endif
     Q_INVOKABLE Pos NewPos(float x,float y){return Pos(x,y);}
     Q_INVOKABLE Pos GetItemCenter(Item *item);
-    Q_INVOKABLE ParametersStru NewParametersStru(){return ParametersStru();}
+    //需要给坑爹的JS提供的操作
+    Q_INVOKABLE ParametersStru* NewParametersStru(){return new ParametersStru();}
+    Q_INVOKABLE ParametersStru GetParametersStruVal(ParametersStru *par){return *par;}
+    Q_INVOKABLE void DeleteParametersStru(ParametersStru *par){delete par;}
+    //坑爹结束
 
     void PassMousePressEvent(Pos point);
     void PassMouseReleaseEvent(Pos point);

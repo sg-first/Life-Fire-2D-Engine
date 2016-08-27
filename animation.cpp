@@ -15,7 +15,7 @@ void SC::changepixmap()
         {iter=pixmap.begin();}//若需循环，就重播
         else//若不循环，发信号退出一切
         {
-            this->over=1;
+            over=true;
             if(signfun!=NULL_String)
             {
                 QByteArray ba = signfun.toLatin1();
@@ -34,7 +34,6 @@ void SC::start(int choose)
 {
     this->choose=choose;
     timer=new QTimer(this);
-    over=0;
     switch(choose)
     {
         case 0:
@@ -115,7 +114,7 @@ void SC::isend()
     if(times!=-1)
     {
         if(temp==times || temp==times+1 || temp==times-1) //temp实际上是记录目前时间的
-        {over=1;}
+        {over=true;}
     }
 }
 
