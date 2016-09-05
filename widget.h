@@ -77,6 +77,8 @@ public:
     Q_INVOKABLE void AnimationSetViewCenter(GraphicsView* view,SCFun scfun,long time=-1,String signfun=NULL_String);
     Q_INVOKABLE void AnimationShearItem(Item* item, float fx, float fy, long time, String signfun=NULL_String);
     Q_INVOKABLE void AnimationShearItem(Item* item,SCFun scfun,long time=-1, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationFreeScaleItem(Item* item, float fx, float fy, long time, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationFreeScaleItem(Item* item,SCFun scfun,long time=-1, String signfun=NULL_String);
     Q_INVOKABLE void AnimationSetRGBColorItem(Item* item, int R, int G, int B, long time, String signfun=NULL_String);
     Q_INVOKABLE void AnimationSetRGBColorItem(Item* item,SCFun scfun,long time=-1,String signfun=NULL_String);
     Q_INVOKABLE int GetItemX(Item* item);
@@ -124,8 +126,11 @@ public:
     Q_INVOKABLE void SetItemEvent(Item *item, String PressSlotfun=NULL_String, ParametersStru PressPar=NULL_ParametersStru, String ReleaseSlotfun=NULL_String, ParametersStru ReleasePar=NULL_ParametersStru);
     Q_INVOKABLE void RemoveFile(String path);
     Q_INVOKABLE void ShearItem(Item* item,float X,float Y);
+    Q_INVOKABLE void FreeScaleItem(Item *item,float X,float Y);
     Q_INVOKABLE float GetItemShearX(Item* item);
     Q_INVOKABLE float GetItemShearY(Item* item);
+    Q_INVOKABLE float GetItemFreeScaleX(Item* item);
+    Q_INVOKABLE float GetItemFreeScaleY(Item* item);
     Q_INVOKABLE void AddKeyEvent(Key key, String PressSlotfun=NULL_String, ParametersStru PressPar=NULL_ParametersStru, String ReleaseSlotfun=NULL_String, ParametersStru ReleasePar=NULL_ParametersStru);
     Q_INVOKABLE void RemoveKeyEvent(Key key);
     Q_INVOKABLE void AddMouseEvent(int mouseX, int mouseY, int fmouseX, int fmouseY, String PressSlotfun=NULL_String, ParametersStru PressPar=NULL_ParametersStru, String ReleaseSlotfun=NULL_String, ParametersStru ReleasePar=NULL_ParametersStru);

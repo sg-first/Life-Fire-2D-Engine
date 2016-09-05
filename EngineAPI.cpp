@@ -425,6 +425,23 @@ void Widget::AnimationShearItem(Item *item, SCFun scfun, long time, String signf
     sc->start(Shear);
 }
 
+void Widget::AnimationFreeScaleItem(Item *item, float fx, float fy, long time, String signfun)
+{
+    EndAnimation(item,FreeScale);
+    SC *sc=new SC(item->FreeScaleX,item->FreeScaleY,fx,fy,time,item,signfun,this);
+    item->scPointer[FreeScale]=sc;
+    sc->start(FreeScale);
+}
+
+void Widget::AnimationFreeScaleItem(Item *item, SCFun scfun, long time, String signfun)
+{
+    EndAnimation(item,FreeScale);
+    SC *sc=new SC(0,0,0,0,time,item,signfun,this);
+    item->scPointer[FreeScale]=sc;
+    sc->UesSCFun(scfun);
+    sc->start(FreeScale);
+}
+
 void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, long time,String signfun)
 {
    EndAnimation(item,Color);
@@ -767,11 +784,26 @@ void Widget::ShearItem(Item* item,float X,float Y)
    item->ShearY=Y;
 }
 
+void Widget::FreeScaleItem(Item *item,float X,float Y)
+{
+    QTransform tranform;
+    tranform.scale(X,Y);
+    item->ItemPointer->setTransform(tranform);
+    item->FreeScaleX=X;
+    item->FreeScaleY=Y;
+}
+
 float Widget::GetItemShearX(Item* item)
 {return item->ShearX;}
 
 float Widget::GetItemShearY(Item* item)
 {return item->ShearY;}
+
+float Widget::GetItemFreeScaleX(Item *item)
+{return item->FreeScaleX;}
+
+float Widget::GetItemFreeScaleY(Item *item)
+{return item->FreeScaleY;}
 
 void Widget::AddKeyEvent(Qt::Key key,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar)
 {

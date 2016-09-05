@@ -133,7 +133,9 @@ public:
     QGraphicsColorizeEffect *Color=nullptr;
     float ShearX=0;
     float ShearY=0;
-    SC* scPointer[8];
+    float FreeScaleX=1;
+    float FreeScaleY=1;
+    SC* scPointer[9];
 };
 
 struct InputEvent

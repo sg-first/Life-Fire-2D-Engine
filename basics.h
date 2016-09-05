@@ -21,7 +21,7 @@ typedef Qt::ConnectionType ExecutionMode;
 typedef QScriptEngine JSVM;
 typedef Qt::Key Key;
 
-enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear};
+enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear,FreeScale};
 
 class ParametersStru : public QObject
 {

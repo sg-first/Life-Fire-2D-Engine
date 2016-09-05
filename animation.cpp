@@ -96,6 +96,14 @@ void SC::start(int choose)
             timer->start(2);
             break;
         }
+        case 8:
+        {
+            temp=0;
+            temp1=2*(TargetModulus-CurrentModulus)/times;
+            temp2=2*(TargetModulus2-CurrentModulus2)/times;
+            timer->start(2);
+            break;
+        }
         case 20:
         {
             temp=0;
@@ -208,6 +216,19 @@ void SC::SlowChange()
             {
                 SCCurrentModulus scc=scfun(temp);
                 s->ShearItem(item,scc.CurrentModulus,scc.CurrentModulus2);
+            }
+            isend();
+            break;
+        }
+        case FreeScale:
+        {
+            temp+=2;
+            if(!isfunction)
+            {s->FreeScaleItem(item,CurrentModulus+=temp1,CurrentModulus2+=temp2);}
+            else
+            {
+                SCCurrentModulus scc=scfun(temp);
+                s->FreeScaleItem(item,scc.CurrentModulus,scc.CurrentModulus2);
             }
             isend();
             break;
