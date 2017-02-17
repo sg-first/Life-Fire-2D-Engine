@@ -17,8 +17,7 @@ public:
     ~Widget();
 
     QList<Item*> AllItem;
-
-    //引擎行为（实现于enginebeh）
+    //开发者使用的接口函数
     Q_INVOKABLE Pixmap* LoadPixmap(String PicPath);
     Q_INVOKABLE RGBColor LoadRGBColor(int R,int G,int B);
     Q_INVOKABLE int GetPixmapWidth(Pixmap *pixmap);
@@ -163,9 +162,9 @@ public:
     Q_INVOKABLE Pos NewPos(float x,float y){return Pos(x,y);}
     Q_INVOKABLE Pos GetItemCenter(Item *item);
     //需要给坑爹的JS提供的操作
-    Q_INVOKABLE ParametersStru* NewParametersStru(){return new ParametersStru();}
-    Q_INVOKABLE ParametersStru GetParametersStruVal(ParametersStru *par){return *par;}
-    Q_INVOKABLE void DeleteParametersStru(ParametersStru *par){delete par;}
+    Q_INVOKABLE ParametersStru* NewParametersStru() {return new ParametersStru();}
+    Q_INVOKABLE ParametersStru GetParametersStruVal(ParametersStru *par) {return *par;}
+    Q_INVOKABLE void DeleteParametersStru(ParametersStru *par) {delete par;}
     //坑爹结束
 
     void PassMousePressEvent(Pos point);
