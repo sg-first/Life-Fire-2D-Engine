@@ -1,3 +1,4 @@
+//-----本文件为一些引擎可选的功能开关-----
 #pragma once
 //选项被注释为关闭，未被注释为开启
 #define SafetyPriority /*安全动画
