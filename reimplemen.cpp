@@ -117,12 +117,12 @@ void VideoPlayer::start()
 
 void VideoPlayer::playFinished(QMediaPlayer::State state)
 {
-    if(state!=QMediaPlayer::StoppedState)
-    {return;}
+    /*if(state!=QMediaPlayer::StoppedState)
+    {return;}*/
     if(!cycle)
     {
         if(signfun!=NULL_String)
-        {RunFun(signfun,par);}
+            RunFun(signfun,par);
         delete this;
     }
     else

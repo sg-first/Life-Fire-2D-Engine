@@ -267,10 +267,6 @@ bool Widget::ItemColliding(Item* item1,Item* item2)
 
 VideoPlayer* Widget::AddVideo(String path,int Volume,int x,int y,int width,int heigh,bool cycle,String signfun,ParametersStru par,GraphicsScene *scene)
 {
-    if(x==-1)
-    {x=MainView->viewX-(WindowsWidth/2);}
-    if(y==-1)
-    {y=MainView->viewY-(WindowsHeigh/2);}
     VideoPlayer* video=new VideoPlayer(path,Volume,x,y,width,heigh,cycle,signfun,par,scene);
     video->start();
     return video;
