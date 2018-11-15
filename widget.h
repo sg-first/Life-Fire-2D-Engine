@@ -19,6 +19,7 @@ public:
     QList<Item*> AllItem;
     //开发者使用的接口函数
     Q_INVOKABLE Pixmap* LoadPixmap(String PicPath);
+    Q_INVOKABLE void DeletePixmap(Pixmap* pixmap) {delete pixmap;}
     Q_INVOKABLE RGBColor LoadRGBColor(int R,int G,int B);
     Q_INVOKABLE int GetPixmapWidth(Pixmap *pixmap);
     Q_INVOKABLE int GetPixmapHeight(Pixmap *pixmap);
@@ -99,12 +100,12 @@ public:
     Q_INVOKABLE int GetViewX(GraphicsView *gview=MainView);
     Q_INVOKABLE int GetViewY(GraphicsView *gview=MainView);
     Q_INVOKABLE GraphicsView* AddView(int x,int y,int width,int height);
-    Q_INVOKABLE void DeleteView(GraphicsView* view){delete view;}
+    Q_INVOKABLE void DeleteView(GraphicsView* view) {delete view;}
     Q_INVOKABLE void SetViewSize(int x,int y,int width=WindowsWidth,int height=WindowsHeigh,GraphicsView *gview=MainView);
     Q_INVOKABLE int GetScreenWidth();
     Q_INVOKABLE int GetScreenHeigh();
     Q_INVOKABLE GraphicsScene* AddScene(int width,int height);
-    Q_INVOKABLE void DeleteScene(GraphicsScene* scene){delete scene;}
+    Q_INVOKABLE void DeleteScene(GraphicsScene* scene) {delete scene;}
     Q_INVOKABLE void SetViewScene(GraphicsView *view=MainView, GraphicsScene *scene=MainScene, int viewX=-1, int viewY=-1);
     Q_INVOKABLE void SafeSleep(long time);
     Q_INVOKABLE void SetItemLayer(Item* item, int Layer);
@@ -142,7 +143,7 @@ public:
     Q_INVOKABLE Pixmap* VerticalFlip(Pixmap *pixmap);
     Q_INVOKABLE Timer* StartMultipleTimer(String slotfun,long time);
     Q_INVOKABLE void StartSingleTimer(String slotfun,long time);
-    Q_INVOKABLE void DeleteTimer(Timer* timer){delete timer;}
+    Q_INVOKABLE void DeleteTimer(Timer* timer) {delete timer;}
     Q_INVOKABLE Gesture* LoadGesture(QList<Pos> posSeq,int tolerance,String event);
     Q_INVOKABLE Gesture* LoadGesture(LocusFunc locus,int tolerance,ProgressStand standard,int maxProgress,String event);
     Q_INVOKABLE void AddGesture(int mouseX,int mouseY,int fmouseX,int fmouseY,QList<Pos> posSeq,int tolerance,String event);

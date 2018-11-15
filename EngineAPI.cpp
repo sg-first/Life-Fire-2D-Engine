@@ -598,6 +598,7 @@ void Widget::EndAllAnimation(Item* item)
    EndAnimation(item,Color);
    EndAnimation(item,Picture);
    EndAnimation(item,Shear);
+   EndAnimation(item,FreeScale);
 }
 
 void Widget::SetViewCenter(int x, int y,GraphicsView *gview)
