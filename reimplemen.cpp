@@ -4,16 +4,18 @@
 QList<ExpansionSlot*> AllExpansionSlot;
 
 //MyItem
-void MyItem::SetButton(Pixmap up, Pixmap down, String Music,int volume)
+void PixmapItem::SetButton(Pixmap up, Pixmap down, String Music,int volume)
 {
     this->isbutton=true;
     this->up=up;
     this->down=down;
     this->Music=Music;
+    if(Music!=NULL_String)
+        this->MusicPointer=new MusicPlayer;
     this->volume=volume;
 }
 
-void MyItem::SetEvent(String PressFun,ParametersStru PressPar,String ReleaseFun,ParametersStru ReleasePar)
+void PixmapItem::SetEvent(String PressFun,ParametersStru PressPar,String ReleaseFun,ParametersStru ReleasePar)
 {
     this->PressFun=PressFun;
     this->PressPar=PressPar;
@@ -21,7 +23,7 @@ void MyItem::SetEvent(String PressFun,ParametersStru PressPar,String ReleaseFun,
     this->ReleasePar=ReleasePar;
 }
 
-bool MyItem::IsRegion()
+bool PixmapItem::IsRegion()
 {
     int x=this->x();
     int width=this->pixmap().width();
@@ -59,31 +61,32 @@ bool MyItem::IsRegion()
 void GraphicsView::mouseMoveEvent(QMouseEvent *e)
 {s->PassMouseMoveEvent(e);}
 
-void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
+void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     if(isbutton)//如果是按钮就放音乐并且切换图元
     {
-        MusicPlayer *player=new MusicPlayer;
-        player->singleplay(Music,volume);
+        MusicPointer->singleplay(Music,volume);
         this->setPixmap(down);
     }
 
     if(PressFun!=NULL_String)//如果有事件，就执行
-    {RunFun(PressFun,PressPar);}
+        RunFun(PressFun,PressPar);
 
+    //传递本次点击到区域鼠标事件检测区
     Pos nowpos=e->pos().toPoint();
     nowpos=Pos(this->x()+nowpos.x(),this->y()+nowpos.y());
     s->PassMousePressEvent(nowpos);
 }
 
-void MyItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
+void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     if(isbutton)//是按钮切回原图元
-    {this->setPixmap(up);}
+        this->setPixmap(up);
 
     if(ReleaseFun!=NULL_String&&IsRegion())
-    {RunFun(ReleaseFun,ReleasePar);}
+        RunFun(ReleaseFun,ReleasePar);
 
+    //传递本次释放到区域鼠标事件检测区
     Pos nowpos=e->pos().toPoint();
     nowpos=Pos(this->x()+nowpos.x(),this->y()+nowpos.y());
     s->PassMouseReleaseEvent(nowpos);
@@ -129,6 +132,7 @@ void VideoPlayer::playFinished(QMediaPlayer::State state)
 
 VideoPlayer::~VideoPlayer()
 {
+    this->mediaPlayer->stop();
     delete mediaPlayer;
     delete videoItem;
 }
@@ -167,7 +171,10 @@ void MusicPlayer::playFinished(QMediaPlayer::State state)
 }
 
 MusicPlayer::~MusicPlayer()
-{delete cyclelist;}
+{
+    this->stop();
+    delete cyclelist;
+}
 
 //GraphicsView
 GraphicsView::GraphicsView(QWidget *parent, Widget *s, int x, int y, int width, int height):QGraphicsView(parent),s(s)
@@ -198,7 +205,7 @@ void GraphicsView::SetCenter(QGraphicsItem *item)
 }
 
 //Item
-Item::Item(MyItem* pixmapitem,QGraphicsItem *graphicsitem)
+Item::Item(PixmapItem* pixmapitem,QGraphicsItem *graphicsitem)
 {
     this->PixmapItemPoniter=pixmapitem;
     if(graphicsitem!=nullptr)

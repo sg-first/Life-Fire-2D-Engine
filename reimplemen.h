@@ -21,36 +21,6 @@ public:
 const JSParStru _NULLJSParStru;
 
 
-class MyItem : public QGraphicsPixmapItem//真正的图元类
-{
-public:
-    MyItem(const QPixmap &pixmap,Widget *s=nullptr, QGraphicsItem *parent=nullptr)
-        :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent),s(s){}
-    void SetButton(Pixmap up, Pixmap down, String Music, int volume);
-    void SetEvent(String PressFun, ParametersStru PressPar, String ReleaseFun, ParametersStru ReleasePar);
-
-protected:
-    Widget *s;
-    //Button
-    bool isbutton=false;
-    Pixmap up;
-    Pixmap down;
-    String Music;
-    int volume;
-    //slotfun
-    String PressFun;
-    ParametersStru PressPar;
-    String ReleaseFun;
-    ParametersStru ReleasePar;
-    //Event
-    void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
-    //允许在此添加更多类型的事件，或许你需要添加一些公有成员变量来记录其所对应的槽函数
-
-    bool IsRegion();
-};
-
-
 class VideoPlayer : public QWidget //视频类
 {
     Q_OBJECT
@@ -71,6 +41,7 @@ private slots:
     void playFinished(QMediaPlayer::State state);
 };
 
+
 class MusicPlayer : public QMediaPlayer//音乐类
 {
     Q_OBJECT
@@ -82,6 +53,38 @@ public:
 
 private slots:
     void playFinished(QMediaPlayer::State state);
+};
+
+
+class PixmapItem : public QGraphicsPixmapItem //图像图元类
+{
+public:
+    PixmapItem(const QPixmap &pixmap,Widget *s=nullptr, QGraphicsItem *parent=nullptr)
+        :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent),s(s){}
+    ~PixmapItem() {delete this->MusicPointer;}
+    void SetButton(Pixmap up, Pixmap down, String Music, int volume);
+    void SetEvent(String PressFun, ParametersStru PressPar, String ReleaseFun, ParametersStru ReleasePar);
+
+protected:
+    Widget *s;
+    //Button
+    bool isbutton=false;
+    Pixmap up;
+    Pixmap down;
+    String Music;
+    MusicPlayer* MusicPointer=nullptr;
+    int volume;
+    //slotfun
+    String PressFun;
+    ParametersStru PressPar;
+    String ReleaseFun;
+    ParametersStru ReleasePar;
+    //Event
+    void mousePressEvent(QGraphicsSceneMouseEvent *e);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+    //允许在此添加更多类型的事件，或许你需要添加一些公有成员变量来记录其所对应的槽函数
+
+    bool IsRegion();
 };
 
 
@@ -121,14 +124,14 @@ protected:
 };
 
 
-class Item//图元信息记录类
+class Item //通用图元类
 {
 public:
-    Item(MyItem* pixmapitem=nullptr,QGraphicsItem *graphicsitem=nullptr);
+    Item(PixmapItem* pixmapitem=nullptr,QGraphicsItem *graphicsitem=nullptr);
     ~Item();
 
     QGraphicsItem *ItemPointer;
-    MyItem *PixmapItemPoniter;
+    PixmapItem *PixmapItemPoniter;
     QGraphicsBlurEffect *Blur=nullptr;
     QGraphicsColorizeEffect *Color=nullptr;
     float ShearX=0;

@@ -121,7 +121,7 @@ void SC::isend()
 {
     if(times!=-1)
     {
-        if(temp==times || temp==times+1 || temp==times-1) //temp实际上是记录目前时间的
+        if((long)temp==times || (long)temp==times+1 || (long)temp==times-1) //temp实际上是记录目前时间的
         {over=true;}
     }
 }
@@ -259,6 +259,6 @@ void SC::SlowChange()
         if(choose!=20)
         {item->scPointer[choose]=nullptr;}
         delete timer;
-        delete this;
+        delete this; //释放动画资源的位置在这里，在EndAnimation后会在2ms后执行到这里自动释放
     }
 }

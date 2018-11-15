@@ -51,19 +51,19 @@ public:
     Q_INVOKABLE void SetBackground(RGBColor color);
     Q_INVOKABLE void PauseMusic(MusicPlayer *player);
     Q_INVOKABLE void PlayMusic(MusicPlayer *player);
-    Q_INVOKABLE void RemoveMusic(MusicPlayer *player);
+    Q_INVOKABLE void DeteleMusic(MusicPlayer *player) {delete player;}
     Q_INVOKABLE void StopMusic(MusicPlayer *player);
     Q_INVOKABLE VideoPlayer* AddVideo(String path, int Volume, int x=-1, int y=-1,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,String signfun=NULL_String,ParametersStru par=NULL_ParametersStru,GraphicsScene *scene=MainScene=MainScene);
     Q_INVOKABLE void SetVideoVolume(VideoPlayer *video,int volume);
     Q_INVOKABLE int GetVideoVolume(VideoPlayer *video);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);
     Q_INVOKABLE void PlayVideo(VideoPlayer *video);
-    Q_INVOKABLE void RemoveVideo(VideoPlayer *video);
+    Q_INVOKABLE void DeleteVideo(VideoPlayer *video) {delete video;}
     Q_INVOKABLE void StopVideo(VideoPlayer *video);
     Q_INVOKABLE CaluThread* StartThread(String slotfun, ParametersStru par=NULL_ParametersStru, bool track=true);
     Q_INVOKABLE void RemoveThread(CaluThread *thread);
     Q_INVOKABLE bool ItemColliding(Item* item1, Item* item2);
-    Q_INVOKABLE void AnimationRotationItem(Item* item, float set,long time,Pos originPos=defaultPos,String signfun=NULL_String);
+    Q_INVOKABLE void AnimationRotationItem(Item* item, float set, long time,Pos originPos=defaultPos,String signfun=NULL_String);
     Q_INVOKABLE void AnimationRotationItem(Item* item,SCFun scfun,long time=-1,Pos originPos=defaultPos,String signfun=NULL_String);
     Q_INVOKABLE void AnimationScaleItem(Item* item, float set, long time, Pos originPos=defaultPos, String signfun=NULL_String);
     Q_INVOKABLE void AnimationScaleItem(Item* item, SCFun scfun, long time=-1, Pos originPos=defaultPos, String signfun=NULL_String);

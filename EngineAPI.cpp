@@ -30,7 +30,7 @@ int Widget::GetPixmapHeight(Pixmap *pixmap)
 Item* Widget::AddPixmapItem(String PicPath,int x,int y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
     Pixmap mainpix(PicPath);
-    MyItem *item=new MyItem(mainpix,this);
+    PixmapItem *item=new PixmapItem(mainpix,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
     item->setPos(x,y);
@@ -41,7 +41,7 @@ Item* Widget::AddPixmapItem(String PicPath,int x,int y,String PressSlotfun,Param
 
 Item* Widget::AddPixmapItem(Pixmap *pixmap,int x,int y,String PressSlotfun,ParametersStru PressPar,String ReleaseSlotfun,ParametersStru ReleasePar,GraphicsScene *scene)
 {
-    MyItem *item=new MyItem(*pixmap,this);
+    PixmapItem *item=new PixmapItem(*pixmap,this);
     item->SetEvent(PressSlotfun,PressPar,ReleaseSlotfun,ReleasePar);
     scene->addItem(item);
     item->setPos(x,y);
@@ -53,7 +53,7 @@ Item* Widget::AddPixmapItem(Pixmap *pixmap,int x,int y,String PressSlotfun,Param
 Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, String PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
 {
     Pixmap mainpix(PicPath);
-    MyItem *item=new MyItem(mainpix,this);
+    PixmapItem *item=new PixmapItem(mainpix,this);
     if(PressPic!=NULL_String)
     {item->SetButton(mainpix,Pixmap(PressPic),PressMusic,volume);}
     else
@@ -68,7 +68,7 @@ Item* Widget::AddButtonItem(String PicPath,int x,int y,String ReleaseSlotfun, St
 
 Item* Widget::AddButtonItem(Pixmap *pixmap,int x,int y,String ReleaseSlotfun, Pixmap *PressPic, String PressMusic,int volume, ParametersStru ReleasePar, GraphicsScene *scene)
 {
-    MyItem *item=new MyItem(*pixmap,this);
+    PixmapItem *item=new PixmapItem(*pixmap,this);
     if(PressPic!=nullptr)
     {item->SetButton(*pixmap,*PressPic,PressMusic,volume);}
     else
@@ -229,12 +229,6 @@ void Widget::PauseMusic(MusicPlayer *player)
 void Widget::PlayMusic(MusicPlayer *player)
 {player->play();}
 
-void Widget::RemoveMusic(MusicPlayer *player)
-{
-    player->stop();
-    delete player;
-}
-
 void Widget::StopMusic(MusicPlayer *player)
 {player->stop();}
 
@@ -294,12 +288,6 @@ void Widget::PauseVideo(VideoPlayer *video)
 
 void Widget::PlayVideo(VideoPlayer *video)
 {video->mediaPlayer->play();}
-
-void Widget::RemoveVideo(VideoPlayer *video)
-{
-    video->mediaPlayer->stop();
-    delete video;
-}
 
 void Widget::StopVideo(VideoPlayer *video)
 {video->mediaPlayer->stop();}
@@ -482,7 +470,7 @@ Item* Widget::AddPicAnimation(QVector<String> address,int x,int y,long time,Stri
 {
     assert(!address.isEmpty()); //确认传入的图片容器不为空
 
-    MyItem *temp=new MyItem(address.at(0));//将第一张图片变为图元
+    PixmapItem *temp=new PixmapItem(address.at(0));//将第一张图片变为图元
     scene->addItem(temp);//将第一张图片显示在场景中
     temp->setPos(x,y);
     Item *item=new Item(temp);
@@ -502,7 +490,7 @@ Item* Widget::AddPicAnimation(QVector<Pixmap*> allpixmap, int x, int y, long tim
 {
     assert(!allpixmap.isEmpty());
 
-    MyItem *item=new MyItem(*allpixmap.at(0));
+    PixmapItem *item=new PixmapItem(*allpixmap.at(0));
     Item *ritem=new Item(item);
     scene->addItem(item);
     item->setPos(x,y);
@@ -522,7 +510,7 @@ void Widget::ChangePicAnimationItem(QVector<String>allpixmap,Item* item,long tim
 {
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
-    MyItem *temp=item->PixmapItemPoniter;
+    PixmapItem *temp=item->PixmapItemPoniter;
     temp->setPixmap(Pixmap(allpixmap.at(0)));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例
     item->scPointer[Picture]=sc;
@@ -537,7 +525,7 @@ void Widget::ChangePicAnimationItem(QVector<Pixmap*> allpixmap, Item *item, long
 {
     assert(!allpixmap.isEmpty());//断言，确认传入的图片容器不为空
     EndAnimation(item,Picture);
-    MyItem *temp=item->PixmapItemPoniter;
+    PixmapItem *temp=item->PixmapItemPoniter;
     temp->setPixmap(*allpixmap.at(0));//变更当前图片为图集的第一帧
     SC *sc=new SC(0,0,time,item,signfun,this);//创建SC实例
     item->scPointer[Picture]=sc;
