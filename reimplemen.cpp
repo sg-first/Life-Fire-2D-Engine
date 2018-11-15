@@ -10,8 +10,6 @@ void PixmapItem::SetButton(Pixmap up, Pixmap down, String Music,int volume)
     this->up=up;
     this->down=down;
     this->Music=Music;
-    if(Music!=NULL_String)
-        this->MusicPointer=new MusicPlayer;
     this->volume=volume;
 }
 
@@ -65,7 +63,8 @@ void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     if(isbutton)//如果是按钮就放音乐并且切换图元
     {
-        MusicPointer->singleplay(Music,volume);
+        MusicPlayer *player=new MusicPlayer;
+        player->singleplay(Music,volume);
         this->setPixmap(down);
     }
 
@@ -165,9 +164,9 @@ void MusicPlayer::multipleplay(String name,int volume)
 
 void MusicPlayer::playFinished(QMediaPlayer::State state)
 {
-    if(state!=QMediaPlayer::StoppedState)
-    {return;}
-    delete this;
+    if(this->slotfun!=NULL_String)
+        RunFun(slotfun,par);
+    delete this; //播放结束后会自动释放资源
 }
 
 MusicPlayer::~MusicPlayer()

@@ -204,9 +204,11 @@ void Widget::SetBackground(int R,int G,int B)
 void Widget::SetBackground(RGBColor color)
 {MainScene->setBackgroundBrush(color);}
 
-MusicPlayer* Widget::AddMusic(String name,int volume,bool cycle)
+MusicPlayer* Widget::AddMusic(String name,int volume,bool cycle,String slotfun,ParametersStru par)
 {
    MusicPlayer *player=new MusicPlayer;
+   player->slotfun=slotfun; //如果不循环，该槽不会启动
+   player->par=par;
    if(!cycle)
    {player->singleplay(name,volume);}
    else

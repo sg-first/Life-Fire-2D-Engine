@@ -49,6 +49,8 @@ public:
     void singleplay(String name,int volume);
     void multipleplay(String name,int volume);
     QMediaPlaylist *cyclelist=nullptr;
+    String slotfun;
+    ParametersStru par;
     ~MusicPlayer();
 
 private slots:
@@ -61,7 +63,6 @@ class PixmapItem : public QGraphicsPixmapItem //图像图元类
 public:
     PixmapItem(const QPixmap &pixmap,Widget *s=nullptr, QGraphicsItem *parent=nullptr)
         :QGraphicsPixmapItem::QGraphicsPixmapItem(pixmap,parent),s(s){}
-    ~PixmapItem() {delete this->MusicPointer;}
     void SetButton(Pixmap up, Pixmap down, String Music, int volume);
     void SetEvent(String PressFun, ParametersStru PressPar, String ReleaseFun, ParametersStru ReleasePar);
 
@@ -72,7 +73,6 @@ protected:
     Pixmap up;
     Pixmap down;
     String Music;
-    MusicPlayer* MusicPointer=nullptr;
     int volume;
     //slotfun
     String PressFun;

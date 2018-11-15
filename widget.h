@@ -43,7 +43,7 @@ public:
     Q_INVOKABLE void RemoveItem(Item* item);
     Q_INVOKABLE String GetPath(String str);
     Q_INVOKABLE void SetVisibleItem(Item* item,bool Enabled);
-    Q_INVOKABLE MusicPlayer* AddMusic(String name, int volume, bool cycle=false);
+    Q_INVOKABLE MusicPlayer* AddMusic(String name, int volume, bool cycle=false, String slotfun=NULL_String, ParametersStru par=NULL_ParametersStru);
     Q_INVOKABLE void SetMusicVolume(MusicPlayer *player,int volume);
     Q_INVOKABLE int GetMusicVolume(MusicPlayer *player);
     Q_INVOKABLE void SetBackground(String PicturePath,GraphicsScene *scene=MainScene);
