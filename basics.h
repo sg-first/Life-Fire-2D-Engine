@@ -66,6 +66,7 @@ const ParametersStru _NULLParametersStru;
 class ExpansionSlot
 {
 private:
+    //三选一
     ParSlot parslot=nullptr;
     VoidSlot voidslot=nullptr;
     String slotname;

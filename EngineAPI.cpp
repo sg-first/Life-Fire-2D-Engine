@@ -18,9 +18,6 @@ void adaptive(float &x,float &y)
 Pixmap* Widget::LoadPixmap(String PicPath)
 {return new Pixmap(PicPath);}
 
-RGBColor Widget::LoadRGBColor(int R, int G, int B)
-{return RGBColor(R,G,B);}
-
 int Widget::GetPixmapWidth(Pixmap *pixmap)
 {return pixmap->width();}
 
@@ -455,6 +452,11 @@ void Widget::AnimationSetRGBColorItem(Item* item, int R, int G, int B, long time
    SC *sc=new SC(CurrentModulus,CurrentModulus2,CurrentModulus3,R,G,B,time,item,signfun,this);
    item->scPointer[Color]=sc;
    sc->start(Color);
+}
+
+void Widget::AnimationSetRGBColorItem(Item* item, RGBColor color, long time,String signfun)
+{
+    AnimationSetRGBColorItem(item,color.red(),color.green(),color.blue(),time,signfun);
 }
 
 void Widget::AnimationSetRGBColorItem(Item *item, SCFun scfun, long time, String signfun)

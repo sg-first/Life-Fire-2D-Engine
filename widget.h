@@ -20,7 +20,7 @@ public:
     //开发者使用的接口函数
     Q_INVOKABLE Pixmap* LoadPixmap(String PicPath);
     Q_INVOKABLE void DeletePixmap(Pixmap* pixmap) {delete pixmap;}
-    Q_INVOKABLE RGBColor LoadRGBColor(int R,int G,int B);
+    //Q_INVOKABLE RGBColor LoadRGBColor(int R,int G,int B) {return RGBColor(R,G,B);}
     Q_INVOKABLE int GetPixmapWidth(Pixmap *pixmap);
     Q_INVOKABLE int GetPixmapHeight(Pixmap *pixmap);
     Q_INVOKABLE Item* AddPixmapItem(String PicPath,int x,int y,String PressSlotfun=NULL_String,ParametersStru PressPar=NULL_ParametersStru,String ReleaseSlotfun=NULL_String,ParametersStru ReleasePar=NULL_ParametersStru,GraphicsScene *scene=MainScene);
@@ -80,6 +80,7 @@ public:
     Q_INVOKABLE void AnimationFreeScaleItem(Item* item, float fx, float fy, long time, String signfun=NULL_String);
     Q_INVOKABLE void AnimationFreeScaleItem(Item* item,SCFun scfun,long time=-1, String signfun=NULL_String);
     Q_INVOKABLE void AnimationSetRGBColorItem(Item* item, int R, int G, int B, long time, String signfun=NULL_String);
+    Q_INVOKABLE void AnimationSetRGBColorItem(Item* item, RGBColor color, long time,String signfun);
     Q_INVOKABLE void AnimationSetRGBColorItem(Item* item,SCFun scfun,long time=-1,String signfun=NULL_String);
     Q_INVOKABLE int GetItemX(Item* item);
     Q_INVOKABLE int GetItemY(Item* item);
