@@ -1,6 +1,6 @@
 ﻿Life-Fire 2D engine
 ===================================
-Life-Fire is the SG-Studio packages graphics engine base on Qt library, enabling developers do not have to focus on the complex inheritance of Qt, not have to understand all kinds of data type and the use of function, by calling the simple interface function to achieve their 2D effect. Dependent on the power of Qt, this engine has a cross-platform capabilities. Currently supports almost all operating systems, you can do a lot of programmers dream of "write once, deploy everywhere."
+Life-Fire is the SG-Studio packages graphics engine base on Qt library. It supports developers do not have to focus on the complex inheritance of Qt, not have to understand all kinds of data type and the use of function, by calling the simple interface function to achieve their 2D effect. Dependent on the power of Qt, this engine has a cross-platform capabilities. It supports almost all operating systems currently so you can do a lot of programmers dream of "write once, deploy everywhere."
 
 Version
 -----------------------------------
