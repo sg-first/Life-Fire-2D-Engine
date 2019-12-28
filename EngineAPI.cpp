@@ -175,12 +175,15 @@ void Widget::ClearScene(GraphicsScene *scene)
 
 void Widget::RemoveItem(Item* item)
 {
-    EndAllAnimation(item);
-    #ifdef SafetyPriority
-    SafeSleep(2);//等待目前进行这帧完成
-    #endif
-    AllItem.removeAt(AllItem.indexOf(item));
-    delete item;
+    if(item!=nullptr)
+    {
+        EndAllAnimation(item);
+        #ifdef SafetyPriority
+        SafeSleep(2);//等待目前进行这帧完成
+        #endif
+        AllItem.removeAt(AllItem.indexOf(item));
+        delete item;
+    }
 }
 
 String Widget::GetPath(String str)
