@@ -22,12 +22,11 @@ Variant maincall::JSEval(String code,String functionname,String *mistake,JSVM *V
     if(functionname!=NULL_String)
     {
         ret=VM->globalObject().property(functionname);
-        ret.call(QScriptValue());
+        ret=ret.call(QScriptValue());
     }
     if(ret.isError())
     {
-        if(mistake!=nullptr)
-        {*mistake=String::number(ret.property("lineNumber").toInt32())+" line:"+ret.toString();}
+        *mistake=String::number(ret.property("lineNumber").toInt32())+" line:"+ret.toString();
         return NULL;
     }
     return ret.toVariant();
