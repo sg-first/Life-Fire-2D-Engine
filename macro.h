@@ -20,4 +20,3 @@
 //实例更名
 #define asynchronous Qt::QueuedConnection
 #define synchronization Qt::DirectConnection
-

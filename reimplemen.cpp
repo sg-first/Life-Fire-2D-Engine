@@ -117,6 +117,7 @@ void VideoPlayer::start()
 
 void VideoPlayer::playFinished(QMediaPlayer::State state)
 {
+    Q_UNUSED(state);
     /*if(state!=QMediaPlayer::StoppedState)
     {return;}*/
     if(!cycle)
@@ -164,6 +165,7 @@ void MusicPlayer::multipleplay(String name,int volume)
 
 void MusicPlayer::playFinished(QMediaPlayer::State state)
 {
+    Q_UNUSED(state);
     if(this->slotfun!=NULL_String)
         RunFun(slotfun,par);
     delete this; //播放结束后会自动释放资源

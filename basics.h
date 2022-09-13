@@ -18,7 +18,7 @@ typedef QTimer Timer;
 typedef std::function<void(ParametersStru)> ParSlot;
 typedef std::function<void()> VoidSlot;
 typedef Qt::ConnectionType ExecutionMode;
-typedef QScriptEngine JSVM;
+typedef QJSEngine JSVM;
 typedef Qt::Key Key;
 
 enum AnimationType{Rotation,Scale,Move,BlurRadius,Opacity,Color,Picture,Shear,FreeScale};
