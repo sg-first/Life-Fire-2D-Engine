@@ -70,8 +70,8 @@ void ExpansionSlot::call(ParametersStru par)
         this->voidslot();
         return;
     }
-    QScriptValue ret=MainJSVM->globalObject().property(slotname);
-    ret.call(QScriptValue());
+    QJSValue ret=MainJSVM->globalObject().property(slotname);
+    ret.call(QJSValueList());
 }
 
 //CaluThread
@@ -104,8 +104,9 @@ void CaluThread::playFinished()
 //独立函数
 ExpansionSlot* FindExpansionSlot(String slotfun)
 {
-    for(ExpansionSlot *slot:AllExpansionSlot)
-    {
+    int expansion_slot_len = AllExpansionSlot.length();
+    for (int i = 0; i < expansion_slot_len; ++i) {
+        ExpansionSlot *slot = AllExpansionSlot.at(i);
         if(slot->getslotname()==slotfun) //确定找到
         {return slot;}
     }

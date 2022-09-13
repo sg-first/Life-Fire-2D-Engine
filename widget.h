@@ -53,7 +53,7 @@ public:
     Q_INVOKABLE void PlayMusic(MusicPlayer *player);
     Q_INVOKABLE void DeteleMusic(MusicPlayer *player) {delete player;}
     Q_INVOKABLE void StopMusic(MusicPlayer *player);
-    Q_INVOKABLE VideoPlayer* AddVideo(String path, int Volume, int x=0, int y=0,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,String signfun=NULL_String,ParametersStru par=NULL_ParametersStru,GraphicsScene *scene=MainScene=MainScene);
+    Q_INVOKABLE VideoPlayer* AddVideo(String path, int Volume, int x=0, int y=0,int width=WindowsWidth,int heigh=WindowsHeigh,bool cycle=false,String signfun=NULL_String,ParametersStru par=NULL_ParametersStru,GraphicsScene *scene=MainScene);
     Q_INVOKABLE void SetVideoVolume(VideoPlayer *video,int volume);
     Q_INVOKABLE int GetVideoVolume(VideoPlayer *video);
     Q_INVOKABLE void PauseVideo(VideoPlayer *video);

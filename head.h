@@ -21,6 +21,7 @@
 //数据
 #include <QList>
 #include <QString>
+#include <QVariant>
 //动画
 #include <QTimeLine>
 #include <QTimer>
@@ -42,5 +43,8 @@
 #include <QWheelEvent>
 #include <functional>
 //脚本解释
-#include <QtScript/QScriptEngine>
-#include <QtScript/QScriptValue>
+#include <QJSEngine>
+#include <QJSValue>
+// 废弃的脚本模块
+//#include <QtScript/QScriptEngine>
+//#include <QtScript/QScriptValue>
